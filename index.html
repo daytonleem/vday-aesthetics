@@ -336,11 +336,11 @@
 <!-- SEARCH BAR -->
 <div class="search-bar-section">
   <div class="search-bar">
-    <select class="search-select"><option>Select Procedure</option><option>FUE Hair Transplant</option><option>Veneers</option><option>Rhinoplasty</option><option>Eyelid Surgery</option><option>Breast Augmentation</option><option>Lip Enhancement</option></select>
-    <select class="search-select"><option>Select Budget Range</option><option>$3,000 – $8,000</option><option>$8,000 – $15,000</option><option>$15,000+</option></select>
-    <select class="search-select"><option>Travel Month</option><option>Jan – Mar</option><option>Apr – Jun</option><option>Jul – Sep</option><option>Oct – Dec</option></select>
-    <select class="search-select"><option>Nationality</option><option>Singapore</option><option>Malaysia</option><option>Indonesia</option><option>Other</option></select>
-    <button class="search-btn-bar">Start Planning →</button>
+    <select class="search-select" id="sel-procedure"><option>Select Procedure</option><option>FUE Hair Transplant</option><option>Veneers</option><option>Rhinoplasty</option><option>Eyelid Surgery</option><option>Breast Augmentation</option><option>Lip Enhancement</option></select>
+    <select class="search-select" id="sel-budget"><option>Select Budget Range</option><option>$3,000 – $8,000</option><option>$8,000 – $15,000</option><option>$15,000+</option></select>
+    <select class="search-select" id="sel-month"><option>Travel Month</option><option>Jan – Mar</option><option>Apr – Jun</option><option>Jul – Sep</option><option>Oct – Dec</option></select>
+    <select class="search-select" id="sel-nationality"><option>Nationality</option><option>Singapore</option><option>Malaysia</option><option>Indonesia</option><option>Other</option></select>
+    <button class="search-btn-bar" id="startPlanningBtn">Start Planning →</button>
   </div>
 </div>
 
@@ -750,7 +750,7 @@
     <div class="footer-col"><h4>Contact</h4><ul>
       <li><a href="https://wa.me/6598991446">WhatsApp</a></li>
       <li><a href="https://www.instagram.com/vday.aesthetics/">Instagram</a></li>
-      <li><a href="/cdn-cgi/l/email-protection#0b636e6767644b7d6f6a726a6e787f636e7f62687825686466">Email Us</a></li>
+      
       <li><a href="https://wa.me/6598991446">Book a Consultation</a></li>
     </ul></div>
   </div>
@@ -889,6 +889,48 @@
       links.classList.remove('open');
       document.body.style.overflow = '';
     });
+  });
+})();
+</script>
+
+<script>
+(function() {
+  const btn = document.getElementById('startPlanningBtn');
+  if (!btn) return;
+
+  btn.addEventListener('click', function() {
+    const procedure   = document.getElementById('sel-procedure').value;
+    const budget      = document.getElementById('sel-budget').value;
+    const month       = document.getElementById('sel-month').value;
+    const nationality = document.getElementById('sel-nationality').value;
+
+    const hasProcedure   = procedure   !== 'Select Procedure';
+    const hasBudget      = budget      !== 'Select Budget Range';
+    const hasMonth       = month       !== 'Travel Month';
+    const hasNationality = nationality !== 'Nationality';
+
+    let msg = 'Hi Vday! I would like to start planning my aesthetic journey.
+
+';
+
+    if (hasProcedure)   msg += '💉 Procedure: ' + procedure + '
+';
+    if (hasBudget)      msg += '💰 Budget: ' + budget + '
+';
+    if (hasMonth)       msg += '✈️ Travel Month: ' + month + '
+';
+    if (hasNationality) msg += '🌏 Nationality: ' + nationality + '
+';
+
+    if (!hasProcedure && !hasBudget && !hasMonth && !hasNationality) {
+      msg += 'I would like to find out more about your services.';
+    } else {
+      msg += '
+Please advise on next steps. Thank you!';
+    }
+
+    const encoded = encodeURIComponent(msg);
+    window.open('https://wa.me/6598991446?text=' + encoded, '_blank');
   });
 })();
 </script>
