@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FUE Hair Transplant in Shanghai | Vday Aesthetic Concierge</title>
 <title>FUE Hair Transplant in Shanghai | Cost, Packages & Safety for Singaporeans | Vday</title>
 <meta name="description" content="Affordable FUE hair transplant in Shanghai for Singaporeans. 40–60% less than local clinics. Airport pickup, hotel, surgery & aftercare included. Enquire today.">
 <link rel="canonical" href="https://vday.asia/fue-hair-transplant.html">
@@ -70,7 +69,7 @@
   .faq-item.open .faq-a { display:block; }
   .cta-section { background:linear-gradient(135deg,var(--blue-deep) 0%,#4a7a94 100%); padding:100px 80px; text-align:center; }
   .cta-section h2 { color:var(--white); margin-bottom:16px; }
-.cta-section h2 em { color:rgba(255,255,255,0.45); }
+  .cta-section h2 em { color:rgba(255,255,255,0.45); }
   .cta-section p { color:rgba(255,255,255,0.75); font-size:15px; font-weight:300; line-height:1.8; max-width:520px; margin:0 auto 36px; }
   .btn-white { background:var(--white); color:var(--blue-deep); padding:14px 32px; border-radius:40px; font-size:12px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; text-decoration:none; transition:all 0.3s; display:inline-flex; align-items:center; gap:8px; }
   .btn-white:hover { background:var(--charcoal); color:var(--white); }
@@ -98,6 +97,19 @@
   .gallery-track { display:flex; gap:16px; padding:0 24px; will-change:transform; }
   .gallery-slide { flex:0 0 240px; border-radius:16px; overflow:hidden; height:320px; flex-shrink:0; }
   .gallery-slide img { width:100%; height:100%; object-fit:cover; display:block; }
+    .about-inner { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+  .about-img { border-radius:20px; overflow:hidden; height:480px; }
+  .about-img img { width:100%; height:100%; object-fit:cover; display:block; }
+  .faq-inner { display:grid; grid-template-columns:1fr 380px; gap:60px; align-items:start; }
+  .faq-img { border-radius:20px; overflow:hidden; position:sticky; top:100px; }
+  .faq-img img { width:100%; display:block; object-fit:cover; }
+  @media(max-width:900px) {
+    .about-inner { grid-template-columns:1fr; }
+    .about-img { height:280px; }
+    .faq-inner { grid-template-columns:1fr; }
+    .faq-img { display:none; }
+  }
+
 </style>
 </head>
 <body>
@@ -140,11 +152,18 @@
 </div>
 
 <div class="section">
-  <div class="section-eyebrow">About This Procedure</div>
-  <h2>What is <em>FUE Hair Transplant?</em></h2>
-  <p class="body-text">Follicular Unit Extraction (FUE) is the most advanced hair restoration technique available today. Individual hair follicles are extracted from the donor area and precisely implanted into thinning or balding areas — with no linear scar and minimal downtime.</p>
-  <p class="body-text">Shanghai's leading clinics perform FUE at exceptional volume, giving their surgeons a level of precision and speed that is difficult to match elsewhere. Costs are significantly lower than Singapore, Australia or the UK — without any compromise on quality.</p>
-  <p class="body-text">Vday coordinates everything: clinic selection, surgeon briefing, airport pickup, accommodation, and post-procedure follow-up — all from your first WhatsApp message.</p>
+  <div class="about-inner">
+    <div class="about-img">
+      <img src="/about-fue.jpg" alt="FUE hair transplant procedure in Shanghai">
+    </div>
+    <div>
+      <div class="section-eyebrow">About This Procedure</div>
+      <h2>What is <em>FUE Hair Transplant?</em></h2>
+      <p class="body-text">Follicular Unit Extraction (FUE) is the most advanced hair restoration technique available today. Individual hair follicles are extracted from the donor area and precisely implanted into thinning or balding areas — with no linear scar and minimal downtime.</p>
+      <p class="body-text">Shanghai's leading clinics perform FUE at exceptional volume, giving their surgeons a level of precision and speed that is difficult to match elsewhere. Costs are significantly lower than Singapore, Australia or the UK — without any compromise on quality.</p>
+      <p class="body-text">Vday coordinates everything: clinic selection, surgeon briefing, airport pickup, accommodation, and post-procedure follow-up — all from your first WhatsApp message.</p>
+    </div>
+  </div>
 </div>
 
 <div class="section section-alt">
@@ -199,42 +218,32 @@
 })();
 </script>
 <div class="section">
-  <div class="section-eyebrow">Common Questions</div>
-  <h2>FUE <em>FAQ</em></h2>
-  <div class="faq-list">
-    <div class="faq-item open">
-      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is FUE hair transplant permanent?</div>
-      <div class="faq-a">Yes. The transplanted follicles are taken from areas genetically resistant to hair loss, so results are permanent. A second session may be needed years later for newly thinned areas.</div>
+  <div class="faq-inner">
+    <div>
+      <div class="section-eyebrow">Common Questions</div>
+      <h2>FUE <em>FAQ</em></h2>
+      <div class="faq-list">
+        <div class="faq-item open">
+          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is FUE hair transplant permanent?</div>
+          <div class="faq-a">Yes. FUE is considered a permanent solution because the transplanted follicles are taken from areas resistant to hair loss. However, existing non-transplanted hair may continue to thin over time, which is why some clients opt for a second session in the future.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Does it hurt?</div>
+          <div class="faq-a">The procedure is performed under local anaesthesia — you feel no pain during the session. Mild soreness and tightness is normal for a few days after.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How many grafts do I need for a hair transplant?</div>
+          <div class="faq-a">The number of grafts depends on your hair loss severity, density goals, and donor area. Mild recession may require 1,500–2,000 grafts, while more advanced cases can need 3,000–5,000 or more. A proper assessment is needed for an accurate estimate.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Why do it in Shanghai?</div>
+          <div class="faq-a">Shanghai clinics perform FUE at very high volume, meaning surgeons develop exceptional speed and precision. Costs are significantly lower than Singapore or the UK — without compromising on quality.</div>
+        </div>
+      </div>
     </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Does it hurt?</div>
-      <div class="faq-a">The procedure is performed under local anaesthesia — you feel no pain during the session. Mild soreness and tightness is normal for a few days after.</div>
+    <div class="faq-img">
+      <img src="/fue-result-15.jpg" alt="FUE hair transplant result">
     </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How many grafts will I need?</div>
-      <div class="faq-a">This depends on your level of hair loss. Mild cases may need 1,500–2,000 grafts; more advanced cases 3,000–5,000+. Your surgeon will assess this during consultation.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Why do it in Shanghai?</div>
-      <div class="faq-a">Shanghai clinics perform FUE at very high volume, meaning surgeons develop exceptional speed and precision. Costs are significantly lower than Singapore or the UK — without compromising on quality.</div>
-    </div>
-    <div class="faq-item">
-  <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-    Is FUE hair transplant permanent?
-  </div>
-  <div class="faq-a">
-    Yes. FUE is considered a permanent solution because the transplanted follicles are taken from areas resistant to hair loss. However, existing non-transplanted hair may continue to thin over time, which is why some clients opt for a second session in the future.
-  </div>
-</div>
-
-<div class="faq-item">
-  <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-    How many grafts do I need for a hair transplant?
-  </div>
-  <div class="faq-a">
-    The number of grafts depends on your hair loss severity, density goals, and donor area. Mild recession may require 1,500–2,000 grafts, while more advanced cases can need 3,000–5,000 or more. A proper assessment is needed for an accurate estimate.
-  </div>
-</div>
   </div>
 </div>
   
