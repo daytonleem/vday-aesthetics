@@ -29,7 +29,9 @@
   .nav-links a { font-size:12px; font-weight:400; letter-spacing:0.14em; text-transform:uppercase; text-decoration:none; color:var(--charcoal); transition:color 0.3s; }
   .nav-links a:hover { color:var(--blue-deep); }
   .nav-cta { background:var(--blue-deep) !important; color:var(--white) !important; padding:10px 26px; border-radius:30px; }
-  .proc-hero { padding:160px 80px 100px; background:linear-gradient(135deg,#f0f6f9 0%,#e8f2f7 50%,#f8f5f2 100%); }
+  .proc-hero { padding:160px 80px 100px; background:linear-gradient(135deg,#f0f6f9 0%,#e8f2f7 50%,#f8f5f2 100%); display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+  .proc-hero-img { border-radius:20px; overflow:hidden; height:520px; }
+  .proc-hero-img img { width:100%; height:100%; object-fit:cover; object-position:top; display:block; }
   .back-link { display:inline-flex; align-items:center; gap:8px; font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color:var(--blue-deep); text-decoration:none; margin-bottom:24px; }
   .back-link:hover { color:var(--charcoal); }
   .proc-eyebrow { font-size:10px; font-weight:500; letter-spacing:0.22em; text-transform:uppercase; color:var(--blue-deep); margin-bottom:18px; display:flex; align-items:center; gap:10px; }
@@ -91,6 +93,11 @@
     .footer-top { grid-template-columns:1fr; gap:32px; } footer { padding:40px 24px 30px; }
     .footer-bottom { flex-direction:column; gap:8px; text-align:center; }
   }
+
+  .gallery-wrap { overflow:hidden; margin:36px -24px 0; }
+  .gallery-track { display:flex; gap:16px; padding:0 24px; will-change:transform; }
+  .gallery-slide { flex:0 0 240px; border-radius:16px; overflow:hidden; height:320px; flex-shrink:0; }
+  .gallery-slide img { width:100%; height:100%; object-fit:cover; display:block; }
 </style>
 </head>
 <body>
@@ -110,6 +117,7 @@
 </nav>
 
 <div class="proc-hero">
+  <div>
   <a href="/" class="back-link">← Back to Services</a>
   <div class="proc-eyebrow">Hair · Scalp Restoration</div>
   <h1>FUE Hair Transplant in Shanghai<br><em>for International Clients</em></h1>
@@ -118,41 +126,19 @@
     <a href="https://wa.me/6598991446" class="btn-primary">💬 Enquire on WhatsApp</a>
     <a href="/#results" class="btn-secondary">See Real Results</a>
   </div>
+  </div>
+  <div class="proc-hero-img">
+    <img src="/fue-result-4.jpg" alt="FUE hair transplant result — natural hairline restoration in Shanghai">
+  </div>
 </div>
 
 <div class="glance">
   <div class="glance-item"><div class="glance-icon">⏱️</div><div class="glance-label">Procedure Time</div><div class="glance-value">6–10 hrs</div></div>
   <div class="glance-item"><div class="glance-icon">🏠</div><div class="glance-label">Downtime</div><div class="glance-value">7–14 days</div></div>
   <div class="glance-item"><div class="glance-icon">🌱</div><div class="glance-label">Final Results</div><div class="glance-value">6–12 months</div></div>
-  <div class="glance-item"><div class="glance-icon">✈️</div><div class="glance-label">Trip Length</div><div class="glance-value">5–7 days</div></div>
+  <div class="glance-item"><div class="glance-icon">✈️</div><div class="glance-label">Trip Length</div><div class="glance-value">3–5 days</div></div>
 </div>
 
-  <div class="section section-alt">
-  <div class="section-eyebrow">Real Results</div>
-  <h2>Before & <em>After Gallery</em></h2>
-  <p class="body-text">Every result below is from a real client coordinated by Vday. Photos shared with consent.</p>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:36px;">
-  <img src="/fue-result-1.jpg" alt="FUE hair transplant before and after Shanghai" style="width:100%;border-radius:16px;object-fit:cover;aspect-ratio:3/4;">
-  <img src="/fue-result-2.jpg" alt="FUE hair transplant before and after Shanghai" style="width:100%;border-radius:16px;object-fit:cover;aspect-ratio:3/4;">
-  <img src="/fue-result-3.jpg" alt="FUE hair transplant result female Shanghai" style="width:100%;border-radius:16px;object-fit:cover;aspect-ratio:3/4;">
-  <img src="/fue-result-4.jpg" alt="FUE hair transplant result female Shanghai" style="width:100%;border-radius:16px;object-fit:cover;aspect-ratio:3/4;">
-  <img src="/fue-result-5.jpg" alt="FUE hair transplant result male Shanghai" style="width:100%;border-radius:16px;object-fit:cover;aspect-ratio:3/4;">
-  <img src="/fue-result-6.jpg" alt="FUE hair transplant result Shanghai" style="width:100%;border-radius:16px;object-fit:cover;aspect-ratio:3/4;">
-  <img src="/fue-result-7.jpg" alt="FUE hair transplant result Shanghai" style="width:100%;border-radius:16px;object-fit:cover;aspect-ratio:3/4;">
-  <img src="/fue-result-8.jpg" alt="FUE hair transplant result Shanghai" style="width:100%;border-radius:16px;object-fit:cover;aspect-ratio:3/4;">
-  <img src="/fue-result-9.jpg" alt="FUE hair transplant result Shanghai" style="width:100%;border-radius:16px;object-fit:cover;aspect-ratio:3/4;">
-  <img src="/fue-result-10.jpg" alt="FUE hair transplant result Shanghai" style="width:100%;border-radius:16px;object-fit:cover;aspect-ratio:3/4;">
-  <img src="/fue-result-11.jpg" alt="FUE hair transplant result Shanghai" style="width:100%;border-radius:16px;object-fit:cover;aspect-ratio:3/4;">
-  <img src="/fue-result-12.jpg" alt="FUE hair transplant result Shanghai" style="width:100%;border-radius:16px;object-fit:cover;aspect-ratio:3/4;">
-  <img src="/fue-result-13.jpg" alt="FUE hair transplant result Shanghai" style="width:100%;border-radius:16px;object-fit:cover;aspect-ratio:3/4;">
-  <img src="/fue-result-14.jpg" alt="FUE hair transplant result Shanghai" style="width:100%;border-radius:16px;object-fit:cover;aspect-ratio:3/4;">
-  <img src="/fue-result-15.jpg" alt="FUE hair transplant result Shanghai" style="width:100%;border-radius:16px;object-fit:cover;aspect-ratio:3/4;">
-  <img src="/fue-result-16.jpg" alt="FUE hair transplant result Shanghai" style="width:100%;border-radius:16px;object-fit:cover;aspect-ratio:3/4;">
-  <img src="/fue-result-17.jpg" alt="FUE hair transplant result Shanghai" style="width:100%;border-radius:16px;object-fit:cover;aspect-ratio:3/4;">
-  <img src="/fue-result-18.jpg" alt="FUE hair transplant result Shanghai" style="width:100%;border-radius:16px;object-fit:cover;aspect-ratio:3/4;">
-  <img src="/fue-result-19.jpg" alt="FUE hair transplant result Shanghai" style="width:100%;border-radius:16px;object-fit:cover;aspect-ratio:3/4;">
-  <img src="/fue-result-20.jpg" alt="FUE hair transplant result Shanghai" style="width:100%;border-radius:16px;object-fit:cover;aspect-ratio:3/4;">
-</div>
 <div class="section">
   <div class="section-eyebrow">About This Procedure</div>
   <h2>What is <em>FUE Hair Transplant?</em></h2>
@@ -162,47 +148,56 @@
 </div>
 
 <div class="section section-alt">
-  <div class="section-eyebrow">Your Journey</div>
-  <h2>How It <em>Works</em></h2>
-  <div class="steps">
-    <div class="step"><div class="step-num">01</div><div class="step-title">Consultation</div><p>We assess your hair loss pattern remotely and match you with the right surgeon before you travel.</p></div>
-    <div class="step"><div class="step-num">02</div><div class="step-title">Travel Planning</div><p>We arrange your airport pickup, accommodation, and clinic schedule. You just show up.</p></div>
-    <div class="step"><div class="step-num">03</div><div class="step-title">Procedure Day</div><p>6–10 hour session under local anaesthesia. Follicles extracted and implanted with precision.</p></div>
-    <div class="step"><div class="step-num">04</div><div class="step-title">Recovery</div><p>Rest for 7–14 days. Full aftercare guidance provided. We're available 24/7 for questions.</p></div>
-    <div class="step"><div class="step-num">05</div><div class="step-title">Results</div><p>New growth begins at 3–4 months. Full density visible at 6–12 months.</p></div>
+  <div class="section-eyebrow">Real Results</div>
+  <h2>Before &amp; <em>After Gallery</em></h2>
+  <p class="body-text">Every result below is from a real client coordinated by Vday. Photos shared with consent.</p>
+  <div class="gallery-wrap" id="galleryWrap">
+    <div class="gallery-track" id="galleryTrack">
+      <div class="gallery-slide"><img src="/fue-result-1.jpg" alt="FUE hair transplant before and after Shanghai"></div>
+      <div class="gallery-slide"><img src="/fue-result-2.jpg" alt="FUE hair transplant result male hairline"></div>
+      <div class="gallery-slide"><img src="/fue-result-3.jpg" alt="Hair transplant before after crown area"></div>
+      <div class="gallery-slide"><img src="/fue-result-4.jpg" alt="FUE hair transplant result Shanghai clinic"></div>
+      <div class="gallery-slide"><img src="/fue-result-5.jpg" alt="Hair restoration before after photo"></div>
+      <div class="gallery-slide"><img src="/fue-result-6.jpg" alt="FUE hair transplant female hairline before after"></div>
+      <div class="gallery-slide"><img src="/fue-result-7.jpg" alt="Hair transplant graft result before after"></div>
+      <div class="gallery-slide"><img src="/fue-result-8.jpg" alt="FUE hair restoration international client"></div>
+      <div class="gallery-slide"><img src="/fue-result-9.jpg" alt="Hair transplant before after temple recession"></div>
+      <div class="gallery-slide"><img src="/fue-result-10.jpg" alt="FUE result Shanghai hair transplant clinic"></div>
+      <div class="gallery-slide"><img src="/fue-result-11.jpg" alt="Hair transplant before after vertex crown"></div>
+      <div class="gallery-slide"><img src="/fue-result-12.jpg" alt="FUE hair transplant natural density result"></div>
+      <div class="gallery-slide"><img src="/fue-result-13.jpg" alt="Hair restoration Singaporean client Shanghai"></div>
+      <div class="gallery-slide"><img src="/fue-result-14.jpg" alt="FUE hair transplant before after photo"></div>
+      <div class="gallery-slide"><img src="/fue-result-15.jpg" alt="Shanghai hair transplant FUE result gallery"></div>
+      <div class="gallery-slide"><img src="/fue-result-16.jpg" alt="FUE hair transplant male pattern baldness"></div>
+      <div class="gallery-slide"><img src="/fue-result-17.jpg" alt="Hair transplant result 6 months after FUE"></div>
+      <div class="gallery-slide"><img src="/fue-result-18.jpg" alt="FUE hair transplant hairline reconstruction"></div>
+      <div class="gallery-slide"><img src="/fue-result-19.jpg" alt="Hair restoration before after Vday concierge"></div>
+      <div class="gallery-slide"><img src="/fue-result-20.jpg" alt="FUE hair transplant result international client"></div>
+    </div>
   </div>
 </div>
 
-<div class="section">
-  <div class="section-eyebrow">Common Questions</div>
-  <h2>FUE <em>FAQ</em></h2>
-  <div class="faq-list">
-    <div class="faq-item open">
-      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is FUE hair transplant permanent?</div>
-      <div class="faq-a">Yes. The transplanted follicles are taken from areas genetically resistant to hair loss, so results are permanent. A second session may be needed years later for newly thinned areas.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Does it hurt?</div>
-      <div class="faq-a">The procedure is performed under local anaesthesia — you feel no pain during the session. Mild soreness and tightness is normal for a few days after.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How many grafts will I need?</div>
-      <div class="faq-a">This depends on your level of hair loss. Mild cases may need 1,500–2,000 grafts; more advanced cases 3,000–5,000+. Your surgeon will assess this during consultation.</div>
-    </div>
-      <div class="faq-item">
-      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Why do it in Shanghai?</div>
-      <div class="faq-a">Shanghai clinics perform FUE at very high volume, meaning surgeons develop exceptional speed and precision. Costs are significantly lower than Singapore or the UK — without compromising on quality.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How much does FUE cost in Shanghai for 3,000 grafts?</div>
-      <div class="faq-a">Pricing varies by clinic and graft count, but Shanghai typically costs 40–60% less than Singapore for the same procedure and quality. We provide a full cost breakdown after your free consultation — no hidden fees.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is it safe to do a hair transplant overseas?</div>
-      <div class="faq-a">Yes — when done through a trusted concierge like Vday. We only work with accredited, internationally certified clinics. You receive full surgeon profiles before committing, and we are with you throughout the entire process.</div>
-    </div>
-  </div>
-</div>
+<script>
+(function() {
+  const track = document.getElementById('galleryTrack');
+  const wrap = document.getElementById('galleryWrap');
+  if (!track) return;
+  const GAP = 16, SPEED = 0.5;
+  let pos = 0, paused = false;
+  const slides = Array.from(track.children);
+  slides.forEach(s => { const c = s.cloneNode(true); c.setAttribute('aria-hidden','true'); track.appendChild(c); });
+  function getSetW() { let w = 0; slides.forEach(s => { w += s.offsetWidth + GAP; }); return w; }
+  function animate() {
+    if (!paused) { pos += SPEED; const sw = getSetW(); if (pos >= sw) pos -= sw; track.style.transform = 'translateX(-' + pos + 'px)'; }
+    requestAnimationFrame(animate);
+  }
+  wrap.addEventListener('mouseenter', () => paused = true);
+  wrap.addEventListener('mouseleave', () => paused = false);
+  wrap.addEventListener('touchstart', () => paused = true, {passive:true});
+  wrap.addEventListener('touchend', () => setTimeout(() => paused = false, 1200), {passive:true});
+  requestAnimationFrame(animate);
+})();
+</script>
 
 <div class="cta-section">
   <h2>Ready to <em>Restore Your Hair?</em></h2>
