@@ -132,11 +132,12 @@
   .gallery-slide { flex:0 0 240px; border-radius:16px; overflow:hidden; height:320px; flex-shrink:0; }
   .gallery-slide img { width:100%; height:100%; object-fit:cover; display:block; }
   .about-inner { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
-  .about-img { border-radius:20px; overflow:hidden; }
+  .about-img { border-radius:20px; overflow:hidden; width:70%; }
   .about-img img { width:100%; height:auto; display:block; }
-  .faq-inner { display:grid; grid-template-columns:1fr 380px; gap:60px; align-items:center; }
-  .faq-img { border-radius:20px; overflow:hidden; }
+  .faq-inner { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+  .faq-img { border-radius:20px; overflow:hidden; width:70%; margin:0 auto; }
   .faq-img img { width:100%; height:auto; display:block; }
+
   @media(max-width:900px) {
     .about-inner { grid-template-columns:1fr; }
     .faq-inner { grid-template-columns:1fr; }
@@ -169,7 +170,7 @@
   <p>The gold standard in hair restoration — minimally invasive, no linear scarring, and natural-looking density that lasts a lifetime. Airport pickup, hotel, surgery and aftercare — fully coordinated.</p>
   <div class="hero-btns">
     <a href="https://wa.me/6598991446" class="btn-primary">💬 Enquire on WhatsApp</a>
-    <a href="/#results" class="btn-secondary">See Real Results</a>
+   <a href="#gallery" class="btn-secondary">See Real Results</a>
   </div>
   </div>
   <div class="proc-hero-img">
@@ -199,7 +200,7 @@
   </div>
 </div>
 
-<div class="section section-alt">
+<div class="section section-alt" id="gallery">
   <div class="section-eyebrow">Real Results</div>
   <h2>Before &amp; <em>After Gallery</em></h2>
   <p class="body-text">Every result below is from a real client coordinated by Vday. Photos shared with consent.</p>
