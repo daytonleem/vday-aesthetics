@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FUE Hair Transplant Blog | Vday Aesthetic Concierge</title>
+<meta name="description" content="Expert guides on FUE hair transplant, recovery, costs, and results. Written for Southeast Asian clients considering procedures in Shanghai.">
+<link rel="canonical" href="https://vday.asia/blog.html">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://vday.asia/blog.html">
+<meta property="og:title" content="FUE Hair Transplant Blog | Vday Aesthetic Concierge">
+<meta property="og:description" content="Expert guides on FUE hair transplant, recovery, costs, and results for Southeast Asian clients.">
+<meta property="og:image" content="https://vday.asia/preview.jpg">
+<meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --blue-mist:#b8cdd8; --blue-pale:#d4e4ec; --blue-deep:#6a9ab0; --white:#fff; --cream:#f8f5f2; --charcoal:#2c2c2c; --mid-gray:#6b6b6b; --light-gray:#e8e8e8; }
+  *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth; }
+  body { font-family:"Jost",sans-serif; background:var(--white); color:var(--charcoal); overflow-x:hidden; }
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:20px 60px; background:rgba(255,255,255,0.95); backdrop-filter:blur(12px); border-bottom:1px solid rgba(184,205,216,0.3); }
+  .logo-text { font-family:"Cormorant Garamond",serif; font-style:italic; font-weight:400; font-size:28px; color:var(--blue-deep); letter-spacing:0.02em; text-decoration:none; }
+  .logo-sub { font-size:9px; font-weight:500; letter-spacing:0.18em; text-transform:uppercase; color:var(--mid-gray); display:block; margin-top:-4px; }
+  .nav-links { display:flex; gap:36px; list-style:none; align-items:center; }
+  .nav-links a { font-size:12px; font-weight:400; letter-spacing:0.14em; text-transform:uppercase; text-decoration:none; color:var(--charcoal); transition:color 0.3s; }
+  .nav-links a:hover,.nav-links a.active { color:var(--blue-deep); }
+  .nav-cta { background:var(--blue-deep) !important; color:var(--white) !important; padding:10px 26px; border-radius:30px; }
+  /* Hero */
+  .blog-hero { padding:160px 80px 80px; background:linear-gradient(135deg,#f0f6f9 0%,#e8f2f7 60%,#f0f6f9 100%); text-align:center; }
+  .blog-hero-eyebrow { font-size:10px; font-weight:500; letter-spacing:0.22em; text-transform:uppercase; color:var(--blue-deep); margin-bottom:20px; display:flex; align-items:center; justify-content:center; gap:10px; }
+  .blog-hero-eyebrow::before,.blog-hero-eyebrow::after { content:""; width:28px; height:1px; background:var(--blue-deep); }
+  .blog-hero h1 { font-family:"Cormorant Garamond",serif; font-weight:300; font-size:clamp(38px,5vw,64px); color:var(--charcoal); margin-bottom:20px; }
+  .blog-hero h1 em { font-style:italic; color:var(--blue-deep); }
+  .blog-hero p { font-size:16px; font-weight:300; color:var(--mid-gray); max-width:560px; margin:0 auto; line-height:1.8; }
+  /* Filter tabs */
+  .blog-filter { padding:40px 80px 0; display:flex; gap:12px; flex-wrap:wrap; border-bottom:1px solid var(--light-gray); }
+  .filter-tab { font-size:11px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; padding:10px 22px; border-radius:30px; border:1px solid var(--light-gray); background:transparent; color:var(--mid-gray); cursor:pointer; text-decoration:none; transition:all 0.3s; }
+  .filter-tab.active,.filter-tab:hover { background:var(--blue-deep); color:var(--white); border-color:var(--blue-deep); }
+  /* Sections */
+  .blog-section { padding:60px 80px; }
+  .blog-section + .blog-section { padding-top:0; }
+  .section-header { margin-bottom:36px; padding-bottom:20px; border-bottom:1px solid var(--light-gray); display:flex; align-items:center; justify-content:space-between; }
+  .section-label { font-size:10px; font-weight:500; letter-spacing:0.22em; text-transform:uppercase; color:var(--blue-deep); display:flex; align-items:center; gap:10px; }
+  .section-label::before { content:""; width:22px; height:1px; background:var(--blue-deep); }
+  .section-title { font-family:"Cormorant Garamond",serif; font-weight:300; font-size:clamp(24px,3vw,36px); color:var(--charcoal); margin-top:8px; }
+  .section-title em { font-style:italic; color:var(--blue-deep); }
+  .section-count { font-size:12px; color:var(--mid-gray); letter-spacing:0.08em; }
+  /* Card grid */
+  .blog-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:28px; }
+  .blog-card { border:1px solid var(--light-gray); border-radius:16px; padding:32px 28px; text-decoration:none; color:inherit; display:flex; flex-direction:column; gap:12px; transition:all 0.3s; background:var(--white); }
+  .blog-card:hover { border-color:var(--blue-deep); box-shadow:0 8px 32px rgba(106,154,176,0.12); transform:translateY(-2px); }
+  .card-tag { font-size:10px; font-weight:500; letter-spacing:0.16em; text-transform:uppercase; color:var(--blue-deep); background:rgba(106,154,176,0.1); padding:4px 12px; border-radius:20px; display:inline-block; align-self:flex-start; }
+  .card-title { font-family:"Cormorant Garamond",serif; font-weight:400; font-size:20px; line-height:1.3; color:var(--charcoal); }
+  .card-excerpt { font-size:13px; font-weight:300; line-height:1.75; color:var(--mid-gray); flex:1; }
+  .card-footer { display:flex; align-items:center; justify-content:space-between; margin-top:4px; }
+  .card-meta { font-size:11px; color:var(--mid-gray); letter-spacing:0.06em; }
+  .card-arrow { font-size:16px; color:var(--blue-deep); transition:transform 0.2s; }
+  .blog-card:hover .card-arrow { transform:translateX(4px); }
+  /* CTA */
+  .blog-cta { background:linear-gradient(135deg,var(--blue-deep) 0%,#4a7a94 100%); padding:80px; text-align:center; }
+  .blog-cta h2 { font-family:"Cormorant Garamond",serif; font-weight:300; font-size:clamp(28px,4vw,44px); color:var(--white); margin-bottom:16px; }
+  .blog-cta h2 em { font-style:italic; color:rgba(255,255,255,0.5); }
+  .blog-cta p { color:rgba(255,255,255,0.75); font-size:15px; font-weight:300; line-height:1.8; max-width:480px; margin:0 auto 32px; }
+  .btn-white { background:var(--white); color:var(--blue-deep); padding:14px 32px; border-radius:40px; font-size:12px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:all 0.3s; }
+  .btn-white:hover { background:var(--charcoal); color:var(--white); }
+  /* Footer */
+  footer { background:var(--charcoal); padding:60px 80px 40px; }
+  .footer-top { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:48px; margin-bottom:48px; }
+  .footer-logo-text { font-family:"Cormorant Garamond",serif; font-style:italic; font-size:26px; color:var(--blue-mist); display:block; margin-bottom:4px; }
+  .footer-logo-sub { font-size:9px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(255,255,255,0.35); display:block; margin-bottom:14px; }
+  .footer-brand p { font-size:13px; line-height:1.75; color:rgba(255,255,255,0.4); max-width:250px; }
+  .footer-col h4 { font-size:11px; font-weight:500; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.5); margin-bottom:18px; }
+  .footer-col ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .footer-col ul li a { font-size:13px; font-weight:300; color:rgba(255,255,255,0.6); text-decoration:none; transition:color 0.3s; }
+  .footer-col ul li a:hover { color:var(--white); }
+  .footer-bottom { border-top:1px solid rgba(255,255,255,0.1); padding-top:24px; display:flex; justify-content:space-between; align-items:center; }
+  .footer-bottom p { font-size:12px; color:rgba(255,255,255,0.3); }
+  @media(max-width:768px) {
+    nav { padding:16px 24px; }
+    .nav-links { display:none; }
+    .blog-hero { padding:120px 24px 60px; }
+    .blog-filter { padding:24px 24px 0; }
+    .blog-section { padding:40px 24px; }
+    .blog-grid { grid-template-columns:1fr; }
+    .blog-cta { padding:60px 24px; }
+    footer { padding:40px 24px 28px; }
+    .footer-top { grid-template-columns:1fr 1fr; gap:32px; }
+    .footer-bottom { flex-direction:column; gap:8px; text-align:center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" style="text-decoration:none;">
+    <span class="logo-text">Vday</span>
+    <span class="logo-sub">Aesthetic Concierge · Shanghai</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/#about">About</a></li>
+    <li><a href="/#results">Results</a></li>
+    <li><a href="/#services">Services</a></li>
+    <li><a href="/blog.html" class="active">Blog</a></li>
+    <li><a href="/#faq">FAQ</a></li>
+    <li><a href="https://wa.me/6598991446?text=Hi%20Vday%2C%20I%20would%20like%20to%20find%20out%20more%20about%20your%20services." class="nav-cta">Book Consultation</a></li>
+  </ul>
+</nav>
+
+<div class="blog-hero">
+  <div class="blog-hero-eyebrow">Knowledge Hub</div>
+  <h1>Aesthetic <em>Insights</em></h1>
+  <p>Evidence-based guides on hair transplant, veneers, and aesthetic procedures — written for Southeast Asian clients planning a Shanghai journey.</p>
+</div>
+
+<div class="blog-filter">
+  <a href="#fue" class="filter-tab active">FUE Hair Transplant</a>
+  <a href="#veneers" class="filter-tab">Porcelain Veneers</a>
+  <a href="#rhinoplasty" class="filter-tab">Rhinoplasty</a>
+  <a href="#eyelid" class="filter-tab">Eyelid Surgery</a>
+</div>
+
+<!-- FUE Section -->
+<div class="blog-section" id="fue">
+  <div class="section-header">
+    <div>
+      <div class="section-label">FUE Hair Transplant</div>
+      <h2 class="section-title">Everything You Need to <em>Know</em></h2>
+    </div>
+    <span class="section-count">20 articles</span>
+  </div>
+  <div class="blog-grid">
+
+    <a href="/blog/is-fue-permanent.html" class="blog-card">
+      <span class="card-tag">FUE · Results</span>
+      <div class="card-title">Is FUE Hair Transplant Permanent?</div>
+      <div class="card-excerpt">Transplanted follicles are taken from permanent donor zones — but what does that mean for long-term results? We break down the science.</div>
+      <div class="card-footer"><span class="card-meta">5 min read</span><span class="card-arrow">→</span></div>
+    </a>
+
+    <a href="/blog/how-many-grafts-do-i-need.html" class="blog-card">
+      <span class="card-tag">FUE · Planning</span>
+      <div class="card-title">How Many Grafts Do I Need?</div>
+      <div class="card-excerpt">From mild recession to advanced hair loss — how surgeons calculate graft counts using the Norwood scale and donor density.</div>
+      <div class="card-footer"><span class="card-meta">6 min read</span><span class="card-arrow">→</span></div>
+    </a>
+
+    <a href="/blog/fue-recovery-timeline-day-by-day.html" class="blog-card">
+      <span class="card-tag">FUE · Recovery</span>
+      <div class="card-title">FUE Recovery Timeline: Day by Day</div>
+      <div class="card-excerpt">What your scalp looks like on day 1, week 1, month 1, and month 12 — a realistic walkthrough with no surprises.</div>
+      <div class="card-footer"><span class="card-meta">7 min read</span><span class="card-arrow">→</span></div>
+    </a>
+
+    <a href="/blog/fue-vs-fut.html" class="blog-card">
+      <span class="card-tag">FUE · Comparison</span>
+      <div class="card-title">FUE vs FUT: Which Is Right for You?</div>
+      <div class="card-excerpt">Scarring, downtime, graft yield — a clear comparison of both extraction methods to help you decide.</div>
+      <div class="card-footer"><span class="card-meta">5 min read</span><span class="card-arrow">→</span></div>
+    </a>
+
+    <a href="/blog/does-fue-leave-scars.html" class="blog-card">
+      <span class="card-tag">FUE · Scarring</span>
+      <div class="card-title">Does FUE Hair Transplant Leave Scars?</div>
+      <div class="card-excerpt">The honest answer: yes, tiny ones — but they're virtually invisible. Here's what your donor area will actually look like.</div>
+      <div class="card-footer"><span class="card-meta">4 min read</span><span class="card-arrow">→</span></div>
+    </a>
+
+    <a href="/blog/when-can-i-exercise-after-fue.html" class="blog-card">
+      <span class="card-tag">FUE · Recovery</span>
+      <div class="card-title">When Can I Exercise After FUE?</div>
+      <div class="card-excerpt">Sweat, blood pressure, and graft survival — why timing your return to the gym matters more than you think.</div>
+      <div class="card-footer"><span class="card-meta">4 min read</span><span class="card-arrow">→</span></div>
+    </a>
+
+    <a href="/blog/fue-shedding-phase.html" class="blog-card">
+      <span class="card-tag">FUE · Recovery</span>
+      <div class="card-title">The FUE Shedding Phase: What to Expect</div>
+      <div class="card-excerpt">Weeks 2–6 after surgery, transplanted hair falls out. It's supposed to. Here's why shock loss happens and when growth begins.</div>
+      <div class="card-footer"><span class="card-meta">5 min read</span><span class="card-arrow">→</span></div>
+    </a>
+
+    <a href="/blog/can-i-drink-alcohol-after-fue.html" class="blog-card">
+      <span class="card-tag">FUE · Aftercare</span>
+      <div class="card-title">Can I Drink Alcohol After FUE?</div>
+      <div class="card-excerpt">Alcohol thins blood, disrupts healing, and can compromise graft survival. Here's the exact timeline for what to avoid and when.</div>
+      <div class="card-footer"><span class="card-meta">4 min read</span><span class="card-arrow">→</span></div>
+    </a>
+
+    <a href="/blog/how-long-does-fue-last.html" class="blog-card">
+      <span class="card-tag">FUE · Results</span>
+      <div class="card-title">How Long Does FUE Last?</div>
+      <div class="card-excerpt">The transplanted hair is permanent — but your existing hair isn't. Understanding the difference is key to long-term planning.</div>
+      <div class="card-footer"><span class="card-meta">4 min read</span><span class="card-arrow">→</span></div>
+    </a>
+
+    <a href="/blog/fue-success-rate.html" class="blog-card">
+      <span class="card-tag">FUE · Results</span>
+      <div class="card-title">FUE Hair Transplant Success Rate: What the Data Shows</div>
+      <div class="card-excerpt">90–95% graft survival is achievable — but surgeon skill, technique, and aftercare all play a role. Here's what the research says.</div>
+      <div class="card-footer"><span class="card-meta">5 min read</span><span class="card-arrow">→</span></div>
+    </a>
+
+    <a href="/blog/female-fue-hair-transplant.html" class="blog-card">
+      <span class="card-tag">FUE · Women</span>
+      <div class="card-title">Female FUE Hair Transplant: What Women Need to Know</div>
+      <div class="card-excerpt">Female hair loss patterns differ from male — and so does the approach. Crown density, diffuse thinning, and hairline refinement explained.</div>
+      <div class="card-footer"><span class="card-meta">6 min read</span><span class="card-arrow">→</span></div>
+    </a>
+
+    <a href="/blog/non-shave-fue-explained.html" class="blog-card">
+      <span class="card-tag">FUE · Technique</span>
+      <div class="card-title">Non-Shave FUE Explained: Is It Right for You?</div>
+      <div class="card-excerpt">Long-hair FUE lets you keep your existing hair during the procedure. The tradeoffs in cost, time, and candidacy — explained clearly.</div>
+      <div class="card-footer"><span class="card-meta">5 min read</span><span class="card-arrow">→</span></div>
+    </a>
+
+    <a href="/blog/fue-cost-singapore-vs-overseas.html" class="blog-card">
+      <span class="card-tag">FUE · Cost</span>
+      <div class="card-title">FUE Cost: Singapore vs Shanghai</div>
+      <div class="card-excerpt">A transparent breakdown of what FUE costs in Singapore versus Shanghai — and how Vday ensures quality isn't sacrificed for savings.</div>
+      <div class="card-footer"><span class="card-meta">6 min read</span><span class="card-arrow">→</span></div>
+    </a>
+
+    <a href="/blog/is-fue-painful.html" class="blog-card">
+      <span class="card-tag">FUE · Procedure</span>
+      <div class="card-title">Is FUE Hair Transplant Painful?</div>
+      <div class="card-excerpt">What you actually feel during the procedure, what's normal after, and how Shanghai clinics manage comfort throughout.</div>
+      <div class="card-footer"><span class="card-meta">4 min read</span><span class="card-arrow">→</span></div>
+    </a>
+
+    <a href="/blog/fue-donor-area-recovery.html" class="blog-card">
+      <span class="card-tag">FUE · Recovery</span>
+      <div class="card-title">FUE Donor Area: Recovery & What to Expect</div>
+      <div class="card-excerpt">Scabbing, redness, numbness — what happens to the back of your scalp after extraction, and the week-by-week healing timeline.</div>
+      <div class="card-footer"><span class="card-meta">5 min read</span><span class="card-arrow">→</span></div>
+    </a>
+
+    <a href="/blog/how-to-prepare-for-fue.html" class="blog-card">
+      <span class="card-tag">FUE · Planning</span>
+      <div class="card-title">How to Prepare for FUE Hair Transplant</div>
+      <div class="card-excerpt">Medications to stop, foods to avoid, what to wear on the day — the complete pre-surgery preparation checklist.</div>
+      <div class="card-footer"><span class="card-meta">5 min read</span><span class="card-arrow">→</span></div>
+    </a>
+
+    <a href="/blog/what-to-avoid-after-fue.html" class="blog-card">
+      <span class="card-tag">FUE · Aftercare</span>
+      <div class="card-title">What to Avoid After FUE: The Complete Guide</div>
+      <div class="card-excerpt">Sun, swimming, hats, smoking, sex — the full list of what to avoid after surgery and exactly how long each restriction lasts.</div>
+      <div class="card-footer"><span class="card-meta">5 min read</span><span class="card-arrow">→</span></div>
+    </a>
+
+    <a href="/blog/fue-hairline-design.html" class="blog-card">
+      <span class="card-tag">FUE · Technique</span>
+      <div class="card-title">FUE Hairline Design: How Surgeons Plan Your New Hairline</div>
+      <div class="card-excerpt">Facial proportions, age-appropriate placement, and the difference between a natural result and one that looks "done."</div>
+      <div class="card-footer"><span class="card-meta">5 min read</span><span class="card-arrow">→</span></div>
+    </a>
+
+    <a href="/blog/fue-aftercare-tips.html" class="blog-card">
+      <span class="card-tag">FUE · Aftercare</span>
+      <div class="card-title">FUE Aftercare Tips: How to Protect Your Transplant</div>
+      <div class="card-excerpt">The washing protocol, sleeping position, and products to avoid in the critical first two weeks after surgery.</div>
+      <div class="card-footer"><span class="card-meta">5 min read</span><span class="card-arrow">→</span></div>
+    </a>
+
+    <a href="/blog/best-age-for-fue.html" class="blog-card">
+      <span class="card-tag">FUE · Planning</span>
+      <div class="card-title">Best Age for FUE Hair Transplant</div>
+      <div class="card-excerpt">Too young and you risk operating on unpredictable hair loss. Too old and donor supply may limit results. Here's the honest breakdown.</div>
+      <div class="card-footer"><span class="card-meta">5 min read</span><span class="card-arrow">→</span></div>
+    </a>
+
+  </div>
+</div>
+
+<div class="blog-cta">
+  <h2>Ready to Start Your <em>Hair Journey?</em></h2>
+  <p>WhatsApp our concierge team for a personalised assessment — no obligation, no pressure.</p>
+  <a href="https://wa.me/6598991446?text=Hi%20Vday%2C%20I%20read%20your%20blog%20and%20would%20like%20to%20find%20out%20more%20about%20FUE%20Hair%20Transplant." class="btn-white">💬 WhatsApp Us Now</a>
+</div>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="footer-logo-text">Vday</span>
+      <span class="footer-logo-sub">Aesthetic Concierge · Shanghai</span>
+      <p>Premium end-to-end aesthetic concierge services, connecting clients across Southeast Asia with Shanghai's finest clinics.</p>
+    </div>
+    <div class="footer-col"><h4>Services</h4><ul>
+      <li><a href="/fue-hair-transplant.html">FUE Hair Transplant</a></li>
+      <li><a href="/porcelain-veneers.html">Porcelain Veneers</a></li>
+      <li><a href="/rhinoplasty.html">Rhinoplasty</a></li>
+      <li><a href="/eyelid-surgery.html">Eyelid Surgery</a></li>
+      <li><a href="/breast-augmentation.html">Breast Augmentation</a></li>
+      <li><a href="/lip-enhancement.html">Lip Enhancement</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Blog</h4><ul>
+      <li><a href="/blog/is-fue-permanent.html">Is FUE Permanent?</a></li>
+      <li><a href="/blog/fue-recovery-timeline-day-by-day.html">Recovery Timeline</a></li>
+      <li><a href="/blog/how-many-grafts-do-i-need.html">How Many Grafts?</a></li>
+      <li><a href="/blog/fue-cost-singapore-vs-overseas.html">FUE Cost Guide</a></li>
+      <li><a href="/blog.html">All Articles →</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Contact</h4><ul>
+      <li><a href="https://wa.me/6598991446">WhatsApp</a></li>
+      <li><a href="https://www.instagram.com/vday.aesthetics/">Instagram</a></li>
+      <li><a href="https://wa.me/6598991446?text=Hi%20Vday%2C%20I%20would%20like%20to%20book%20a%20consultation.">Book Consultation</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Vday Aesthetic Concierge. All rights reserved.</p>
+    <p>Privacy Policy · Terms of Service</p>
+  </div>
+</footer>
+
+<a href="https://wa.me/6598991446?text=Hi%20Vday%2C%20I%20would%20like%20to%20find%20out%20more%20about%20FUE%20Hair%20Transplant." style="position:fixed;bottom:28px;right:28px;width:54px;height:54px;background:#25d366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 4px 20px rgba(37,211,102,0.4);text-decoration:none;z-index:999;" title="Chat on WhatsApp">💬</a>
+
+</body>
+</html>
