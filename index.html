@@ -927,24 +927,17 @@
     const hasMonth       = month       !== 'Travel Month';
     const hasNationality = nationality !== 'Nationality';
 
-    let msg = 'Hi Vday! I would like to start planning my aesthetic journey.
+    let msg = 'Hi Vday! I would like to start planning my aesthetic journey.\n\n';
 
-';
-
-    if (hasProcedure)   msg += '💉 Procedure: ' + procedure + '
-';
-    if (hasBudget)      msg += '💰 Budget: ' + budget + '
-';
-    if (hasMonth)       msg += '✈️ Travel Month: ' + month + '
-';
-    if (hasNationality) msg += '🌏 Nationality: ' + nationality + '
-';
+    if (hasProcedure)   msg += '💉 Procedure: ' + procedure + '\n';
+    if (hasBudget)      msg += '💰 Budget: ' + budget + '\n';
+    if (hasMonth)       msg += '✈️ Travel Month: ' + month + '\n';
+    if (hasNationality) msg += '🌏 Nationality: ' + nationality + '\n';
 
     if (!hasProcedure && !hasBudget && !hasMonth && !hasNationality) {
       msg += 'I would like to find out more about your services.';
     } else {
-      msg += '
-Please advise on next steps. Thank you!';
+      msg += '\nPlease advise on next steps. Thank you!';
     }
 
     const encoded = encodeURIComponent(msg);
