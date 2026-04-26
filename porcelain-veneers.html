@@ -65,9 +65,10 @@
   .nav-links a { font-size:12px; font-weight:400; letter-spacing:0.14em; text-transform:uppercase; text-decoration:none; color:var(--charcoal); transition:color 0.3s; }
   .nav-links a:hover { color:var(--blue-deep); }
   .nav-cta { background:var(--blue-deep) !important; color:var(--white) !important; padding:10px 26px; border-radius:30px; }
-  .proc-hero { padding:160px 80px 100px; background:linear-gradient(135deg,#f0f6f9 0%,#e8f2f7 50%,#f8f5f2 100%); display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
-  .proc-hero-img { border-radius:20px; overflow:hidden; display:flex; align-items:center; justify-content:center; }
-  .proc-hero-img img { width:100%; height:auto; max-height:580px; object-fit:contain; display:block; border-radius:20px; }
+  .proc-hero { padding:160px 60px 100px; background:linear-gradient(135deg,#f0f6f9 0%,#e8f2f7 50%,#f8f5f2 100%); display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center; }
+  .proc-hero-left { padding-left:40px; }
+  .proc-hero-img { display:flex; align-items:center; justify-content:center; }
+  .proc-hero-img img { width:auto; max-width:100%; height:auto; max-height:540px; display:block; border-radius:20px; object-fit:contain; }
   .back-link { display:inline-flex; align-items:center; gap:8px; font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color:var(--blue-deep); text-decoration:none; margin-bottom:24px; }
   .back-link:hover { color:var(--charcoal); }
   .proc-eyebrow { font-size:10px; font-weight:500; letter-spacing:0.22em; text-transform:uppercase; color:var(--blue-deep); margin-bottom:18px; display:flex; align-items:center; gap:10px; }
@@ -93,7 +94,7 @@
   h2 em { font-style:italic; color:var(--blue-deep); }
   .body-text { font-size:15px; font-weight:300; line-height:1.85; color:var(--mid-gray); max-width:700px; margin-bottom:20px; }
   .about-inner { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
-  .about-img { border-radius:20px; overflow:hidden; }
+  .about-img { border-radius:20px; overflow:hidden; width:70%; }
   .about-img img { width:100%; height:auto; display:block; border-radius:20px; }
   .faq-inner { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
   .faq-img { border-radius:20px; overflow:hidden; }
@@ -154,7 +155,7 @@
 </nav>
 
 <div class="proc-hero">
-  <div>
+  <div class="proc-hero-left">
     <a href="/" class="back-link">← Back to Services</a>
     <div class="proc-eyebrow">Dental · Smile Design</div>
     <h1>Porcelain Veneers in <em>Shanghai</em><br>for International Clients</h1>
@@ -204,25 +205,26 @@
       <div class="section-eyebrow">Common Questions</div>
       <h2>Veneers <em>FAQ</em></h2>
       <div class="faq-list">
-    <div class="faq-item open">
-      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Do porcelain veneers damage your teeth?</div>
-      <div class="faq-a">A minimal amount of enamel (typically 0.3–0.5mm) is removed to allow the veneer to sit flush. This is a permanent, irreversible process, so the decision should be considered carefully with your dentist.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How many teeth can be veneered?</div>
-      <div class="faq-a">Most clients veneer 6–10 upper front teeth for a balanced smile transformation. Your dentist will recommend the ideal number based on your goals and facial proportions.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How long do porcelain veneers last?</div>
-      <div class="faq-a">With proper care, porcelain veneers last 10–15 years. Avoiding biting hard objects, wearing a night guard if you grind, and maintaining good oral hygiene significantly extend their lifespan.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is the veneer procedure painful?</div>
-      <div class="faq-a">Teeth preparation is done under local anaesthesia. Some sensitivity is normal for a few days after preparation and placement, which subsides quickly.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Why get veneers in Shanghai?</div>
-      <div class="faq-a">Shanghai dental clinics combine advanced digital smile design technology with high-quality ceramic materials and skilled lab technicians, delivering precise, natural-looking results that rival the world's best dental centres.</div>
+        <div class="faq-item open">
+          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Do porcelain veneers damage your teeth?</div>
+          <div class="faq-a">A minimal amount of enamel (typically 0.3–0.5mm) is removed to allow the veneer to sit flush. This is a permanent, irreversible process, so the decision should be considered carefully with your dentist.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How many teeth can be veneered?</div>
+          <div class="faq-a">Most clients veneer 6–10 upper front teeth for a balanced smile transformation. Your dentist will recommend the ideal number based on your goals and facial proportions.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How long do porcelain veneers last?</div>
+          <div class="faq-a">With proper care, porcelain veneers last 10–15 years. Avoiding biting hard objects, wearing a night guard if you grind, and maintaining good oral hygiene significantly extend their lifespan.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is the veneer procedure painful?</div>
+          <div class="faq-a">Teeth preparation is done under local anaesthesia. Some sensitivity is normal for a few days after preparation and placement, which subsides quickly.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Why get veneers in Shanghai?</div>
+          <div class="faq-a">Shanghai dental clinics combine advanced digital smile design technology with high-quality ceramic materials and skilled lab technicians, delivering precise, natural-looking results that rival the world's best dental centres.</div>
+        </div>
       </div>
     </div>
     <div class="faq-img">
