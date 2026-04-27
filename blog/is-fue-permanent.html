@@ -24,13 +24,13 @@
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
   body{font-family:"Jost",sans-serif;background:var(--white);color:var(--charcoal);overflow-x:hidden}
-  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px 60px;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(184,205,216,0.3)}
-  .logo-text{font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:400;font-size:28px;color:var(--blue-deep);letter-spacing:.02em;text-decoration:none}
-  .logo-sub{font-size:9px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--mid-gray);display:block;margin-top:-4px}
-  .nav-links{display:flex;gap:36px;list-style:none;align-items:center}
-  .nav-links a{font-size:12px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--charcoal);transition:color .3s}
-  .nav-links a:hover{color:var(--blue-deep)}
-  .nav-cta{background:var(--blue-deep)!important;color:var(--white)!important;padding:10px 26px;border-radius:30px}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,0.97);border-bottom:1px solid var(--light-gray)}
+  .nav-inner{max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px}
+  .nav-logo{font-family:"Cormorant Garamond",serif;font-size:1.3rem;font-weight:500;letter-spacing:.05em;color:var(--charcoal);text-decoration:none}
+  .nav-links{display:flex;gap:2rem;list-style:none}
+  .nav-links a{font-size:.85rem;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--mid-gray);transition:color .2s;text-decoration:none}
+  .nav-links a:hover{color:var(--charcoal)}
+  .nav-cta{background:var(--blue-deep);color:var(--white)!important;padding:.5rem 1.2rem;border-radius:2px}
   .article-hero{padding:140px 80px 60px;background:linear-gradient(135deg,#f0f6f9 0%,#e8f2f7 60%,#f0f6f9 100%)}
   .article-hero-inner{max-width:760px}
   .breadcrumb{font-size:12px;color:var(--mid-gray);margin-bottom:20px;display:flex;align-items:center;gap:8px}
@@ -94,15 +94,15 @@
 </head>
 <body>
 <nav>
-  <a href="/" style="text-decoration:none;"><span class="logo-text">Vday</span><span class="logo-sub">Aesthetic Concierge · Shanghai</span></a>
-  <ul class="nav-links">
-    <li><a href="/#about">About</a></li>
-    <li><a href="/#results">Results</a></li>
-    <li><a href="/#services">Services</a></li>
-    <li><a href="/blog.html">Blog</a></li>
-    <li><a href="/#faq">FAQ</a></li>
-    <li><a href="https://wa.me/6598991446?text=Hi%20Vday%2C%20I%20am%20interested%20in%20FUE%20Hair%20Transplant.%20Can%20you%20advise%3F" class="nav-cta">Book Consultation</a></li>
-  </ul>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Vday Aesthetic Concierge</a>
+    <ul class="nav-links">
+      <li><a href="/#services">Services</a></li>
+      <li><a href="/blog.html">Blog</a></li>
+      <li><a href="/#faq">FAQ</a></li>
+      <li><a href="https://wa.me/6598991446?text=Hi%2C+I%27d+like+to+find+out+more+about+FUE+Hair+Transplant" class="nav-cta">Get Started</a></li>
+    </ul>
+  </div>
 </nav>
 
 <div class="article-hero">
@@ -152,17 +152,17 @@
     <div class="related-posts">
       <h3>Related Articles</h3>
       <div class="related-grid">
-        <a href="/blog/how-long-does-fue-last.html" class="related-card">
-          <span class="r-tag">FUE · Results</span>
-          <div class="r-title">How Long Does FUE Last?</div>
+        <a href="/blog/fue-shedding-phase.html" class="related-card">
+          <span class="r-tag">FUE · Recovery</span>
+          <div class="r-title">The FUE Shedding Phase: What to Expect</div>
         </a>
         <a href="/blog/fue-recovery-timeline-day-by-day.html" class="related-card">
           <span class="r-tag">FUE · Recovery</span>
           <div class="r-title">FUE Recovery Timeline: Day by Day</div>
         </a>
-        <a href="/blog/fue-success-rate.html" class="related-card">
-          <span class="r-tag">FUE · Results</span>
-          <div class="r-title">FUE Success Rate: What the Data Shows</div>
+        <a href="/blog/how-many-grafts-do-i-need.html" class="related-card">
+          <span class="r-tag">FUE · Planning</span>
+          <div class="r-title">How Many Grafts Do I Need?</div>
         </a>
       </div>
     </div>
@@ -183,7 +183,6 @@
         <li><a href="/blog/fue-vs-fut.html">FUE vs FUT: Which Is Right?</a></li>
         <li><a href="/blog/fue-shedding-phase.html">The Shedding Phase Explained</a></li>
         <li><a href="/blog/fue-cost-singapore-vs-overseas.html">FUE Cost: Singapore vs Shanghai</a></li>
-        <li><a href="/blog/best-age-for-fue.html">Best Age for FUE</a></li>
       </ul>
     </div>
   </aside>
