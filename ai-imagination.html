@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Imagination — Visualise Your Transformation | Vday Aesthetic Concierge</title>
-  <meta name="description" content="Upload your photo and see how you could look after rhinoplasty, eyelid surgery, hairline correction, eyebag removal and more. AI-powered visualisation by Vday.">
+  <title>AI Imagination — Visualise Your Transformation | Vday</title>
+  <meta name="description" content="Upload your photo and see how you could look after rhinoplasty, eyelid surgery, hairline correction, eyebag removal and more.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
@@ -15,119 +15,110 @@
       --cream:#f8f5f2; --white:#fff;
     }
     *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
-    html { scroll-behavior:smooth; }
-    body { font-family:'Jost',sans-serif; background:var(--white); color:var(--charcoal); }
+    body { font-family:'Jost',sans-serif; background:var(--white); color:var(--charcoal); min-height:100vh; }
 
     /* NAV */
-    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:20px 60px; background:rgba(255,255,255,0.97); border-bottom:1px solid rgba(184,205,216,0.3); }
-    .logo-text { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400; font-size:28px; color:var(--blue-deep); text-decoration:none; }
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:18px 48px; background:rgba(255,255,255,0.97); border-bottom:1px solid rgba(184,205,216,0.3); }
+    .logo-text { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400; font-size:26px; color:var(--blue-deep); text-decoration:none; }
     .logo-sub { font-size:9px; font-weight:500; letter-spacing:0.18em; text-transform:uppercase; color:var(--mid-gray); display:block; margin-top:-4px; }
-    .nav-right { display:flex; align-items:center; gap:16px; }
-    .nav-badge { font-size:10px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; background:var(--blue-pale); color:var(--blue-deep); padding:6px 14px; border-radius:20px; }
-    .nav-cta { background:var(--blue-deep); color:var(--white); padding:10px 22px; border-radius:30px; font-size:11px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; text-decoration:none; transition:background 0.3s; }
+    .nav-right { display:flex; align-items:center; gap:14px; }
+    .nav-badge { font-size:9px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; background:var(--blue-pale); color:var(--blue-deep); padding:5px 12px; border-radius:20px; }
+    .nav-cta { background:var(--blue-deep); color:var(--white); padding:9px 20px; border-radius:30px; font-size:11px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; text-decoration:none; transition:background 0.3s; }
     .nav-cta:hover { background:var(--charcoal); }
 
-    /* HERO */
-    .hero { padding:130px 80px 56px; background:linear-gradient(135deg,#f0f6f9 0%,#e8f2f7 60%,#f8f5f2 100%); text-align:center; }
-    .hero-eyebrow { font-size:10px; font-weight:500; letter-spacing:0.22em; text-transform:uppercase; color:var(--blue-deep); margin-bottom:18px; display:flex; align-items:center; justify-content:center; gap:10px; }
-    .hero-eyebrow::before,.hero-eyebrow::after { content:""; width:28px; height:1px; background:var(--blue-deep); }
-    .hero h1 { font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(36px,5vw,62px); line-height:1.12; margin-bottom:16px; }
-    .hero h1 em { font-style:italic; color:var(--blue-deep); }
-    .hero p { font-size:15px; font-weight:300; color:var(--mid-gray); max-width:540px; margin:0 auto 10px; line-height:1.8; }
-    .hero-disclaimer { font-size:11px; color:var(--mid-gray); opacity:0.6; }
+    /* MAIN LAYOUT */
+    .page { display:grid; grid-template-columns:1fr 420px; gap:0; min-height:100vh; padding-top:64px; }
 
-    /* MAIN TOOL */
-    .tool-wrap { max-width:1040px; margin:0 auto; padding:60px 40px 80px; }
+    /* ── LEFT: PHOTO PANEL ── */
+    .photo-panel { position:sticky; top:64px; height:calc(100vh - 64px); display:flex; align-items:center; justify-content:center; background:var(--cream); border-right:1px solid var(--light-gray); overflow:hidden; }
 
-    /* STEP INDICATOR */
-    .steps { display:flex; justify-content:center; align-items:center; gap:0; margin-bottom:52px; }
-    .step { display:flex; align-items:center; gap:10px; font-size:11px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:var(--mid-gray); }
-    .step.active { color:var(--blue-deep); }
-    .step.done { color:var(--charcoal); }
-    .step-num { width:28px; height:28px; border-radius:50%; border:1px solid var(--light-gray); display:flex; align-items:center; justify-content:center; font-size:12px; background:var(--white); flex-shrink:0; transition:all 0.3s; }
-    .step.active .step-num { background:var(--blue-deep); color:var(--white); border-color:var(--blue-deep); }
-    .step.done .step-num { background:var(--charcoal); color:var(--white); border-color:var(--charcoal); }
-    .step-line { width:52px; height:1px; background:var(--light-gray); margin:0 6px; }
-
-    /* ── PHASE 1: UPLOAD ── */
-    #phase1 {}
-    .upload-zone { border:2px dashed var(--blue-mist); border-radius:12px; padding:56px 40px; text-align:center; cursor:pointer; transition:all 0.3s; background:var(--white); position:relative; }
-    .upload-zone:hover,.upload-zone.dragover { border-color:var(--blue-deep); background:#f4f9fc; }
+    /* Upload zone */
+    .upload-zone { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; transition:background 0.3s; position:relative; padding:40px; text-align:center; }
+    .upload-zone:hover { background:#eef5f9; }
     .upload-zone input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
-    .upload-icon { font-size:44px; margin-bottom:16px; }
-    .upload-zone h3 { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:400; margin-bottom:8px; }
-    .upload-zone p { font-size:13px; color:var(--mid-gray); font-weight:300; margin-bottom:4px; }
+    .upload-dashed { border:2px dashed var(--blue-mist); border-radius:16px; padding:60px 40px; width:100%; max-width:360px; pointer-events:none; }
+    .upload-icon { font-size:48px; margin-bottom:20px; }
+    .upload-zone h2 { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; margin-bottom:10px; color:var(--charcoal); }
+    .upload-zone p { font-size:13px; font-weight:300; color:var(--mid-gray); line-height:1.7; margin-bottom:8px; }
     .upload-zone small { font-size:11px; color:var(--mid-gray); opacity:0.6; }
-    .upload-tips { background:var(--cream); border-radius:8px; padding:14px 20px; margin-top:20px; }
-    .upload-tips p { font-size:12px; color:var(--mid-gray); line-height:1.7; }
-    .upload-tips strong { color:var(--charcoal); }
+    .upload-tip { margin-top:20px; background:rgba(184,205,216,0.2); border-radius:8px; padding:12px 16px; text-align:left; }
+    .upload-tip p { font-size:11px; color:var(--mid-gray); line-height:1.6; }
+    .upload-tip strong { color:var(--charcoal); }
 
-    /* Thumbnail preview in upload zone */
-    .upload-thumb { display:none; width:120px; height:120px; border-radius:8px; object-fit:cover; object-position:top; margin:0 auto 16px; border:2px solid var(--blue-mist); }
+    /* Photo display */
+    .photo-display { width:100%; height:100%; position:relative; display:none; }
+    .photo-display img { width:100%; height:100%; object-fit:cover; object-position:top center; display:block; }
+    .photo-overlay { position:absolute; top:16px; left:16px; display:flex; gap:8px; flex-wrap:wrap; }
+    .photo-label { font-size:9px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; background:rgba(255,255,255,0.92); color:var(--charcoal); padding:5px 12px; border-radius:20px; backdrop-filter:blur(4px); }
+    .photo-label.ai { background:var(--blue-deep); color:var(--white); }
 
-    /* ── PHASE 2: PROCEDURE SELECT ── */
-    #phase2 { display:none; }
-    .phase2-layout { display:grid; grid-template-columns:200px 1fr; gap:40px; align-items:start; }
-    .uploaded-preview { border-radius:12px; overflow:hidden; border:1px solid var(--light-gray); }
-    .uploaded-preview img { width:100%; height:260px; object-fit:cover; object-position:top; display:block; }
-    .uploaded-preview-label { padding:10px 14px; font-size:10px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; color:var(--mid-gray); background:var(--cream); }
-    .procedure-select-wrap h3 { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:400; margin-bottom:6px; }
-    .procedure-select-wrap p { font-size:13px; color:var(--mid-gray); font-weight:300; margin-bottom:20px; }
-    .procedure-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
-    .proc-card { border:1.5px solid var(--light-gray); border-radius:10px; padding:16px 14px; cursor:pointer; transition:all 0.25s; user-select:none; position:relative; background:var(--white); }
-    .proc-card:hover { border-color:var(--blue-mist); background:#f7fbfd; }
-    .proc-card.selected { border-color:var(--blue-deep); background:#eef6fb; }
-    .proc-card.selected::after { content:"✓"; position:absolute; top:8px; right:10px; font-size:11px; font-weight:600; color:var(--blue-deep); }
-    .proc-icon { font-size:26px; margin-bottom:8px; }
-    .proc-name { font-size:12px; font-weight:500; letter-spacing:0.06em; color:var(--charcoal); margin-bottom:3px; }
-    .proc-desc { font-size:11px; font-weight:300; color:var(--mid-gray); line-height:1.5; }
-    .selection-note { margin-top:14px; font-size:11px; color:var(--mid-gray); opacity:0.7; }
-
-    /* ── PHASE 3: RESULT ── */
-    #phase3 { display:none; }
-    .result-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:32px; }
-    .result-box { border:1px solid var(--light-gray); border-radius:12px; overflow:hidden; }
-    .result-box-label { padding:10px 16px; font-size:10px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; color:var(--mid-gray); background:var(--cream); border-bottom:1px solid var(--light-gray); display:flex; align-items:center; justify-content:space-between; }
-    .result-box-label .proc-tags { display:flex; gap:6px; flex-wrap:wrap; }
-    .proc-tag { font-size:9px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; background:var(--blue-pale); color:var(--blue-deep); padding:2px 8px; border-radius:10px; }
-    .result-box img { width:100%; height:340px; object-fit:cover; object-position:top; display:block; }
-    .loading-box { width:100%; height:340px; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:14px; background:#f0f6f9; }
-    .spinner { width:40px; height:40px; border:3px solid var(--blue-mist); border-top-color:var(--blue-deep); border-radius:50%; animation:spin 0.8s linear infinite; }
+    /* Loading overlay on photo */
+    .photo-loading { position:absolute; inset:0; background:rgba(240,246,249,0.92); display:none; flex-direction:column; align-items:center; justify-content:center; gap:16px; backdrop-filter:blur(2px); }
+    .spinner { width:44px; height:44px; border:3px solid var(--blue-mist); border-top-color:var(--blue-deep); border-radius:50%; animation:spin 0.8s linear infinite; }
     @keyframes spin { to { transform:rotate(360deg); } }
-    .loading-text { font-size:13px; color:var(--mid-gray); font-weight:300; }
-    .loading-sub { font-size:11px; color:var(--mid-gray); opacity:0.6; }
-    .ai-badge { display:inline-block; font-size:9px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; background:var(--blue-deep); color:var(--white); padding:3px 8px; border-radius:10px; }
+    .loading-label { font-size:13px; font-weight:400; color:var(--charcoal); }
+    .loading-sub { font-size:11px; color:var(--mid-gray); font-weight:300; }
 
-    /* result CTA */
-    .result-cta { background:linear-gradient(135deg,#e8f1f6,#d0e4ef); border-left:3px solid var(--blue-deep); padding:24px 28px; border-radius:0 8px 8px 0; margin-top:8px; }
-    .result-cta h3 { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:400; margin-bottom:8px; }
-    .result-cta p { font-size:13px; color:var(--mid-gray); font-weight:300; line-height:1.7; margin-bottom:16px; }
-    .result-cta-btns { display:flex; gap:12px; flex-wrap:wrap; }
+    /* ── RIGHT: CONTROLS PANEL ── */
+    .controls-panel { padding:40px 36px 40px; display:flex; flex-direction:column; gap:32px; overflow-y:auto; max-height:calc(100vh - 64px); }
 
-    /* CONTROLS */
-    .controls { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:32px; }
-    .btn-primary { background:var(--blue-deep); color:var(--white); padding:14px 32px; border-radius:40px; font-size:12px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; text-decoration:none; border:none; cursor:pointer; transition:background 0.3s; display:inline-flex; align-items:center; gap:8px; font-family:'Jost',sans-serif; }
-    .btn-primary:hover { background:var(--charcoal); }
-    .btn-primary:disabled { opacity:0.4; cursor:not-allowed; }
-    .btn-secondary { border:1px solid var(--blue-deep); color:var(--blue-deep); padding:14px 32px; border-radius:40px; font-size:12px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; background:transparent; cursor:pointer; transition:all 0.3s; font-family:'Jost',sans-serif; text-decoration:none; }
-    .btn-secondary:hover { background:var(--blue-deep); color:var(--white); }
+    /* Section label */
+    .section-label { font-size:9px; font-weight:500; letter-spacing:0.2em; text-transform:uppercase; color:var(--mid-gray); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+    .section-label::before { content:""; width:16px; height:1px; background:var(--mid-gray); }
+
+    /* PROCEDURE TOGGLES */
+    .proc-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .proc-pill { border:1.5px solid var(--light-gray); border-radius:40px; padding:10px 16px; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; gap:8px; user-select:none; background:var(--white); }
+    .proc-pill:hover { border-color:var(--blue-mist); background:#f4f9fc; }
+    .proc-pill.active { border-color:var(--blue-deep); background:var(--blue-pale); }
+    .proc-pill.active .pill-dot { background:var(--blue-deep); }
+    .pill-dot { width:8px; height:8px; border-radius:50%; background:var(--light-gray); flex-shrink:0; transition:background 0.2s; }
+    .pill-name { font-size:11px; font-weight:500; letter-spacing:0.06em; color:var(--charcoal); }
+    .pill-icon { font-size:14px; }
+
+    /* DIVIDER */
+    .divider { height:1px; background:var(--light-gray); }
+
+    /* ACTION BUTTONS */
+    .action-section { display:flex; flex-direction:column; gap:10px; }
+    .btn-generate { background:var(--blue-deep); color:var(--white); border:none; border-radius:40px; padding:14px 24px; font-size:12px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; cursor:pointer; transition:background 0.3s; font-family:'Jost',sans-serif; width:100%; display:flex; align-items:center; justify-content:center; gap:8px; }
+    .btn-generate:hover:not(:disabled) { background:var(--charcoal); }
+    .btn-generate:disabled { opacity:0.35; cursor:not-allowed; }
+    .btn-upload-new { background:transparent; color:var(--mid-gray); border:1px solid var(--light-gray); border-radius:40px; padding:11px 24px; font-size:11px; font-weight:400; letter-spacing:0.1em; text-transform:uppercase; cursor:pointer; transition:all 0.2s; font-family:'Jost',sans-serif; width:100%; position:relative; }
+    .btn-upload-new input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+    .btn-upload-new:hover { border-color:var(--blue-mist); color:var(--charcoal); }
+
+    /* DESCRIPTION LINES */
+    .desc-section { display:flex; flex-direction:column; gap:0; }
+    .desc-empty { font-size:12px; color:var(--mid-gray); opacity:0.5; font-weight:300; font-style:italic; }
+    .desc-line { padding:12px 0; border-bottom:1px solid var(--light-gray); display:flex; flex-direction:column; gap:3px; }
+    .desc-line:last-child { border-bottom:none; }
+    .desc-proc-name { font-size:11px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--blue-deep); }
+    .desc-proc-text { font-size:12px; font-weight:300; color:var(--mid-gray); line-height:1.5; }
+    .desc-summary { margin-top:12px; padding:12px 16px; background:var(--cream); border-radius:8px; font-size:12px; color:var(--charcoal); font-weight:400; line-height:1.5; }
+
+    /* WA CTA */
+    .wa-cta { background:linear-gradient(135deg,var(--blue-deep),#4a7a94); border-radius:12px; padding:20px; color:var(--white); display:none; }
+    .wa-cta h4 { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:400; margin-bottom:6px; }
+    .wa-cta p { font-size:12px; font-weight:300; opacity:0.85; line-height:1.6; margin-bottom:14px; }
+    .wa-cta a { display:block; background:var(--white); color:var(--blue-deep); text-align:center; padding:10px; border-radius:30px; font-size:11px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; text-decoration:none; transition:background 0.2s; }
+    .wa-cta a:hover { background:rgba(255,255,255,0.85); }
 
     /* DISCLAIMER */
-    .disclaimer { text-align:center; padding:32px 40px; border-top:1px solid var(--light-gray); margin-top:48px; }
-    .disclaimer p { font-size:11px; color:var(--mid-gray); opacity:0.6; line-height:1.7; max-width:640px; margin:0 auto; }
+    .disclaimer-text { font-size:10px; color:var(--mid-gray); opacity:0.5; line-height:1.6; }
 
-    @media(max-width:800px) {
-      nav { padding:16px 24px; }
+    /* MOBILE */
+    @media(max-width:860px) {
+      nav { padding:16px 20px; }
       .nav-right .nav-cta { display:none; }
-      .hero { padding:110px 24px 48px; }
-      .tool-wrap { padding:40px 20px 60px; }
-      .phase2-layout { grid-template-columns:1fr; }
-      .uploaded-preview { display:none; }
-      .procedure-grid { grid-template-columns:1fr 1fr; }
-      .result-grid { grid-template-columns:1fr; }
-      .result-box img,.loading-box { height:260px; }
-      .step span { display:none; }
-      .steps { gap:0; }
+      .page { grid-template-columns:1fr; padding-top:60px; }
+      .photo-panel { position:relative; top:0; height:60vw; min-height:280px; }
+      .controls-panel { max-height:none; padding:28px 20px; }
+      .proc-grid { grid-template-columns:1fr 1fr 1fr; }
+    }
+    @media(max-width:500px) {
+      .proc-grid { grid-template-columns:1fr 1fr; }
+      .photo-panel { height:75vw; }
     }
   </style>
 </head>
@@ -144,335 +135,276 @@
   </div>
 </nav>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-eyebrow">AI Imagination</div>
-  <h1>See Your <em>Transformation</em><br>Before You Decide</h1>
-  <p>Upload a photo, select the procedures you're curious about, and see an AI-generated preview of how you could look — no commitment, no obligation.</p>
-  <p class="hero-disclaimer">For visualisation purposes only. Results are illustrative and not a medical guarantee.</p>
-</div>
+<div class="page">
 
-<div class="tool-wrap">
+  <!-- ── LEFT: PHOTO PANEL ── -->
+  <div class="photo-panel" id="photoPanel">
 
-  <!-- STEPS -->
-  <div class="steps">
-    <div class="step active" id="s1"><div class="step-num">1</div><span>Upload Photo</span></div>
-    <div class="step-line"></div>
-    <div class="step" id="s2"><div class="step-num">2</div><span>Select Procedures</span></div>
-    <div class="step-line"></div>
-    <div class="step" id="s3"><div class="step-num">3</div><span>Generate</span></div>
-    <div class="step-line"></div>
-    <div class="step" id="s4"><div class="step-num">4</div><span>See Result</span></div>
-  </div>
-
-  <!-- PHASE 1: UPLOAD -->
-  <div id="phase1">
+    <!-- Upload state -->
     <div class="upload-zone" id="uploadZone">
       <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp">
-      <img class="upload-thumb" id="uploadThumb" src="" alt="">
-      <div class="upload-icon" id="uploadIcon">📷</div>
-      <h3 id="uploadTitle">Upload your photo</h3>
-      <p id="uploadSub">Drag and drop or click to select</p>
-      <small>JPG, PNG or WEBP · Max 10MB · Front-facing recommended</small>
-    </div>
-    <div class="upload-tips">
-      <p><strong>Best results:</strong> Front-facing · Good natural lighting · Neutral expression · Hair away from face · No heavy shadows</p>
-    </div>
-    <div class="controls">
-      <button class="btn-primary" id="nextBtn" disabled>Next: Select Procedures →</button>
-    </div>
-  </div>
-
-  <!-- PHASE 2: PROCEDURE SELECT -->
-  <div id="phase2">
-    <div class="phase2-layout">
-      <div>
-        <div class="uploaded-preview">
-          <div class="uploaded-preview-label">Your Photo</div>
-          <img id="uploadedImg" src="" alt="Uploaded photo">
+      <div class="upload-dashed">
+        <div class="upload-icon">📷</div>
+        <h2>Upload Your Photo</h2>
+        <p>Drag and drop or click anywhere to select. See how you could look after your chosen procedures — instantly.</p>
+        <small>JPG · PNG · WEBP · Max 10MB</small>
+        <div class="upload-tip">
+          <p><strong>Best results:</strong> Front-facing · Good lighting · Neutral expression · Hair away from forehead</p>
         </div>
       </div>
-      <div class="procedure-select-wrap">
-        <h3>What would you like to visualise?</h3>
-        <p>Select one or more procedures — our AI will apply them together.</p>
-        <div class="procedure-grid" id="procedureGrid">
+    </div>
 
-          <div class="proc-card" data-proc="hairline" data-label="Hairline Correction">
-            <div class="proc-icon">💆</div>
-            <div class="proc-name">Hairline Correction</div>
-            <div class="proc-desc">Lower or redefine your natural hairline</div>
-          </div>
-
-          <div class="proc-card" data-proc="rhinoplasty" data-label="Rhinoplasty">
-            <div class="proc-icon">👃</div>
-            <div class="proc-name">Rhinoplasty</div>
-            <div class="proc-desc">Refine your nose bridge, tip, or profile</div>
-          </div>
-
-          <div class="proc-card" data-proc="eyelid" data-label="Eyelid Surgery">
-            <div class="proc-icon">👁️</div>
-            <div class="proc-name">Eyelid Surgery</div>
-            <div class="proc-desc">Create a natural double eyelid crease</div>
-          </div>
-
-          <div class="proc-card" data-proc="eyebag" data-label="Eyebag Removal">
-            <div class="proc-icon">✨</div>
-            <div class="proc-name">Eyebag Removal</div>
-            <div class="proc-desc">Reduce under-eye puffiness and dark circles</div>
-          </div>
-
-          <div class="proc-card" data-proc="veneers" data-label="Porcelain Veneers">
-            <div class="proc-icon">😁</div>
-            <div class="proc-name">Porcelain Veneers</div>
-            <div class="proc-desc">Transform your smile with ceramic veneers</div>
-          </div>
-
-          <div class="proc-card" data-proc="lip" data-label="Lip Enhancement">
-            <div class="proc-icon">💋</div>
-            <div class="proc-name">Lip Enhancement</div>
-            <div class="proc-desc">Add natural volume and definition</div>
-          </div>
-
-        </div>
-        <p class="selection-note" id="selectionNote">Select at least one procedure to continue.</p>
+    <!-- Photo display state -->
+    <div class="photo-display" id="photoDisplay">
+      <img id="displayImg" src="" alt="Your photo">
+      <div class="photo-overlay">
+        <span class="photo-label" id="photoLabel">Your Photo</span>
+      </div>
+      <!-- Loading overlay -->
+      <div class="photo-loading" id="photoLoading">
+        <div class="spinner"></div>
+        <div class="loading-label" id="loadingLabel">Generating your preview…</div>
+        <div class="loading-sub" id="loadingSub">Analysing facial structure</div>
       </div>
     </div>
-    <div class="controls">
-      <button class="btn-secondary" id="backBtn">← Back</button>
-      <button class="btn-primary" id="generateBtn" disabled>Generate My Preview →</button>
-    </div>
+
   </div>
 
-  <!-- PHASE 3: RESULT -->
-  <div id="phase3">
-    <div class="result-grid">
-      <div class="result-box">
-        <div class="result-box-label">Your Photo</div>
-        <img id="beforeImg" src="" alt="Before">
-      </div>
-      <div class="result-box">
-        <div class="result-box-label">
-          <span>AI Imagination <span class="ai-badge">Beta</span></span>
-          <div class="proc-tags" id="procTags"></div>
+  <!-- ── RIGHT: CONTROLS PANEL ── -->
+  <div class="controls-panel">
+
+    <!-- PROCEDURE TOGGLES -->
+    <div>
+      <div class="section-label">Select Procedures</div>
+      <div class="proc-grid" id="procGrid">
+
+        <div class="proc-pill" data-proc="hairline"
+          data-desc="Hairline is digitally lowered and reshaped to frame your face more naturally."
+          data-link="/fue-hair-transplant.html">
+          <span class="pill-icon">💆</span>
+          <div class="pill-dot"></div>
+          <span class="pill-name">Hairline Correction</span>
         </div>
-        <div class="loading-box" id="loadingBox">
-          <div class="spinner"></div>
-          <div class="loading-text" id="loadingText">Analysing your photo…</div>
-          <div class="loading-sub" id="loadingSub">This takes about 15–30 seconds</div>
+
+        <div class="proc-pill" data-proc="rhinoplasty"
+          data-desc="Nose bridge refined, tip elevated and narrowed for a more balanced profile."
+          data-link="/rhinoplasty.html">
+          <span class="pill-icon">👃</span>
+          <div class="pill-dot"></div>
+          <span class="pill-name">Rhinoplasty</span>
         </div>
-        <img id="afterImg" src="" alt="AI preview" style="display:none;">
+
+        <div class="proc-pill" data-proc="eyelid"
+          data-desc="Upper eyelid crease created for a natural, defined double-eyelid appearance."
+          data-link="/eyelid-surgery.html">
+          <span class="pill-icon">👁️</span>
+          <div class="pill-dot"></div>
+          <span class="pill-name">Eyelid Surgery</span>
+        </div>
+
+        <div class="proc-pill" data-proc="eyebag"
+          data-desc="Under-eye puffiness and dark shadows reduced for a rested, refreshed look."
+          data-link="/eyelid-surgery.html">
+          <span class="pill-icon">✨</span>
+          <div class="pill-dot"></div>
+          <span class="pill-name">Eyebag Removal</span>
+        </div>
+
+        <div class="proc-pill" data-proc="veneers"
+          data-desc="Teeth whitened, shaped and evened with porcelain veneers for a complete smile transformation."
+          data-link="/porcelain-veneers.html">
+          <span class="pill-icon">😁</span>
+          <div class="pill-dot"></div>
+          <span class="pill-name">Porcelain Veneers</span>
+        </div>
+
+        <div class="proc-pill" data-proc="lip"
+          data-desc="Lips volumised and defined with a natural-looking enhancement."
+          data-link="/lip-enhancement.html">
+          <span class="pill-icon">💋</span>
+          <div class="pill-dot"></div>
+          <span class="pill-name">Lip Enhancement</span>
+        </div>
+
       </div>
     </div>
 
-    <div class="result-cta" id="resultCta" style="display:none;">
-      <h3>Curious about what's possible for you?</h3>
-      <p>Your AI preview is a visual guide. For a personalised assessment based on your actual anatomy, WhatsApp our concierge team — no obligation, no pressure.</p>
-      <div class="result-cta-btns">
-        <a href="https://wa.me/6598991446?text=Hi%20Vday%2C%20I%20used%20the%20AI%20Imagination%20tool%20and%20I%27d%20like%20to%20discuss%20my%20options." class="btn-primary">💬 WhatsApp Our Team</a>
-        <a href="/#services" class="btn-secondary">Explore All Services →</a>
+    <div class="divider"></div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="action-section">
+      <div class="section-label">Generate</div>
+      <button class="btn-generate" id="generateBtn" disabled>Generate Preview →</button>
+      <div class="btn-upload-new" id="uploadNewWrap">
+        <input type="file" id="fileInputNew" accept="image/jpeg,image/png,image/webp">
+        Upload New Photo
       </div>
     </div>
 
-    <div class="controls">
-      <button class="btn-secondary" id="startOverBtn">Start Over</button>
-      <button class="btn-secondary" id="changeProcBtn" style="display:none;">Change Procedures</button>
+    <div class="divider"></div>
+
+    <!-- DESCRIPTION LINES -->
+    <div class="desc-section">
+      <div class="section-label">What Changes</div>
+      <div id="descContent">
+        <p class="desc-empty">Select procedures above to see what each one changes.</p>
+      </div>
     </div>
-  </div>
 
-  <div class="disclaimer">
-    <p>AI Imagination is a visualisation tool for reference only. Generated images are not medical simulations and do not represent guaranteed surgical outcomes. Actual results vary based on individual anatomy, skin quality, surgeon technique, and healing. Always consult a qualified surgeon before making any decisions.</p>
-  </div>
+    <!-- WA CTA (shown after generation) -->
+    <div class="wa-cta" id="waCta">
+      <h4>Like what you see?</h4>
+      <p>Get a personalised assessment from our concierge team — no commitment required.</p>
+      <a href="https://wa.me/6598991446?text=Hi%20Vday%2C%20I%20used%20the%20AI%20Imagination%20tool%20and%20I%27d%20like%20to%20discuss%20my%20options.">💬 WhatsApp Our Team</a>
+    </div>
 
+    <!-- DISCLAIMER -->
+    <p class="disclaimer-text">AI-generated previews are for visualisation only and do not represent guaranteed surgical outcomes. Consult a qualified surgeon before making any decisions.</p>
+
+  </div>
 </div>
 
 <script>
-  // ── STATE ──
+  const procedures = {
+    hairline:    { name:'Hairline Correction',  icon:'💆' },
+    rhinoplasty: { name:'Rhinoplasty',           icon:'👃' },
+    eyelid:      { name:'Eyelid Surgery',        icon:'👁️' },
+    eyebag:      { name:'Eyebag Removal',        icon:'✨' },
+    veneers:     { name:'Porcelain Veneers',     icon:'😁' },
+    lip:         { name:'Lip Enhancement',       icon:'💋' },
+  };
+
   let uploadedDataUrl = null;
-  let selectedProcs = new Set();
+  let hasResult = false;
+  const selected = new Set();
 
-  // ── ELEMENTS ──
-  const fileInput   = document.getElementById('fileInput');
-  const uploadZone  = document.getElementById('uploadZone');
-  const uploadThumb = document.getElementById('uploadThumb');
-  const uploadIcon  = document.getElementById('uploadIcon');
-  const uploadTitle = document.getElementById('uploadTitle');
-  const uploadSub   = document.getElementById('uploadSub');
-  const nextBtn     = document.getElementById('nextBtn');
-  const phase1      = document.getElementById('phase1');
-  const phase2      = document.getElementById('phase2');
-  const phase3      = document.getElementById('phase3');
-  const uploadedImg = document.getElementById('uploadedImg');
-  const beforeImg   = document.getElementById('beforeImg');
-  const afterImg    = document.getElementById('afterImg');
-  const loadingBox  = document.getElementById('loadingBox');
-  const loadingText = document.getElementById('loadingText');
-  const loadingSub  = document.getElementById('loadingSub');
-  const generateBtn = document.getElementById('generateBtn');
-  const backBtn     = document.getElementById('backBtn');
-  const startOverBtn= document.getElementById('startOverBtn');
-  const changeProcBtn=document.getElementById('changeProcBtn');
-  const resultCta   = document.getElementById('resultCta');
-  const selectionNote=document.getElementById('selectionNote');
-  const procTags    = document.getElementById('procTags');
-  const procCards   = document.querySelectorAll('.proc-card');
-  const s1=document.getElementById('s1'), s2=document.getElementById('s2'),
-        s3=document.getElementById('s3'), s4=document.getElementById('s4');
+  const uploadZone   = document.getElementById('uploadZone');
+  const photoDisplay = document.getElementById('photoDisplay');
+  const displayImg   = document.getElementById('displayImg');
+  const photoLabel   = document.getElementById('photoLabel');
+  const photoLoading = document.getElementById('photoLoading');
+  const loadingLabel = document.getElementById('loadingLabel');
+  const loadingSub   = document.getElementById('loadingSub');
+  const fileInput    = document.getElementById('fileInput');
+  const fileInputNew = document.getElementById('fileInputNew');
+  const generateBtn  = document.getElementById('generateBtn');
+  const descContent  = document.getElementById('descContent');
+  const waCta        = document.getElementById('waCta');
+  const pills        = document.querySelectorAll('.proc-pill');
 
-  // ── DRAG & DROP ──
-  uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('dragover'); });
-  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
-  uploadZone.addEventListener('drop', e => {
-    e.preventDefault(); uploadZone.classList.remove('dragover');
-    const f = e.dataTransfer.files[0];
-    if (f && f.type.startsWith('image/')) loadFile(f);
-  });
-  fileInput.addEventListener('change', () => { if (fileInput.files[0]) loadFile(fileInput.files[0]); });
-
+  // ── FILE LOAD ──
   function loadFile(file) {
+    if (!file || !file.type.startsWith('image/')) return;
     const reader = new FileReader();
     reader.onload = e => {
       uploadedDataUrl = e.target.result;
-      uploadThumb.src = uploadedDataUrl;
-      uploadThumb.style.display = 'block';
-      uploadIcon.style.display = 'none';
-      uploadTitle.textContent = '✓ Photo Ready';
-      uploadSub.textContent = 'Click to change photo';
-      nextBtn.disabled = false;
+      hasResult = false;
+      showPhoto(uploadedDataUrl, 'Your Photo', false);
+      waCta.style.display = 'none';
+      updateGenerateBtn();
     };
     reader.readAsDataURL(file);
   }
 
-  // ── STEP 1 → 2 ──
-  nextBtn.addEventListener('click', () => {
-    uploadedImg.src = uploadedDataUrl;
-    setPhase(2);
-    setStep(s2);
-  });
+  // Drag & drop
+  uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.style.background='#eef5f9'; });
+  uploadZone.addEventListener('dragleave', () => { uploadZone.style.background=''; });
+  uploadZone.addEventListener('drop', e => { e.preventDefault(); uploadZone.style.background=''; loadFile(e.dataTransfer.files[0]); });
+  fileInput.addEventListener('change', () => loadFile(fileInput.files[0]));
+  fileInputNew.addEventListener('change', () => loadFile(fileInputNew.files[0]));
 
-  // ── PROCEDURE CARDS ──
-  procCards.forEach(card => {
-    card.addEventListener('click', () => {
-      const p = card.dataset.proc;
-      if (selectedProcs.has(p)) { selectedProcs.delete(p); card.classList.remove('selected'); }
-      else { selectedProcs.add(p); card.classList.add('selected'); }
-      const count = selectedProcs.size;
-      generateBtn.disabled = count === 0;
-      selectionNote.textContent = count === 0
-        ? 'Select at least one procedure to continue.'
-        : `${count} procedure${count>1?'s':''} selected — ready to generate.`;
+  // ── PROCEDURE PILLS ──
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      const p = pill.dataset.proc;
+      if (selected.has(p)) { selected.delete(p); pill.classList.remove('active'); }
+      else { selected.add(p); pill.classList.add('active'); }
+      updateDescriptions();
+      updateGenerateBtn();
     });
   });
 
-  // ── STEP 2 → 3: GENERATE ──
+  function updateGenerateBtn() {
+    const ready = uploadedDataUrl && selected.size > 0;
+    generateBtn.disabled = !ready;
+    generateBtn.textContent = hasResult
+      ? `Regenerate (${selected.size} procedure${selected.size>1?'s':''}) →`
+      : `Generate Preview${selected.size > 0 ? ` (${selected.size})` : ''} →`;
+  }
+
+  function updateDescriptions() {
+    if (selected.size === 0) {
+      descContent.innerHTML = '<p class="desc-empty">Select procedures above to see what each one changes.</p>';
+      return;
+    }
+    let html = '';
+    selected.forEach(p => {
+      const pill = document.querySelector(`.proc-pill[data-proc="${p}"]`);
+      html += `<div class="desc-line">
+        <span class="desc-proc-name">${procedures[p].icon} ${procedures[p].name}</span>
+        <span class="desc-proc-text">${pill.dataset.desc}</span>
+      </div>`;
+    });
+    const count = selected.size;
+    html += `<div class="desc-summary">${count} procedure${count>1?'s':''} selected — click Generate to see your preview.</div>`;
+    descContent.innerHTML = html;
+  }
+
+  // ── GENERATE ──
   generateBtn.addEventListener('click', () => {
-    beforeImg.src = uploadedDataUrl;
-
-    // Build proc tags
-    procTags.innerHTML = '';
-    selectedProcs.forEach(p => {
-      const card = document.querySelector(`.proc-card[data-proc="${p}"]`);
-      const tag = document.createElement('span');
-      tag.className = 'proc-tag';
-      tag.textContent = card.dataset.label;
-      procTags.appendChild(tag);
-    });
-
-    setPhase(3);
-    setStep(s3);
-    loadingBox.style.display = 'flex';
-    afterImg.style.display = 'none';
-    resultCta.style.display = 'none';
-    changeProcBtn.style.display = 'none';
-
-    runGeneration();
+    if (!uploadedDataUrl || selected.size === 0) return;
+    startGeneration();
   });
 
-  function runGeneration() {
+  function startGeneration() {
+    photoLoading.style.display = 'flex';
+    generateBtn.disabled = true;
+    waCta.style.display = 'none';
+
     const msgs = [
-      ['Analysing your facial structure…', 'Detecting key landmarks'],
-      ['Mapping procedure areas…', 'Preparing transformation parameters'],
-      ['Applying selected procedures…', 'Blending changes naturally'],
-      ['Refining details…', 'Almost ready'],
+      ['Analysing facial structure…',       'Detecting key landmarks'],
+      ['Mapping procedure areas…',          'Preparing transformation'],
+      ['Applying selected procedures…',     'Blending changes naturally'],
+      ['Refining details…',                 'Almost ready'],
     ];
     let i = 0;
     const t = setInterval(() => {
-      i++;
-      if (i < msgs.length) {
-        loadingText.textContent = msgs[i][0];
-        loadingSub.textContent = msgs[i][1];
-      }
+      i++; if (i < msgs.length) { loadingLabel.textContent = msgs[i][0]; loadingSub.textContent = msgs[i][1]; }
     }, 1800);
 
-    // ═══════════════════════════════════════════════
-    // AI API CALL — replace setTimeout with real call
+    // ═══════════════════════════════════════════
+    // AI API CALL — replace setTimeout below
     //
-    // Input:  uploadedDataUrl (base64 image)
-    //         selectedProcs   (Set of procedure keys)
-    //
-    // Call your AI endpoint here, e.g.:
     // fetch('/api/imagine', {
     //   method: 'POST',
     //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({
-    //     image: uploadedDataUrl,
-    //     procedures: [...selectedProcs]
-    //   })
+    //   body: JSON.stringify({ image: uploadedDataUrl, procedures: [...selected] })
     // })
     // .then(r => r.json())
     // .then(data => { clearInterval(t); showResult(data.imageUrl); });
-    // ═══════════════════════════════════════════════
-
-    setTimeout(() => {
-      clearInterval(t);
-      // PLACEHOLDER: mirrors uploaded photo until real AI is wired in
-      showResult(uploadedDataUrl);
-    }, 7000);
+    // ═══════════════════════════════════════════
+    setTimeout(() => { clearInterval(t); showResult(uploadedDataUrl); }, 7000);
   }
 
   function showResult(url) {
-    loadingBox.style.display = 'none';
-    afterImg.src = url;
-    afterImg.style.display = 'block';
-    resultCta.style.display = 'block';
-    changeProcBtn.style.display = 'inline-flex';
-    setStep(s4);
+    hasResult = true;
+    photoLoading.style.display = 'none';
+    showPhoto(url, 'AI Preview', true);
+    waCta.style.display = 'block';
+    updateGenerateBtn();
+
+    // Update desc summary
+    const count = selected.size;
+    const last = descContent.querySelector('.desc-summary');
+    if (last) last.textContent = `${count} procedure${count>1?'s':''} applied — see changes above.`;
   }
 
-  // ── BACK / RESET ──
-  backBtn.addEventListener('click', () => { setPhase(1); setStep(s1); });
-  startOverBtn.addEventListener('click', reset);
-  changeProcBtn.addEventListener('click', () => { setPhase(2); setStep(s2); });
-
-  function reset() {
-    uploadedDataUrl = null;
-    selectedProcs.clear();
-    fileInput.value = '';
-    uploadThumb.style.display = 'none';
-    uploadIcon.style.display = 'block';
-    uploadTitle.textContent = 'Upload your photo';
-    uploadSub.textContent = 'Drag and drop or click to select';
-    nextBtn.disabled = true;
-    generateBtn.disabled = true;
-    selectionNote.textContent = 'Select at least one procedure to continue.';
-    procCards.forEach(c => c.classList.remove('selected'));
-    setPhase(1);
-    setStep(s1);
-  }
-
-  function setPhase(n) {
-    phase1.style.display = n===1 ? 'block' : 'none';
-    phase2.style.display = n===2 ? 'block' : 'none';
-    phase3.style.display = n===3 ? 'block' : 'none';
-  }
-
-  function setStep(active) {
-    const all = [s1,s2,s3,s4];
-    const idx = all.indexOf(active);
-    all.forEach((s,i) => {
-      s.classList.remove('active','done');
-      if (i < idx) s.classList.add('done');
-      else if (i === idx) s.classList.add('active');
-    });
+  function showPhoto(url, label, isAI) {
+    uploadZone.style.display = 'none';
+    photoDisplay.style.display = 'block';
+    displayImg.src = url;
+    photoLabel.textContent = label;
+    photoLabel.className = 'photo-label' + (isAI ? ' ai' : '');
   }
 </script>
 
