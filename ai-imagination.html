@@ -85,7 +85,7 @@
     .btn-generate { background:var(--blue-deep); color:var(--white); border:none; border-radius:40px; padding:14px 24px; font-size:12px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; cursor:pointer; transition:background 0.3s; font-family:'Jost',sans-serif; width:100%; display:flex; align-items:center; justify-content:center; gap:8px; }
     .btn-generate:hover:not(:disabled) { background:var(--charcoal); }
     .btn-generate:disabled { opacity:0.35; cursor:not-allowed; }
-    .btn-upload-new { background:transparent; color:var(--mid-gray); border:1px solid var(--light-gray); border-radius:40px; padding:11px 24px; font-size:11px; font-weight:400; letter-spacing:0.1em; text-transform:uppercase; cursor:pointer; transition:all 0.2s; font-family:'Jost',sans-serif; width:100%; position:relative; }
+    .btn-upload-new { background:transparent; color:var(--mid-gray); border:1px solid var(--light-gray); border-radius:40px; padding:11px 24px; font-size:11px; font-weight:400; letter-spacing:0.1em; text-transform:uppercase; cursor:pointer; transition:all 0.2s; font-family:'Jost',sans-serif; width:100%; position:relative; text-align:center; }
     .btn-upload-new input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
     .btn-upload-new:hover { border-color:var(--blue-mist); color:var(--charcoal); }
 
@@ -188,15 +188,15 @@
           data-desc="Hairline is digitally lowered and reshaped to frame your face more naturally."
           data-link="/fue-hair-transplant.html">
           <span class="pill-icon">💆</span>
-          <div class="pill-dot"></div>
-          <span class="pill-name">Hairline Correction</span>
+
+          <span class="pill-name">Hair Transplant</span>
         </div>
 
         <div class="proc-pill" data-proc="rhinoplasty"
           data-desc="Nose bridge refined, tip elevated and narrowed for a more balanced profile."
           data-link="/rhinoplasty.html">
           <span class="pill-icon">👃</span>
-          <div class="pill-dot"></div>
+
           <span class="pill-name">Rhinoplasty</span>
         </div>
 
@@ -204,7 +204,7 @@
           data-desc="Upper eyelid crease created for a natural, defined double-eyelid appearance."
           data-link="/eyelid-surgery.html">
           <span class="pill-icon">👁️</span>
-          <div class="pill-dot"></div>
+
           <span class="pill-name">Eyelid Surgery</span>
         </div>
 
@@ -212,7 +212,7 @@
           data-desc="Under-eye puffiness and dark shadows reduced for a rested, refreshed look."
           data-link="/eyelid-surgery.html">
           <span class="pill-icon">✨</span>
-          <div class="pill-dot"></div>
+
           <span class="pill-name">Eyebag Removal</span>
         </div>
 
@@ -220,7 +220,7 @@
           data-desc="Teeth whitened, shaped and evened with porcelain veneers for a complete smile transformation."
           data-link="/porcelain-veneers.html">
           <span class="pill-icon">😁</span>
-          <div class="pill-dot"></div>
+
           <span class="pill-name">Porcelain Veneers</span>
         </div>
 
@@ -228,7 +228,7 @@
           data-desc="Lips volumised and defined with a natural-looking enhancement."
           data-link="/lip-enhancement.html">
           <span class="pill-icon">💋</span>
-          <div class="pill-dot"></div>
+
           <span class="pill-name">Lip Enhancement</span>
         </div>
 
@@ -273,7 +273,7 @@
 
 <script>
   const procedures = {
-    hairline:    { name:'Hairline Correction',  icon:'💆' },
+    hairline:    { name:'Hair Transplant',       icon:'💆' },
     rhinoplasty: { name:'Rhinoplasty',           icon:'👃' },
     eyelid:      { name:'Eyelid Surgery',        icon:'👁️' },
     eyebag:      { name:'Eyebag Removal',        icon:'✨' },
