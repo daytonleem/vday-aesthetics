@@ -373,17 +373,15 @@
     }, 1800);
 
     // ═══════════════════════════════════════════
-    // AI API CALL — replace setTimeout below
-    //
-    // fetch('/api/imagine', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ image: uploadedDataUrl, procedures: [...selected] })
-    // })
-    // .then(r => r.json())
-    // .then(data => { clearInterval(t); showResult(data.imageUrl); });
+    fetch('https://vday-ai-imagine.daytonleem.workers.dev/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: uploadedDataUrl, procedures: [...selected] })
+    })
+    .then(r => r.blob())
+    .then(blob => { clearInterval(t); showResult(URL.createObjectURL(blob)); })
+    .catch(() => { clearInterval(t); loadingLabel.textContent = 'Something went wrong — please try again.'; loadingSub.textContent = ''; });
     // ═══════════════════════════════════════════
-    setTimeout(() => { clearInterval(t); showResult(uploadedDataUrl); }, 7000);
   }
 
   function showResult(url) {
