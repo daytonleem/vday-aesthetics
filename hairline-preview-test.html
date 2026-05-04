@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hairline Preview Tool — Vday Aesthetic Concierge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue-deep:#6a9ab0; --blue-mist:#b8cdd8; --blue-pale:#d4e4ec; --charcoal:#2c2c2c; --mid-gray:#6b6b6b; --light-gray:#e8e8e8; --cream:#f8f5f2; --white:#fff; }
+    *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Jost',sans-serif; background:var(--white); color:var(--charcoal); }
+
+    /* NAV */
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:20px 60px; background:rgba(255,255,255,0.97); border-bottom:1px solid rgba(184,205,216,0.3); }
+    .logo-text { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400; font-size:28px; color:var(--blue-deep); text-decoration:none; }
+    .logo-sub { font-size:9px; font-weight:500; letter-spacing:0.18em; text-transform:uppercase; color:var(--mid-gray); display:block; margin-top:-4px; }
+    .nav-badge { font-size:10px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; background:var(--blue-pale); color:var(--blue-deep); padding:6px 14px; border-radius:20px; }
+
+    /* HERO */
+    .hero { padding:140px 80px 60px; background:linear-gradient(135deg,#f0f6f9,#e8f2f7 60%,#f8f5f2); text-align:center; }
+    .hero-eyebrow { font-size:10px; font-weight:500; letter-spacing:0.22em; text-transform:uppercase; color:var(--blue-deep); margin-bottom:18px; display:flex; align-items:center; justify-content:center; gap:10px; }
+    .hero-eyebrow::before,.hero-eyebrow::after { content:""; width:28px; height:1px; background:var(--blue-deep); }
+    .hero h1 { font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(36px,5vw,60px); line-height:1.15; margin-bottom:16px; }
+    .hero h1 em { font-style:italic; color:var(--blue-deep); }
+    .hero p { font-size:15px; font-weight:300; color:var(--mid-gray); max-width:520px; margin:0 auto 12px; line-height:1.8; }
+    .hero-disclaimer { font-size:11px; color:var(--mid-gray); opacity:0.7; }
+
+    /* TOOL */
+    .tool-wrap { max-width:960px; margin:0 auto; padding:60px 40px 80px; }
+
+    /* STEP INDICATOR */
+    .steps { display:flex; justify-content:center; gap:0; margin-bottom:48px; }
+    .step { display:flex; align-items:center; gap:10px; font-size:11px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:var(--mid-gray); }
+    .step.active { color:var(--blue-deep); }
+    .step.done { color:var(--charcoal); }
+    .step-num { width:28px; height:28px; border-radius:50%; border:1px solid var(--light-gray); display:flex; align-items:center; justify-content:center; font-size:12px; background:var(--white); flex-shrink:0; }
+    .step.active .step-num { background:var(--blue-deep); color:var(--white); border-color:var(--blue-deep); }
+    .step.done .step-num { background:var(--charcoal); color:var(--white); border-color:var(--charcoal); }
+    .step-line { width:48px; height:1px; background:var(--light-gray); margin:0 4px; }
+
+    /* UPLOAD ZONE */
+    .upload-zone { border:2px dashed var(--blue-mist); border-radius:12px; padding:60px 40px; text-align:center; cursor:pointer; transition:all 0.3s; background:var(--white); position:relative; }
+    .upload-zone:hover,.upload-zone.dragover { border-color:var(--blue-deep); background:#f4f9fc; }
+    .upload-zone input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+    .upload-icon { font-size:40px; margin-bottom:16px; }
+    .upload-zone h3 { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:400; margin-bottom:8px; }
+    .upload-zone p { font-size:13px; color:var(--mid-gray); font-weight:300; margin-bottom:4px; }
+    .upload-zone small { font-size:11px; color:var(--mid-gray); opacity:0.7; }
+    .upload-tips { background:var(--cream); border-radius:8px; padding:16px 20px; margin-top:24px; text-align:left; }
+    .upload-tips p { font-size:12px; color:var(--mid-gray); font-weight:400; margin-bottom:0; line-height:1.7; }
+    .upload-tips strong { color:var(--charcoal); }
+
+    /* PREVIEW STATE */
+    .preview-state { display:none; }
+    .preview-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:32px; }
+    .preview-box { border:1px solid var(--light-gray); border-radius:12px; overflow:hidden; }
+    .preview-box-label { padding:10px 16px; font-size:10px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; color:var(--mid-gray); background:var(--cream); border-bottom:1px solid var(--light-gray); }
+    .preview-box img { width:100%; height:320px; object-fit:cover; object-position:top; display:block; }
+    .preview-box-result { width:100%; height:320px; display:flex; align-items:center; justify-content:center; background:#f0f6f9; flex-direction:column; gap:12px; }
+
+    /* LOADING */
+    .spinner { width:40px; height:40px; border:3px solid var(--blue-mist); border-top-color:var(--blue-deep); border-radius:50%; animation:spin 0.8s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .loading-text { font-size:13px; color:var(--mid-gray); font-weight:300; }
+    .loading-steps-list { font-size:12px; color:var(--mid-gray); opacity:0.7; text-align:center; margin-top:4px; }
+
+    /* RESULT */
+    .result-box { display:none; width:100%; height:320px; position:relative; }
+    .result-box img { width:100%; height:100%; object-fit:cover; object-position:top; }
+    .result-badge { position:absolute; top:10px; right:10px; background:var(--blue-deep); color:var(--white); font-size:10px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; padding:4px 10px; border-radius:20px; }
+
+    /* CONTROLS */
+    .controls { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+    .btn-primary { background:var(--blue-deep); color:var(--white); padding:14px 32px; border-radius:40px; font-size:12px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; text-decoration:none; border:none; cursor:pointer; transition:background 0.3s; display:inline-flex; align-items:center; gap:8px; font-family:'Jost',sans-serif; }
+    .btn-primary:hover { background:var(--charcoal); }
+    .btn-primary:disabled { opacity:0.5; cursor:not-allowed; }
+    .btn-secondary { border:1px solid var(--blue-deep); color:var(--blue-deep); padding:14px 32px; border-radius:40px; font-size:12px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; text-decoration:none; background:transparent; cursor:pointer; transition:all 0.3s; font-family:'Jost',sans-serif; }
+    .btn-secondary:hover { background:var(--blue-deep); color:var(--white); }
+
+    /* POST-RESULT CTA */
+    .result-cta { display:none; background:linear-gradient(135deg,#e8f1f6,#d0e4ef); border-left:3px solid var(--blue-deep); padding:24px 28px; border-radius:0 8px 8px 0; margin-top:32px; }
+    .result-cta h3 { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:400; margin-bottom:8px; }
+    .result-cta p { font-size:13px; color:var(--mid-gray); font-weight:300; line-height:1.7; margin-bottom:16px; }
+    .result-cta-btns { display:flex; gap:12px; flex-wrap:wrap; }
+
+    /* DISCLAIMER */
+    .disclaimer { text-align:center; padding:32px 40px; border-top:1px solid var(--light-gray); margin-top:48px; }
+    .disclaimer p { font-size:11px; color:var(--mid-gray); opacity:0.7; line-height:1.7; max-width:600px; margin:0 auto; }
+
+    @media(max-width:768px) {
+      nav { padding:16px 24px; }
+      .hero { padding:110px 24px 48px; }
+      .tool-wrap { padding:40px 20px 60px; }
+      .preview-grid { grid-template-columns:1fr; }
+      .preview-box img,.preview-box-result,.result-box { height:240px; }
+      .steps { gap:0; }
+      .step span { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" style="text-decoration:none;">
+    <span class="logo-text">Vday</span>
+    <span class="logo-sub">Aesthetic Concierge · Shanghai</span>
+  </a>
+  <span class="nav-badge">AI Preview Tool · Beta</span>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">AI-Powered Visualisation</div>
+  <h1>See Your <em>New Hairline</em><br>Before You Commit</h1>
+  <p>Upload a clear front-facing photo and our AI will generate a realistic preview of how a lowered hairline could look on your face.</p>
+  <p class="hero-disclaimer">Preview is for reference only. Final results depend on individual anatomy and surgeon assessment.</p>
+</div>
+
+<div class="tool-wrap">
+
+  <!-- STEP INDICATOR -->
+  <div class="steps">
+    <div class="step active" id="step1">
+      <div class="step-num">1</div>
+      <span>Upload Photo</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step" id="step2">
+      <div class="step-num">2</div>
+      <span>Generate Preview</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step" id="step3">
+      <div class="step-num">3</div>
+      <span>See Result</span>
+    </div>
+  </div>
+
+  <!-- UPLOAD STATE -->
+  <div id="uploadState">
+    <div class="upload-zone" id="uploadZone">
+      <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp">
+      <div class="upload-icon">📷</div>
+      <h3>Upload your photo</h3>
+      <p>Drag and drop or click to select</p>
+      <small>JPG, PNG or WEBP · Max 10MB</small>
+    </div>
+    <div class="upload-tips">
+      <p><strong>Best results:</strong> Front-facing photo · Good lighting · Hair pulled back or away from face · Neutral expression · No heavy shadows on forehead</p>
+    </div>
+    <div class="controls" style="margin-top:28px;">
+      <button class="btn-primary" id="uploadBtn" disabled>Generate Preview →</button>
+    </div>
+  </div>
+
+  <!-- PREVIEW + RESULT STATE -->
+  <div class="preview-state" id="previewState">
+    <div class="preview-grid">
+      <div class="preview-box">
+        <div class="preview-box-label">Your Photo</div>
+        <img id="uploadedImg" src="" alt="Uploaded photo">
+      </div>
+      <div class="preview-box">
+        <div class="preview-box-label">AI Preview — Lowered Hairline</div>
+        <!-- Loading -->
+        <div class="preview-box-result" id="loadingBox">
+          <div class="spinner"></div>
+          <div class="loading-text">Generating your preview…</div>
+          <div class="loading-steps-list" id="loadingStepText">Analysing facial structure</div>
+        </div>
+        <!-- Result image (shown after generation) -->
+        <div class="result-box" id="resultBox">
+          <img id="resultImg" src="" alt="AI hairline preview">
+          <div class="result-badge">AI Preview</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn-secondary" id="retryBtn">Upload Different Photo</button>
+      <a href="https://wa.me/6598991446?text=Hi%20Vday%2C%20I%20tried%20the%20hairline%20preview%20tool%20and%20I%27d%20like%20to%20find%20out%20more%20about%20FUE%20hair%20transplant." class="btn-primary" id="waBtn" style="display:none;">💬 Discuss With Our Team</a>
+    </div>
+
+    <!-- Post-result CTA -->
+    <div class="result-cta" id="resultCta">
+      <h3>Like What You See?</h3>
+      <p>Your preview is a guide — not a guarantee. A consultation with our team will give you a personalised assessment of what's achievable based on your donor density and scalp laxity.</p>
+      <div class="result-cta-btns">
+        <a href="https://wa.me/6598991446?text=Hi%20Vday%2C%20I%20tried%20the%20hairline%20preview%20tool%20and%20I%27d%20like%20to%20discuss%20FUE%20hair%20transplant%20in%20Shanghai." class="btn-primary">💬 WhatsApp Our Concierge</a>
+        <a href="/fue-hair-transplant.html" class="btn-secondary">Learn About FUE →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <p>This tool is for visualisation purposes only. AI-generated previews are illustrative and do not constitute a medical assessment or guarantee of results. Actual outcomes depend on individual hair characteristics, donor density, and surgical technique. Always consult a qualified surgeon before making any decisions.</p>
+  </div>
+
+</div>
+
+<script>
+  const fileInput = document.getElementById('fileInput');
+  const uploadZone = document.getElementById('uploadZone');
+  const uploadBtn = document.getElementById('uploadBtn');
+  const uploadState = document.getElementById('uploadState');
+  const previewState = document.getElementById('previewState');
+  const uploadedImg = document.getElementById('uploadedImg');
+  const loadingBox = document.getElementById('loadingBox');
+  const loadingStepText = document.getElementById('loadingStepText');
+  const resultBox = document.getElementById('resultBox');
+  const resultImg = document.getElementById('resultImg');
+  const resultCta = document.getElementById('resultCta');
+  const retryBtn = document.getElementById('retryBtn');
+  const waBtn = document.getElementById('waBtn');
+  const step1 = document.getElementById('step1');
+  const step2 = document.getElementById('step2');
+  const step3 = document.getElementById('step3');
+
+  let selectedFile = null;
+
+  // Drag and drop
+  uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+  uploadZone.addEventListener('drop', e => {
+    e.preventDefault();
+    uploadZone.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) handleFile(file);
+  });
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) handleFile(fileInput.files[0]);
+  });
+
+  function handleFile(file) {
+    selectedFile = file;
+    uploadBtn.disabled = false;
+    uploadBtn.textContent = '✓ Photo Selected — Generate Preview →';
+  }
+
+  uploadBtn.addEventListener('click', () => {
+    if (!selectedFile) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      uploadedImg.src = e.target.result;
+      startGeneration(e.target.result);
+    };
+    reader.readAsDataURL(selectedFile);
+  });
+
+  function startGeneration(dataUrl) {
+    // Show preview state
+    uploadState.style.display = 'none';
+    previewState.style.display = 'block';
+    loadingBox.style.display = 'flex';
+    resultBox.style.display = 'none';
+    resultCta.style.display = 'none';
+    waBtn.style.display = 'none';
+
+    // Update steps
+    step1.classList.remove('active'); step1.classList.add('done');
+    step2.classList.add('active');
+
+    // Simulate loading steps
+    const loadingMessages = [
+      'Analysing facial structure…',
+      'Detecting hairline position…',
+      'Calculating natural hairline shape…',
+      'Rendering lowered hairline…',
+      'Finalising preview…',
+    ];
+    let i = 0;
+    const msgInterval = setInterval(() => {
+      i++;
+      if (i < loadingMessages.length) loadingStepText.textContent = loadingMessages[i];
+    }, 900);
+
+    // === AI API CALL GOES HERE ===
+    // Replace the setTimeout below with your actual API call.
+    // Send `dataUrl` (base64 image) to your chosen AI endpoint.
+    // On success, set resultImg.src to the returned image URL or base64.
+    // Example:
+    // fetch('/api/hairline-preview', { method:'POST', body: JSON.stringify({ image: dataUrl }) })
+    //   .then(r => r.json())
+    //   .then(data => showResult(data.resultImageUrl));
+    // ============================
+
+    setTimeout(() => {
+      clearInterval(msgInterval);
+      // PLACEHOLDER: shows the uploaded photo as a stand-in for the AI result
+      // Replace resultImg.src with the actual AI-generated image
+      showResult(dataUrl);
+    }, 5000);
+  }
+
+  function showResult(resultUrl) {
+    loadingBox.style.display = 'none';
+    resultImg.src = resultUrl;
+    resultBox.style.display = 'block';
+    resultCta.style.display = 'block';
+    waBtn.style.display = 'inline-flex';
+
+    step2.classList.remove('active'); step2.classList.add('done');
+    step3.classList.add('active');
+  }
+
+  retryBtn.addEventListener('click', () => {
+    selectedFile = null;
+    fileInput.value = '';
+    uploadBtn.disabled = true;
+    uploadBtn.textContent = 'Generate Preview →';
+    uploadState.style.display = 'block';
+    previewState.style.display = 'none';
+    step1.classList.remove('done'); step1.classList.add('active');
+    step2.classList.remove('active','done');
+    step3.classList.remove('active','done');
+  });
+</script>
+
+</body>
+</html>
