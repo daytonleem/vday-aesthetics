@@ -363,32 +363,58 @@
     startGeneration();
   });
 
+  function resizeImage(dataUrl, maxPx, quality, cb) {
+    const img = new Image();
+    img.onload = () => {
+      let w = img.width, h = img.height;
+      if (w > h) { if (w > maxPx) { h = Math.round(h * maxPx / w); w = maxPx; } }
+      else        { if (h > maxPx) { w = Math.round(w * maxPx / h); h = maxPx; } }
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      cb(c.toDataURL('image/jpeg', quality));
+    };
+    img.src = dataUrl;
+  }
+
   function startGeneration() {
     photoLoading.style.display = 'flex';
+    loadingLabel.textContent = 'Analysing facial structure…';
+    loadingSub.textContent = 'Detecting key landmarks';
     generateBtn.disabled = true;
     waCta.style.display = 'none';
 
     const msgs = [
-      ['Analysing facial structure…',       'Detecting key landmarks'],
       ['Mapping procedure areas…',          'Preparing transformation'],
       ['Applying selected procedures…',     'Blending changes naturally'],
       ['Refining details…',                 'Almost ready'],
     ];
     let i = 0;
     const t = setInterval(() => {
-      i++; if (i < msgs.length) { loadingLabel.textContent = msgs[i][0]; loadingSub.textContent = msgs[i][1]; }
+      if (i < msgs.length) { loadingLabel.textContent = msgs[i][0]; loadingSub.textContent = msgs[i][1]; }
+      i++;
     }, 1800);
 
-    // ═══════════════════════════════════════════
-    fetch('https://vday-ai-imagine.daytonleem.workers.dev/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image: uploadedDataUrl, procedures: [...selected] })
-    })
-    .then(r => r.blob())
-    .then(blob => { clearInterval(t); showResult(URL.createObjectURL(blob)); })
-    .catch(() => { clearInterval(t); loadingLabel.textContent = 'Something went wrong — please try again.'; loadingSub.textContent = ''; });
-    // ═══════════════════════════════════════════
+    resizeImage(uploadedDataUrl, 768, 0.88, resized => {
+      fetch('https://vday-ai-imagine.daytonleem.workers.dev/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: resized, procedures: [...selected] })
+      })
+      .then(r => {
+        if (!r.ok) return r.text().then(msg => { throw new Error(`Worker ${r.status}: ${msg}`); });
+        return r.blob();
+      })
+      .then(blob => { clearInterval(t); showResult(URL.createObjectURL(blob)); })
+      .catch(err => {
+        clearInterval(t);
+        photoLoading.style.display = 'none';
+        generateBtn.disabled = false;
+        updateGenerateBtn();
+        console.error('Generation error:', err);
+        alert('Generation failed — ' + (err.message || 'please try again.'));
+      });
+    });
   }
 
   function showResult(url) {
