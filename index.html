@@ -1414,19 +1414,12 @@
 </script>
 <!-- Google Ads Contact conversion -->
 <script>
-function gtag_report_conversion(url) {
-  var callback = function () {
-    if (typeof(url) != 'undefined') {
-      window.location = url;
-    }
-  };
+function gtag_report_conversion() {
   gtag('event', 'conversion', {
       'send_to': 'AW-18270057504/hfUBCPemjsUcEKDo64dE',
       'value': 1.0,
-      'currency': 'SGD',
-      'event_callback': callback
+      'currency': 'SGD'
   });
-  return false;
 }
 </script>
 </head>
@@ -1470,7 +1463,7 @@ function gtag_report_conversion(url) {
         End-to-end support for advanced cosmetic procedures in Shanghai — curated, coordinated, and seamlessly executed for you.
       </p>
       <div class="hero-ctas">
-        <a onclick="return gtag_report_conversion(this.href)" href="https://wa.me/6598991446?text=Hi%2C%20I%20am%20interested%20in%20a%20cosmetic%20procedure%20in%20Shanghai.%20Could%20you%20advise%20what%20would%20suit%20my%20case%20and%20walk%20me%20through%20the%20next%20steps%3F" class="btn btn-accent" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor" style="width:15px;height:15px;flex-shrink:0" aria-hidden="true"><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93a7.9 7.9 0 0 0-2.327-5.607M7.994 14.521a6.573 6.573 0 0 1-3.355-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.593 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.1-.403.093-.087.21-.226.315-.34.1-.114.133-.198.198-.33.065-.134.034-.248-.034-.347-.065-.099-.495-1.193-.679-1.636-.182-.443-.367-.382-.504-.388a9.65 9.65 0 0 0-.476-.009c-.158 0-.41.06-.624.301-.218.243-.832.813-.832 1.97 0 1.154.851 2.27.972 2.428.114.158 1.587 2.428 3.84 3.31 2.256.881 2.256.586 3.012.553.756-.034 1.595-.534 1.823-1.06.228-.527.228-1.034.16-1.06-.066-.026-.36-.158-.567-.257"/></svg>WhatsApp Us</a>
+        <a onclick="gtag_report_conversion()" href="https://wa.me/6598991446?text=Hi%2C%20I%20am%20interested%20in%20a%20cosmetic%20procedure%20in%20Shanghai.%20Could%20you%20advise%20what%20would%20suit%20my%20case%20and%20walk%20me%20through%20the%20next%20steps%3F" class="btn btn-accent" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor" style="width:15px;height:15px;flex-shrink:0" aria-hidden="true"><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93a7.9 7.9 0 0 0-2.327-5.607M7.994 14.521a6.573 6.573 0 0 1-3.355-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.593 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.1-.403.093-.087.21-.226.315-.34.1-.114.133-.198.198-.33.065-.134.034-.248-.034-.347-.065-.099-.495-1.193-.679-1.636-.182-.443-.367-.382-.504-.388a9.65 9.65 0 0 0-.476-.009c-.158 0-.41.06-.624.301-.218.243-.832.813-.832 1.97 0 1.154.851 2.27.972 2.428.114.158 1.587 2.428 3.84 3.31 2.256.881 2.256.586 3.012.553.756-.034 1.595-.534 1.823-1.06.228-.527.228-1.034.16-1.06-.066-.026-.36-.158-.567-.257"/></svg>WhatsApp Us</a>
         <a href="#social-proof" class="btn btn-outline">See Real Results</a>
       </div>
       <div class="hero-stats">
@@ -1758,7 +1751,7 @@ function gtag_report_conversion(url) {
     <!-- More procedures -->
     <div class="proc-more reveal">
       <p class="proc-more-text"><strong>More procedures available.</strong> Don't see what you're looking for? We source across all aesthetic specialties in Shanghai. Just ask.</p>
-      <a onclick="return gtag_report_conversion(this.href)" href="https://wa.me/6598991446?text=Hi%2C%20I%20have%20a%20question%20about%20a%20procedure%20not%20listed%20on%20your%20website." class="btn btn-outline" target="_blank" rel="noopener">Ask Us →</a>
+      <a onclick="gtag_report_conversion()" href="https://wa.me/6598991446?text=Hi%2C%20I%20have%20a%20question%20about%20a%20procedure%20not%20listed%20on%20your%20website." class="btn btn-outline" target="_blank" rel="noopener">Ask Us →</a>
     </div>
   </section>
 
@@ -1915,7 +1908,7 @@ function gtag_report_conversion(url) {
       <p class="eyebrow">Begin Today</p>
       <h2>Your <em>Transformation</em><br>Starts Here</h2>
       <p>A free, no-obligation consultation. Tell us your goals and we'll match you with the right surgeon and clinic in Shanghai.</p>
-      <a onclick="return gtag_report_conversion(this.href)" href="https://wa.me/6598991446?text=Hi%2C%20I%20am%20interested%20in%20a%20cosmetic%20procedure%20in%20Shanghai.%20Could%20you%20advise%20what%20would%20suit%20my%20case%20and%20walk%20me%20through%20the%20next%20steps%3F" class="btn btn-cream" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor" style="width:15px;height:15px;flex-shrink:0" aria-hidden="true"><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93a7.9 7.9 0 0 0-2.327-5.607M7.994 14.521a6.573 6.573 0 0 1-3.355-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.593 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.1-.403.093-.087.21-.226.315-.34.1-.114.133-.198.198-.33.065-.134.034-.248-.034-.347-.065-.099-.495-1.193-.679-1.636-.182-.443-.367-.382-.504-.388a9.65 9.65 0 0 0-.476-.009c-.158 0-.41.06-.624.301-.218.243-.832.813-.832 1.97 0 1.154.851 2.27.972 2.428.114.158 1.587 2.428 3.84 3.31 2.256.881 2.256.586 3.012.553.756-.034 1.595-.534 1.823-1.06.228-.527.228-1.034.16-1.06-.066-.026-.36-.158-.567-.257"/></svg>WhatsApp Us</a>
+      <a onclick="gtag_report_conversion()" href="https://wa.me/6598991446?text=Hi%2C%20I%20am%20interested%20in%20a%20cosmetic%20procedure%20in%20Shanghai.%20Could%20you%20advise%20what%20would%20suit%20my%20case%20and%20walk%20me%20through%20the%20next%20steps%3F" class="btn btn-cream" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor" style="width:15px;height:15px;flex-shrink:0" aria-hidden="true"><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93a7.9 7.9 0 0 0-2.327-5.607M7.994 14.521a6.573 6.573 0 0 1-3.355-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.593 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.1-.403.093-.087.21-.226.315-.34.1-.114.133-.198.198-.33.065-.134.034-.248-.034-.347-.065-.099-.495-1.193-.679-1.636-.182-.443-.367-.382-.504-.388a9.65 9.65 0 0 0-.476-.009c-.158 0-.41.06-.624.301-.218.243-.832.813-.832 1.97 0 1.154.851 2.27.972 2.428.114.158 1.587 2.428 3.84 3.31 2.256.881 2.256.586 3.012.553.756-.034 1.595-.534 1.823-1.06.228-.527.228-1.034.16-1.06-.066-.026-.36-.158-.567-.257"/></svg>WhatsApp Us</a>
     </div>
   </section>
 
@@ -1951,7 +1944,7 @@ function gtag_report_conversion(url) {
       <div class="footer-col">
         <h4>Contact</h4>
         <ul>
-          <li><a onclick="return gtag_report_conversion(this.href)" href="https://wa.me/6598991446" target="_blank" rel="noopener">WhatsApp Us</a></li>
+          <li><a onclick="gtag_report_conversion()" href="https://wa.me/6598991446" target="_blank" rel="noopener">WhatsApp Us</a></li>
           <li><a href="https://www.instagram.com/vday.aesthetics/" target="_blank" rel="noopener">Instagram</a></li>
         </ul>
       </div>
@@ -1975,7 +1968,7 @@ function gtag_report_conversion(url) {
   </div>
 
   <!-- ── WHATSAPP FLOAT ─────────────────────────────────────── -->
-  <a onclick="return gtag_report_conversion(this.href)" href="https://wa.me/6598991446?text=Hi%2C%20I%20am%20interested%20in%20a%20cosmetic%20procedure%20in%20Shanghai.%20Could%20you%20advise%20what%20would%20suit%20my%20case%20and%20walk%20me%20through%20the%20next%20steps%3F" class="wa-float" target="_blank" rel="noopener" title="Chat on WhatsApp" aria-label="Chat on WhatsApp">
+  <a onclick="gtag_report_conversion()" href="https://wa.me/6598991446?text=Hi%2C%20I%20am%20interested%20in%20a%20cosmetic%20procedure%20in%20Shanghai.%20Could%20you%20advise%20what%20would%20suit%20my%20case%20and%20walk%20me%20through%20the%20next%20steps%3F" class="wa-float" target="_blank" rel="noopener" title="Chat on WhatsApp" aria-label="Chat on WhatsApp">
     <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#25D366"><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93a7.9 7.9 0 0 0-2.327-5.607M7.994 14.521a6.573 6.573 0 0 1-3.355-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.593 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.1-.403.093-.087.21-.226.315-.34.1-.114.133-.198.198-.33.065-.134.034-.248-.034-.347-.065-.099-.495-1.193-.679-1.636-.182-.443-.367-.382-.504-.388a9.65 9.65 0 0 0-.476-.009c-.158 0-.41.06-.624.301-.218.243-.832.813-.832 1.97 0 1.154.851 2.27.972 2.428.114.158 1.587 2.428 3.84 3.31 2.256.881 2.256.586 3.012.553.756-.034 1.595-.534 1.823-1.06.228-.527.228-1.034.16-1.06-.066-.026-.36-.158-.567-.257"/></svg>
     <span>Contact Us</span>
   </a>
