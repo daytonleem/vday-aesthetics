@@ -17,19 +17,12 @@
 </script>
 <!-- Google Ads Contact conversion -->
 <script>
-function gtag_report_conversion(url) {
-  var callback = function () {
-    if (typeof(url) != 'undefined') {
-      window.location = url;
-    }
-  };
+function gtag_report_conversion() {
   gtag('event', 'conversion', {
       'send_to': 'AW-18270057504/hfUBCPemjsUcEKDo64dE',
       'value': 1.0,
-      'currency': 'SGD',
-      'event_callback': callback
+      'currency': 'SGD'
   });
-  return false;
 }
 </script>
 </head>
