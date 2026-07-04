@@ -1,0 +1,83 @@
+# ===========================================================================
+# router.toml — THE routing table. This file IS the router's brain.
+# Edit it freely; router.py re-reads it on every request.
+#
+# Prices below are $/million tokens (input/output), checked 2026-07-04 on
+# openrouter.ai. They drift — the router always reports the EXACT billed cost
+# of every call from OpenRouter's /generation endpoint, so these comments are
+# orientation, not accounting.
+# ===========================================================================
+
+[openrouter]
+base_url = "https://openrouter.ai/api/v1"
+# Identifies your app to OpenRouter (shows up in their dashboard; optional).
+app_name = "ai-stack-router"
+
+[limits]
+# Soft daily budget enforced by the router itself (USD). This is the SECOND
+# line of defense — the hard credit limit you set on the OpenRouter key is
+# the first. Costs are summed from logs/usage.jsonl (local date).
+daily_budget_usd = 2.00
+
+# Models the router will NEVER route to automatically. You can still reach
+# them by hand with:  router.py ask --frontier --model anthropic/...
+# This is the "route, don't escalate" rule made mechanical.
+blocked_prefixes = ["anthropic/", "openai/", "google/", "x-ai/"]
+
+# The one frontier model you compare against BY HAND (proof step 6).
+# Verify the exact slug at https://openrouter.ai/anthropic before first use.
+frontier_compare_model = "anthropic/claude-fable-5"
+
+# ---------------------------------------------------------------------------
+# ROUTES — each task type goes to the model that wins it, with a CHEAP open
+# fallback (never a paid frontier model). "models" is an ordered chain:
+# OpenRouter's native `models` fallback array gets exactly this list, so if
+# the primary is down/rate-limited, OpenRouter itself retries the next one.
+# ---------------------------------------------------------------------------
+
+[routes.coding]
+# DeepSeek V4 Pro — competitive coding.  ~$0.44 in / $0.87 out
+models = ["deepseek/deepseek-v4-pro", "qwen/qwen3.6-plus"]
+keywords = [
+  "code", "coding", "function", "bug", "debug", "refactor", "compile",
+  "python", "javascript", "typescript", "rust", "sql", "regex", "script",
+  "unit test", "stack trace", "exception", "algorithm", "implement",
+]
+
+[routes.agents]
+# Kimi K2.6 — agentic tool-use, sustains very long tool-call chains.
+# ~$0.66 in / $3.41 out. (A :free variant exists on OpenRouter with low
+# rate limits — fine as last-ditch fallback.)
+models = ["moonshotai/kimi-k2.6", "moonshotai/kimi-k2.5"]
+keywords = [
+  "tool call", "tool use", "agent", "agentic", "browse", "automate",
+  "multi-step", "workflow", "orchestrate", "mcp", "function calling",
+]
+
+[routes.web]
+# GLM-5.2 — web design (#1 Design Arena) + math.  ~$1.40 in / $4.40 out
+models = ["z-ai/glm-5.2", "deepseek/deepseek-v4-pro"]
+keywords = [
+  "website", "web page", "webpage", "landing page", "html", "css",
+  "tailwind", "ui", "ux", "design", "frontend", "front-end", "responsive",
+  "hero section", "layout", "component", "react component",
+]
+
+[routes.longdoc]
+# MiniMax M3 — 1M context + expert reasoning (beats the big frontier
+# models on GPQA).  ~$0.60 in / $2.40 out
+models = ["minimax/minimax-m3", "qwen/qwen3.6-plus"]
+keywords = [
+  "summarize this document", "long document", "entire codebase", "contract",
+  "prove", "proof", "reason step", "reasoning", "logic puzzle", "derive",
+  "physics", "chemistry", "biology question", "gpqa", "analyze this report",
+]
+# Anything with a prompt bigger than this many characters is forced onto
+# this route regardless of keywords (only MiniMax's 1M window fits it).
+force_above_chars = 300000
+
+[routes.general]
+# Qwen3.7 Max — strongest all-rounder; the default when nothing matches.
+# (~$1.20 in per launch coverage — check live price on openrouter.ai/qwen)
+models = ["qwen/qwen3.7-max", "qwen/qwen3.6-plus"]
+keywords = []   # default route — no keywords needed

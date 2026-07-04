@@ -1,0 +1,26 @@
+# systemd unit — Hermes gateway as an always-on service (Linux VPS).
+# Requires ai-stack-router.service so "auto" routing is always available.
+#
+# Install:
+#   sudo cp deploy/hermes-gateway.service /etc/systemd/system/
+#   # edit User= below; check the hermes binary path with `which hermes`
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now hermes-gateway
+
+[Unit]
+Description=Hermes agent gateway (Telegram/Discord/Slack/etc.)
+After=network-online.target ai-stack-router.service
+Wants=network-online.target
+Requires=ai-stack-router.service
+
+[Service]
+Type=simple
+User=youruser
+# `hermes gateway` is the always-on messaging daemon; run `hermes gateway setup`
+# once interactively first to connect your platforms.
+ExecStart=%h/.local/bin/hermes gateway
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

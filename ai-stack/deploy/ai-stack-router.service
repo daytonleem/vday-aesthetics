@@ -1,0 +1,29 @@
+# systemd unit — the router as an always-on, auto-restarting service (Linux VPS).
+#
+# Install (as the user that owns the checkout):
+#   sudo cp deploy/ai-stack-router.service /etc/systemd/system/
+#   # edit User= and the /opt/ai-stack paths below to match your box
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now ai-stack-router
+#   systemctl status ai-stack-router          # verify
+#   journalctl -u ai-stack-router -f          # live logs
+#
+# "enable" = starts on every boot. Restart=always = survives crashes.
+
+[Unit]
+Description=ai-stack OpenRouter routing proxy
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=youruser
+WorkingDirectory=/opt/ai-stack
+ExecStart=/usr/bin/python3 /opt/ai-stack/router.py serve --host 127.0.0.1 --port 5720
+Restart=always
+RestartSec=3
+# Key comes from the .env file next to router.py; alternatively uncomment:
+# Environment=OPENROUTER_API_KEY=sk-or-v1-...
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- launchd job: the router as an always-on, auto-restarting service on macOS.
+
+  Install:
+    1. Edit the two /Users/YOU/ai-stack paths below.
+    2. cp deploy/com.ai-stack.router.plist ~/Library/LaunchAgents/
+    3. launchctl load -w ~/Library/LaunchAgents/com.ai-stack.router.plist
+    4. Verify: curl http://127.0.0.1:5720/v1/models
+
+  KeepAlive=true restarts it on crash; RunAtLoad starts it at login.
+  ALSO stop the Mac from sleeping while plugged in (the #1 cause of
+  "my agent stopped working overnight"):
+    sudo pmset -c sleep 0
+-->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+ "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.ai-stack.router</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/bin/python3</string>
+    <string>/Users/YOU/ai-stack/router.py</string>
+    <string>serve</string>
+  </array>
+  <key>WorkingDirectory</key><string>/Users/YOU/ai-stack</string>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>StandardOutPath</key><string>/tmp/ai-stack-router.log</string>
+  <key>StandardErrorPath</key><string>/tmp/ai-stack-router.log</string>
+</dict>
+</plist>
