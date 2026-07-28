@@ -71,7 +71,9 @@ slide1 = wrap(f"""
   </div>
   <div class="body-text rise d5" style="font-size:21px;color:var(--muted);">Swipe to understand why.</div>
 </div>
-<img src="{_doctor_src}" style="position:absolute;bottom:10px;right:-80px;width:403px;opacity:.92;pointer-events:none;transform:rotate(-45deg);transform-origin:bottom right;" class="rise d5">
+<div class="rise d5" style="position:absolute;bottom:-230px;right:-260px;">
+  <img src="{_doctor_src}" style="width:560px;opacity:.95;pointer-events:none;display:block;transform:rotate(-22deg);transform-origin:bottom center;">
+</div>
 {FOOTER}
 """)
 
@@ -245,15 +247,15 @@ slide6 = wrap(f"""
 </div>
 <style>
 @keyframes plane-fly {{
-  0%   {{ transform: rotate(55deg) translate(-320px, 320px); opacity:0; }}
-  15%  {{ opacity:1; }}
-  100% {{ transform: rotate(55deg) translate(0px, 0px); opacity:1; }}
+  0%   {{ transform: rotate(45deg) translate(-1200px, 1200px); opacity:0; }}
+  8%   {{ opacity:1; }}
+  100% {{ transform: rotate(45deg) translate(0px, 0px); opacity:1; }}
 }}
 .plane-anim {{
-  animation: plane-fly 1.6s cubic-bezier(.22,.8,.36,1) 0.8s both;
+  animation: plane-fly 3.8s ease-in-out 0.6s both;
 }}
 </style>
-<img src="{_plane_src}" class="plane-anim" style="position:absolute;top:80px;right:76px;width:220px;transform:rotate(55deg);pointer-events:none;">
+<img src="{_plane_src}" class="plane-anim" style="position:absolute;top:60px;right:60px;width:220px;pointer-events:none;transform:rotate(45deg);">
 {FOOTER}
 """)
 
