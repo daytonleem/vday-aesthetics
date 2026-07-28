@@ -247,15 +247,19 @@ slide6 = wrap(f"""
 </div>
 <style>
 @keyframes plane-fly {{
-  0%   {{ transform: rotate(45deg) translate(-1200px, 1200px); opacity:0; }}
-  8%   {{ opacity:1; }}
-  100% {{ transform: rotate(45deg) translate(0px, 0px); opacity:1; }}
+  0%   {{ transform: translate(-920px, 1350px); opacity:0; }}
+  6%   {{ opacity:1; }}
+  100% {{ transform: translate(0px, 0px); opacity:1; }}
 }}
-.plane-anim {{
-  animation: plane-fly 3.8s ease-in-out 0.6s both;
+.plane-wrapper {{
+  position:absolute; top:60px; right:60px;
+  animation: plane-fly 3.8s ease-in-out 0.95s both;
+  pointer-events:none;
 }}
 </style>
-<img src="{_plane_src}" class="plane-anim" style="position:absolute;top:60px;right:60px;width:220px;pointer-events:none;transform:rotate(45deg);">
+<div class="plane-wrapper">
+  <img src="{_plane_src}" style="width:220px;display:block;transform:rotate(45deg);">
+</div>
 {FOOTER}
 """)
 
