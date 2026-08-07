@@ -1,0 +1,10 @@
+{
+  "model": "gemini-3.1-flash-lite-image",
+  "provider": "google-ai-studio",
+  "prompt": "A single red rose on a white marble surface, soft romantic lighting, Valentine's Day aesthetic, professional product photography",
+  "refs": [],
+  "params": {},
+  "cost_usd": 0.034,
+  "created": "2026-08-07T06:00:52Z",
+  "notes": "fal.ai (cheapest route) reachable but account balance exhausted (403 'User is locked. Exhausted balance'). Fell back to Google AI Studio per routing rule 3."
+}
