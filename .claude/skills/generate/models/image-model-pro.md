@@ -1,58 +1,47 @@
-# Image (quality) — Nano Banana Pro
+# Nano Banana 2
 
-Reference-faithful hero/final model. Only run this after a draft on
-the cheap model has been picked as the favourite, or when the job
-requires a real face/logo reference (never describe those in text —
-pass the file).
+The full-size sibling of the Lite model. Same reference-image
+strength, higher fidelity, higher cost. Only run this after a draft
+on `image-model.md` has been picked as the favourite, or when the
+job needs a real face/logo reference and the extra accuracy matters
+(never describe those in text — pass the file).
 
-## Providers, cheapest first
-1. **Kie AI** — aggregates Nano Banana Pro at a discount vs Google's
-   direct pricing. Check kie.ai/pricing for the current per-image
-   rate before quoting cost.
-2. **fal.ai** — `fal-ai/nano-banana-pro` fallback if Kie AI errors
-   or lacks the model. Verify the exact model slug at fal.ai/models
-   before running — these get renamed.
-3. **WaveSpeed AI** — last-resort fallback if both above fail.
+| Field | Value |
+|---|---|
+| Model ID | `gemini-3.1-flash-image-preview` |
+| Provider | Google AI Studio (fallback: fal.ai) |
+| Method | Sync (instant reply) |
+| Type | Image |
+| API key | `.env` → `GOOGLE_API_KEY` (fallback: `FAL_KEY`) |
+| Docs | https://ai.google.dev/gemini-api/docs/image-generation |
+| Cost | Higher than Lite's ~$0.034/image — check Google AI Studio's pricing page for the current rate before quoting |
 
-## Why this model for this project
-Best-in-class reference-image fidelity: feed it a real before/after
-photo, logo, or face and it preserves identity instead of
-hallucinating a new one. That's the only acceptable way to handle
-faces/logos under the project rules.
-
-## Kie AI request
+## Endpoint (Google AI Studio)
 ```
-curl -X POST https://api.kie.ai/api/v1/jobs/createTask \
-  -H "Authorization: Bearer $KIE_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "google/nano-banana-pro",
-    "input": {
-      "prompt": "<prompt>",
-      "image_urls": ["<reference image URL(s)>"]
-    }
-  }'
+POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image-preview:generateContent?key={GOOGLE_API_KEY}
 ```
-Returns a `taskId`; poll the get-task-detail endpoint
-(`https://api.kie.ai/api/v1/jobs/recordInfo?taskId=...`) until the
-state is complete, then download the result URL.
+
+## Request format
+Same shape as the Lite model — see `image-model.md` — one
+`inline_data` part per reference image, text prompt for everything
+that isn't a face/logo.
+
+## Response handling
+Sync call — base64 image at
+`candidates[0].content.parts[].inline_data.data`. Decode and write
+to `generations/`.
 
 ## fal.ai request (fallback)
 ```
-curl -X POST https://queue.fal.run/fal-ai/nano-banana-pro \
-  -H "Authorization: Key $FAL_API_KEY" \
+curl -X POST https://fal.run/{model-slug} \
+  -H "Authorization: Key $FAL_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"prompt": "<prompt>", "image_urls": ["<reference image URL>"]}'
+  -d '{"prompt": "<prompt>"}'
 ```
-
-## Params worth setting
-- `prompt` (required)
-- `image_urls` — the real reference file(s); upload to a reachable
-  URL first if the provider needs one rather than a raw upload
-- keep batches to 1 at a time per the rate-limit rule
+Verify the current fal.ai slug at fal.ai/models before running.
 
 ## When to use
 Final hero shots, anything the client will pick as "the one,"
-anything with a real face/logo reference. This is the paid/quality
-tier for images — quote cost if running more than a couple of
-variations, though it doesn't need the video approval gate.
+anything with a real face/logo reference where accuracy matters more
+than cost. This is the paid/quality image tier — quote cost if
+running more than a couple of variations.

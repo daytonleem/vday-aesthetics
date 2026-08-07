@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Generations Gallery</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg: #121212;
+    --card: #1b1b1b;
+    --text: #eee;
+    --muted: #999;
+    --accent: #ff5a1f;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh;
+  }
+  header {
+    padding: 28px 24px 12px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  h1 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: 0.01em;
+  }
+  #reconnect {
+    background: none;
+    border: 1px solid #333;
+    color: var(--muted);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  #reconnect:hover { color: var(--text); border-color: #555; }
+  #reconnect.hidden { display: none; }
+
+  #picker-screen {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px;
+    gap: 16px;
+  }
+  #picker-screen p { color: var(--muted); max-width: 40ch; line-height: 1.5; margin: 0; }
+  #choose-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 22px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  #choose-btn:hover { filter: brightness(1.08); }
+  .hidden { display: none !important; }
+
+  .wall {
+    column-count: 4;
+    column-gap: 16px;
+    padding: 0 24px 40px;
+  }
+  @media (max-width: 1100px) { .wall { column-count: 3; } }
+  @media (max-width: 760px)  { .wall { column-count: 2; } }
+  @media (max-width: 480px)  { .wall { column-count: 1; } }
+
+  .tile {
+    break-inside: avoid;
+    margin-bottom: 16px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--card);
+    cursor: zoom-in;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  }
+  .tile img, .tile video {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .tile .name {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 8px 10px;
+    font-size: 12px;
+    color: #fff;
+    background: linear-gradient(transparent, rgba(0,0,0,0.65));
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    pointer-events: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .tile:hover .name { opacity: 1; }
+
+  #lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.88);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    padding: 32px;
+  }
+  #lightbox.hidden { display: none; }
+  #lightbox img, #lightbox video {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+  }
+
+  #empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 60px 24px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Generations</h1>
+  <button id="reconnect" class="hidden">Change folder</button>
+</header>
+
+<div id="picker-screen">
+  <p id="picker-message">
+    Pick your <code>generations</code> folder once. Your browser remembers
+    it after that, and new files just show up here on reload.
+  </p>
+  <button id="choose-btn">Choose generations folder</button>
+</div>
+
+<div id="wall" class="wall hidden"></div>
+<div id="empty" class="hidden">No images or videos in this folder yet.</div>
+
+<div id="lightbox" class="hidden"></div>
+
+<script>
+const MEDIA_RE = /\.(png|jpe?g|webp|gif|avif|mp4|webm|mov)$/i;
+const DB_NAME = 'generations-gallery';
+const STORE = 'handles';
+const KEY = 'dir';
+
+function idbOpen() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = () => req.result.createObjectStore(STORE);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+async function idbGet(key) {
+  const db = await idbOpen();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE, 'readonly');
+    const req = tx.objectStore(STORE).get(key);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+async function idbSet(key, val) {
+  const db = await idbOpen();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE, 'readwrite');
+    tx.objectStore(STORE).put(val, key);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+const pickerScreen = document.getElementById('picker-screen');
+const pickerMessage = document.getElementById('picker-message');
+const chooseBtn = document.getElementById('choose-btn');
+const reconnectBtn = document.getElementById('reconnect');
+const wall = document.getElementById('wall');
+const emptyMsg = document.getElementById('empty');
+const lightbox = document.getElementById('lightbox');
+
+lightbox.addEventListener('click', (e) => {
+  if (e.target === lightbox) closeLightbox();
+});
+function closeLightbox() {
+  lightbox.classList.add('hidden');
+  lightbox.innerHTML = '';
+}
+
+function openLightbox(entry) {
+  lightbox.innerHTML = '';
+  const el = entry.type === 'video' ? document.createElement('video') : document.createElement('img');
+  el.src = entry.url;
+  if (entry.type === 'video') { el.controls = true; el.autoplay = true; }
+  lightbox.appendChild(el);
+  lightbox.classList.remove('hidden');
+}
+
+function makeTile(entry) {
+  const tile = document.createElement('div');
+  tile.className = 'tile';
+
+  let media;
+  if (entry.type === 'video') {
+    media = document.createElement('video');
+    media.src = entry.url;
+    media.muted = true;
+    media.loop = true;
+    media.playsInline = true;
+    media.preload = 'metadata';
+    tile.addEventListener('mouseenter', () => media.play().catch(() => {}));
+    tile.addEventListener('mouseleave', () => { media.pause(); media.currentTime = 0; });
+  } else {
+    media = document.createElement('img');
+    media.src = entry.url;
+    media.loading = 'lazy';
+    media.alt = entry.name;
+  }
+
+  const label = document.createElement('div');
+  label.className = 'name';
+  label.textContent = entry.name;
+
+  tile.appendChild(media);
+  tile.appendChild(label);
+  tile.addEventListener('click', () => openLightbox(entry));
+  return tile;
+}
+
+async function loadGallery(dirHandle) {
+  const entries = [];
+  for await (const [name, handle] of dirHandle.entries()) {
+    if (handle.kind !== 'file') continue; // skips refs/ and any subfolders
+    if (!MEDIA_RE.test(name)) continue;
+    const file = await handle.getFile();
+    entries.push({
+      name,
+      type: /\.(mp4|webm|mov)$/i.test(name) ? 'video' : 'image',
+      url: URL.createObjectURL(file),
+      lastModified: file.lastModified,
+    });
+  }
+  entries.sort((a, b) => b.lastModified - a.lastModified);
+
+  wall.innerHTML = '';
+  if (entries.length === 0) {
+    emptyMsg.classList.remove('hidden');
+    wall.classList.add('hidden');
+  } else {
+    emptyMsg.classList.add('hidden');
+    wall.classList.remove('hidden');
+    for (const entry of entries) wall.appendChild(makeTile(entry));
+  }
+
+  pickerScreen.classList.add('hidden');
+  reconnectBtn.classList.remove('hidden');
+}
+
+async function chooseFolder() {
+  const dirHandle = await window.showDirectoryPicker();
+  await idbSet(KEY, dirHandle);
+  await loadGallery(dirHandle);
+}
+
+chooseBtn.addEventListener('click', () => {
+  chooseFolder().catch((err) => {
+    if (err.name !== 'AbortError') console.error(err);
+  });
+});
+reconnectBtn.addEventListener('click', () => {
+  chooseFolder().catch((err) => {
+    if (err.name !== 'AbortError') console.error(err);
+  });
+});
+
+(async function init() {
+  if (!window.showDirectoryPicker) {
+    pickerMessage.textContent =
+      'This gallery reads a local folder directly, which needs a Chromium-based browser (Chrome, Edge, Brave). Open this file there.';
+    chooseBtn.classList.add('hidden');
+    return;
+  }
+
+  const savedHandle = await idbGet(KEY).catch(() => null);
+  if (!savedHandle) return;
+
+  const perm = await savedHandle.queryPermission({ mode: 'read' });
+  if (perm === 'granted') {
+    await loadGallery(savedHandle);
+  } else {
+    pickerMessage.textContent = 'Reconnect to your generations folder — your browser needs permission again after a restart.';
+    chooseBtn.textContent = 'Reconnect folder';
+    chooseBtn.classList.remove('hidden');
+    chooseBtn.onclick = async () => {
+      const granted = await savedHandle.requestPermission({ mode: 'read' });
+      if (granted === 'granted') await loadGallery(savedHandle);
+    };
+  }
+})();
+</script>
+
+</body>
+</html>
