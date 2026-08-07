@@ -1,0 +1,10 @@
+{
+  "model": "fal-ai/nano-banana-2",
+  "provider": "fal-ai",
+  "prompt": "A single red rose on a white marble surface, soft romantic lighting, Valentine's Day aesthetic, professional product photography",
+  "refs": [],
+  "params": {},
+  "cost_usd": 0.0225,
+  "created": "2026-08-07T06:07:30Z",
+  "notes": "Confirms fal.ai routing works end-to-end after balance top-up. Cheapest route for the default image tier."
+}
