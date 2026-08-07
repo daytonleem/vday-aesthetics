@@ -6,39 +6,43 @@ on `image-model.md` has been picked as the favourite, or when the
 job needs a real face/logo reference and the extra accuracy matters
 (never describe those in text — pass the file).
 
-| Field | Value |
-|---|---|
-| Model ID | `gemini-3.1-flash-image-preview` |
-| Provider | Google AI Studio (fallback: fal.ai) |
-| Method | Sync (instant reply) |
-| Type | Image |
-| API key | `.env` → `GOOGLE_API_KEY` (fallback: `FAL_KEY`) |
-| Docs | https://ai.google.dev/gemini-api/docs/image-generation |
-| Cost | Higher than Lite's ~$0.034/image — check Google AI Studio's pricing page for the current rate before quoting |
+## Providers (cheapest first — compare before running)
+| Provider | Model ID | ~Cost | API key |
+|---|---|---|---|
+| Google AI Studio | `gemini-3.1-flash-image-preview` | ~$0.134/image (1K/2K), ~$0.24/image at 4K | `.env` → `GOOGLE_API_KEY` |
+| fal.ai | `fal-ai/nano-banana-2` | ~$0.15/image | `.env` → `FAL_KEY` |
 
-## Endpoint (Google AI Studio)
+Unlike the Lite tier, Google's direct rate tends to be cheaper here
+than fal.ai's markup. Default to Google AI Studio; fall back to
+fal.ai if it errors or the price has flipped. Verify both before a
+large batch.
+
+## Google AI Studio request (default)
+Key goes in the URL, not a header.
 ```
 POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image-preview:generateContent?key={GOOGLE_API_KEY}
 ```
-
-## Request format
-Same shape as the Lite model — see `image-model.md` — one
-`inline_data` part per reference image, text prompt for everything
-that isn't a face/logo.
-
-## Response handling
+```json
+{
+  "contents": [{
+    "parts": [
+      { "text": "<prompt>" },
+      { "inline_data": { "mime_type": "image/png", "data": "<base64 reference image, if any>" } }
+    ]
+  }]
+}
+```
 Sync call — base64 image at
-`candidates[0].content.parts[].inline_data.data`. Decode and write
-to `generations/`.
+`candidates[0].content.parts[].inline_data.data`.
 
 ## fal.ai request (fallback)
 ```
-curl -X POST https://fal.run/{model-slug} \
+curl -X POST https://fal.run/fal-ai/nano-banana-2 \
   -H "Authorization: Key $FAL_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"prompt": "<prompt>"}'
+  -d '{"prompt": "<prompt>", "image_urls": ["<reference image URL, if any>"]}'
 ```
-Verify the current fal.ai slug at fal.ai/models before running.
+Sync call — image URL comes back in the same response.
 
 ## When to use
 Final hero shots, anything the client will pick as "the one,"

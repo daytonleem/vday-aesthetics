@@ -19,11 +19,18 @@ mockups. Nano Banana isn't reliable for in-image text.
 Read the recipe file before every generation.
 
 ## Provider routing
-1. Default to the LOWEST COST provider that runs the model well
-   (check Google AI Studio, Kie AI, fal.ai, WaveSpeed AI).
-2. If the cheapest route lacks the model, fails auth, or errors,
-   fall back to the next provider.
-3. Never hide a provider swap. Say which route ran and why.
+1. Each recipe lists every provider you hold a key for that can run
+   that model, cheapest-known-first. Use the top one by default.
+2. Those prices are ballparks and drift — for anything beyond a
+   quick draft (a paid video run, or a batch), verify current price
+   at the provider's pricing page before running, since ordering can
+   flip between tiers (e.g. fal.ai is cheaper than Google AI Studio
+   for the default image tier, but Google is cheaper for the quality
+   tier — don't assume one provider wins across the board).
+3. If the cheapest route lacks the model, fails auth, or errors,
+   fall back to the next one down the list.
+4. Never hide a provider swap or a cheaper-alternative check. Say
+   which route ran and why.
 
 ## Output
 - Save every file FLAT into `generations/` at the repo root.

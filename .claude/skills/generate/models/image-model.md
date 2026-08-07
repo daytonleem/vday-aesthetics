@@ -4,27 +4,32 @@ Everyday images. Cheap, fast, strong with reference images. Use this
 first for every image request; only escalate to `image-model-pro.md`
 once a direction is picked.
 
-| Field | Value |
-|---|---|
-| Model ID | `gemini-3.1-flash-lite-image` |
-| Provider | Google AI Studio (fallback: fal.ai) |
-| Method | Sync (instant reply) |
-| Type | Image |
-| API key | `.env` → `GOOGLE_API_KEY` (fallback: `FAL_KEY`) |
-| Docs | https://ai.google.dev/gemini-api/docs/image-generation |
-| Cost | ~$0.034 per image at 1K resolution |
+## Providers (cheapest first — compare before running)
+| Provider | Model ID | ~Cost | API key |
+|---|---|---|---|
+| fal.ai | `fal-ai/nano-banana-2` (verify the Lite variant slug at fal.ai/models — likely `fal-ai/gemini-3.1-flash-lite-image`) | ~$0.0225/image | `.env` → `FAL_KEY` |
+| Google AI Studio | `gemini-3.1-flash-lite-image` | ~$0.034/image | `.env` → `GOOGLE_API_KEY` |
 
-Prices drift — confirm on the provider's pricing page before a
-large batch.
+fal.ai has been running cheaper than Google's direct rate for this
+model family. Default to fal.ai; fall back to Google AI Studio if
+fal.ai errors, lacks the model, or its price has moved. Verify both
+before a large batch — these numbers drift.
 
-## Endpoint (Google AI Studio)
+## fal.ai request (default)
+```
+curl -X POST https://fal.run/fal-ai/nano-banana-2 \
+  -H "Authorization: Key $FAL_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "<prompt>", "image_urls": ["<reference image URL, if any>"]}'
+```
+Sync call — the image URL comes back in the same response.
+
+## Google AI Studio request (fallback)
+Key goes in the URL, not a header — the one provider here that
+works this way.
 ```
 POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-image:generateContent?key={GOOGLE_API_KEY}
 ```
-Google AI Studio puts the key in the URL, not a header — the one
-provider here that works this way.
-
-## Request format
 ```json
 {
   "contents": [{
@@ -35,27 +40,16 @@ provider here that works this way.
   }]
 }
 ```
-Add one `inline_data` part per reference image (logo, face, style
-shot) instead of describing it in the prompt text.
+Sync call — base64 image at
+`candidates[0].content.parts[].inline_data.data`. Decode and write
+to `generations/`.
 
-## Response handling
-Sync call — the image comes back in the same response, base64-
-encoded at `candidates[0].content.parts[].inline_data.data`. Decode
-and write it straight to `generations/`.
-
-## fal.ai request (fallback)
-```
-curl -X POST https://fal.run/{model-slug} \
-  -H "Authorization: Key $FAL_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"prompt": "<prompt>"}'
-```
-Look up the current fal.ai slug for this model at fal.ai/models
-before running — verify it hasn't changed.
+Add one reference part/URL per logo, face, or style shot instead of
+describing it in the prompt text.
 
 ## Notes
-- If a call returns "model not found," the id has probably been
-  bumped — check Google AI Studio's model list and update this file.
+- If a call returns "model not found," the slug has probably moved
+  — check the provider's model list and update this file.
 - Not for final faces/logos with tight brand accuracy — use the
   quality tier (`image-model-pro.md`) for anything the client will
   actually pick.
