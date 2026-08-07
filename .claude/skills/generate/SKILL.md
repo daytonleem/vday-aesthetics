@@ -9,7 +9,12 @@ description: Generate images and videos via AI model APIs for the vday-aesthetic
 |---|---|---|
 | Image (default) | Nano Banana 2 Lite (Google AI Studio) | models/image-model.md |
 | Image (quality) | Nano Banana 2 (Google AI Studio) | models/image-model-pro.md |
+| Image (text-in-image) | GPT Image 2 (fal.ai) | models/image-model-text.md |
 | Video (default) | Kling 3.0 (Kie AI) | models/video-model.md |
+
+Use GPT Image 2 instead of the defaults whenever the image needs
+legible text baked in — signs, posters, menus, packaging, UI
+mockups. Nano Banana isn't reliable for in-image text.
 
 Read the recipe file before every generation.
 
