@@ -1,0 +1,9 @@
+{
+  "model": "gemini-3.1-flash-lite-image",
+  "provider": "google-ai-studio",
+  "prompt": "a photo of an apple",
+  "refs": [],
+  "params": {},
+  "cost_usd": 0.034,
+  "created": "2026-08-07T05:51:46Z"
+}
