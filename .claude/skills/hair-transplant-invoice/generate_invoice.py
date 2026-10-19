@@ -81,7 +81,7 @@ def dark_logo():
 
 def money(value):
     sign = "\u2212" if value < 0 else ""
-    return f"{sign}${abs(value):,.2f}"
+    return f"{sign}S${abs(value):,.2f}"
 
 
 def parse_date(value):
@@ -276,7 +276,7 @@ def draw_invoice(data, out_path, qr_path=None, compact=False):
     # Line items
     y = band_bottom - 10 * mm * gap
     label(c, margin, y, "Description", regular, color=MUTED)
-    label(c, right, y, "Amount", regular, "right", color=MUTED)
+    label(c, right, y, "Amount (SGD)", regular, "right", color=MUTED)
     y -= 7
     c.setStrokeColor(INK)
     c.setLineWidth(0.5)
