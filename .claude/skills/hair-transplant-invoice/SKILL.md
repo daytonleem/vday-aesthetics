@@ -112,11 +112,12 @@ Invoice Spec (JSON)
 - K: `=IF(Fn="","",Fn+Gn-In)`. M: `=IF(Kn="","",IF(Bn="Deposit",Ln,IF(Bn="Receipt",0,Kn-Ln)))`.
 - Q holds the exact JSON spec used (one line), so the PDF can be regenerated identically.
 
-**Client Tracker** tab: one row per client. Columns A to U:
+**Client Tracker** tab: one row per client. Columns A to W:
 Client Name | Nationality | Mobile | Email | Passport No | Package | Surgery Date |
 Package Price (SGD) | Add-ons (SGD) | Add-on Details | Discount (SGD) | Total (SGD) |
 Deposit Invoice No | Deposit Invoice Date | Deposit Paid (SGD) | Balance Invoice No |
-Balance Invoice Date | Balance Due (SGD) | Status | Notes | Old Invoice Tab
+Balance Invoice Date | Balance Due (SGD) | Status | Fully Paid (Yes/No) | Surgery Done (Yes/No) |
+Notes | Old Invoice Tab
 - L: `=IF(Hn="","",Hn+In-Kn)`. R: `=IF(Ln="","",Ln-On)`.
 - Deposit invoice: add the client's row with M, N, O filled and Status "Deposit invoiced".
 - Balance invoice: update the same row (P, Q, any changed add-ons or discount) and set Status
@@ -124,6 +125,22 @@ Balance Invoice Date | Balance Due (SGD) | Status | Notes | Old Invoice Tab
 - Status dropdown: Deposit invoiced, Deposit paid, Balance invoiced, Paid in full, Surgery done, Cancelled.
 
 Read both rows back and check the totals match the PDF.
+
+## Payment and surgery check-ins
+
+Columns T (Fully Paid) and U (Surgery Done) are only ever set from what the user tells you; never
+assume a client paid or had surgery.
+
+- At the start of any invoice or tracking request, read the Client Tracker and list clients with a
+  balance invoice where T or U is not "Yes" (skip Cancelled). Ask in one short question, e.g.
+  "Before we start: has Tng Jian Kai paid the $4,088 balance, and has his surgery been done?"
+  Prioritise clients whose surgery date has passed. Don't ask again about a client the user said is
+  still pending in this conversation.
+- When the user answers (or says on their own that a client paid or finished surgery), set T and U,
+  set Status ("Paid in full" when paid, "Surgery done" when both are done), and in the Invoice Log
+  set Paid? to "Yes" on that client's balance invoice row.
+- When the user asks who still owes money or who is pending, answer from the tracker: name,
+  balance due, surgery date, and what is outstanding.
 
 Older invoices (before separate deposit and balance invoices) live in tabs named
 `YYYY-MM-DD First name`; the original sheet template is the `Old Template` tab. The user can save
