@@ -1,0 +1,3 @@
+# Client invoices and specs never belong in this public repo.
+*.pdf
+*.json
