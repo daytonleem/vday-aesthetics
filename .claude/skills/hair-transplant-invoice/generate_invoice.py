@@ -126,8 +126,6 @@ def build_lines(data):
     if blocks:
         price_per_block = float(data.get("graft_block_price", GRAFT_BLOCK_PRICE))
         desc = f"Top Up {blocks * GRAFT_BLOCK:,} Grafts"
-        if blocks > 1:
-            desc += f" ({blocks} \u00d7 {money(price_per_block)} per {GRAFT_BLOCK:,})"
         extras.append({"description": desc, "detail": [], "amount": blocks * price_per_block})
     extra_nights = int(data.get("extra_hotel_nights", 0))
     if extra_nights:
@@ -189,12 +187,14 @@ def label(c, x, y, text, font, align="left", color=None):
 
 def draw_invoice(data, out_path, qr_path=None, compact=False):
     """compact tightens vertical spacing for invoices with many lines."""
-    gap = 0.55 if compact else 1.0
+    gap = 0.6 if compact else 1.0
     light, regular, medium = register_fonts()
     W, H = A4
-    margin = 22 * mm
+    margin = 20 * mm
     right = W - margin
     width = right - margin
+    col_r = right - 66 * mm  # start of the right-hand column (details, totals)
+    pad = 12  # inner padding of the totals panel
 
     from reportlab.pdfgen import canvas
 
@@ -206,117 +206,105 @@ def draw_invoice(data, out_path, qr_path=None, compact=False):
     c.setTitle(f"Invoice {inv_no} - {client['name']}")
     c.setAuthor(BUSINESS["name"])
 
-    # Thin accent line across the very top
-    c.setFillColor(ACCENT)
-    c.rect(0, H - 2.2 * mm, W, 2.2 * mm, stroke=0, fill=1)
+    def key_value(y, key, value, x0=col_r, x1=right, size=9, key_font=None, value_font=None, colour=INK):
+        spaced(c, x0, y, key, key_font or light, size, MUTED)
+        spaced(c, x1, y, value, value_font or regular, size, colour, 0, "right")
 
-    # Header: logo left, document title right
-    top = H - 20 * mm
+    # Header
+    top = H - 17 * mm
     logo = dark_logo()
+    logo_h = 0
     if logo:
         reader, (lw, lh) = logo
-        logo_w = 38 * mm
+        logo_w = 34 * mm
         logo_h = logo_w * lh / lw
-        c.drawImage(reader, margin - 2.5 * mm, top - logo_h + 6 * mm, logo_w, logo_h, mask="auto")
+        c.drawImage(reader, margin - 2 * mm, top - logo_h, logo_w, logo_h, mask="auto")
     else:
-        spaced(c, margin, top - 14, BUSINESS["name"], medium, 26, INK)
-    sub_y = top - 16 * mm
-    spaced(c, margin, sub_y, BUSINESS["tagline"].upper(), regular, 7, MUTED, 1.4)
+        spaced(c, margin, top - 20, BUSINESS["name"], medium, 26, INK)
+        logo_h = 24
+    sub_y = top - logo_h - 4 * mm
+    label(c, margin, sub_y, BUSINESS["tagline"], regular, color=MUTED)
     spaced(c, margin, sub_y - 12, BUSINESS["whatsapp"], light, 8.5, MUTED)
 
     title = {"deposit": "Deposit Invoice", "receipt": "Receipt"}.get(inv_type, "Invoice")
-    spaced(c, right, top - 4, title.upper(), light, 22, INK, 4.5, "right")
-    spaced(c, right, top - 20, f"No. {inv_no}", regular, 9.5, MUTED, 0.6, "right")
+    title_y = top - logo_h + 9 * mm
+    spaced(c, right, title_y, title.upper(), light, 19, INK, 3.2, "right")
+    spaced(c, right, title_y - 16, f"No. {inv_no}", light, 9, MUTED, 0.4, "right")
     if inv_type == "receipt":
-        pill = "PAID IN FULL"
-        pw = pdfmetrics.stringWidth(pill, medium, 7) + 1.6 * (len(pill) - 1) + 16
+        tag = "PAID IN FULL"
+        tw = pdfmetrics.stringWidth(tag, regular, 6.5) + 1.4 * (len(tag) - 1) + 14
         c.setStrokeColor(ACCENT)
-        c.setLineWidth(0.8)
-        c.roundRect(right - pw, top - 42, pw, 15, 7.5, stroke=1, fill=0)
-        spaced(c, right - pw / 2, top - 37, pill, medium, 7, ACCENT, 1.6, "centre")
+        c.setLineWidth(0.6)
+        c.roundRect(right - tw, title_y - 38, tw, 13, 6.5, stroke=1, fill=0)
+        spaced(c, right - tw / 2, title_y - 33.5, tag, regular, 6.5, ACCENT, 1.4, "centre")
 
-    # Details panel: billed to, dates, payment, on a tinted background
-    y = top - 33 * mm
-    pad = 14
-    col_w = (width - 2 * pad) / 3
-    cols = [margin + pad, margin + pad + col_w, margin + pad + 2 * col_w]
-
+    # Details band, full page width so its text sits on the page margins
+    band_top = sub_y - 12 - 8 * mm
+    y0 = band_top - 8 * mm
+    client_rows = [client[k] if k != "passport" else f"Passport {client[k]}"
+                   for k in ("nationality", "passport", "mobile", "email") if client.get(k)]
     details = [("Date", fmt_date(inv_date))]
     if data.get("surgery_date"):
         details.append(("Procedure", fmt_date(parse_date(data["surgery_date"]))))
     if data.get("deposit_invoice_no"):
-        details.append(("Deposit inv.", str(data["deposit_invoice_no"])))
-    pay_rows = [("Method", data.get("payment_method", "PayNow")), ("Currency", "SGD")]
-    client_lines = sum(1 for k in ("nationality", "passport", "mobile", "email") if client.get(k))
-    lowest = max(15 + 14 + 12.5 * (client_lines - 1) if client_lines else 15,
-                 15 + 14 * (max(len(details), len(pay_rows)) - 1))
+        details.append(("Deposit invoice", str(data["deposit_invoice_no"])))
+    details.append(("Payment", data.get("payment_method", "PayNow")))
+    left_h = 16 + 13 * len(client_rows)
+    right_h = 16 + 14 * (len(details) - 1)
+    band_bottom = y0 - max(left_h, right_h) - 7 * mm
     c.setFillColor(MIST)
-    c.roundRect(margin, y - lowest - 14, width, lowest + 14 + 22, 5, stroke=0, fill=1)
+    c.rect(0, band_bottom, W, band_top - band_bottom, stroke=0, fill=1)
 
-    label(c, cols[0], y, "Billed to", medium)
-    yy = y - 15
-    spaced(c, cols[0], yy, client["name"], medium, 11, INK)
-    yy -= 14
-    for key in ("nationality", "passport", "mobile", "email"):
-        if client.get(key):
-            value = client[key] if key != "passport" else f"Passport {client[key]}"
-            spaced(c, cols[0], yy, value, light, 9, MUTED)
-            yy -= 12.5
-    bottom = yy
-
-    def detail_column(x, heading, rows):
-        label(c, x, y, heading, medium)
-        ry = y - 15
-        for k, v in rows:
-            spaced(c, x, ry, k, light, 8.5, MUTED)
-            spaced(c, x + 21 * mm, ry, v, regular, 9, INK)
-            ry -= 14
-        return ry
-
-    detail_column(cols[1], "Details", details)
-    detail_column(cols[2], "Payment", pay_rows)
+    label(c, margin, y0, "Billed to", regular, color=MUTED)
+    spaced(c, margin, y0 - 16, client["name"], regular, 11.5, INK)
+    yy = y0 - 16
+    for row_text in client_rows:
+        yy -= 13
+        spaced(c, margin, yy, row_text, light, 9, MUTED)
+    label(c, col_r, y0, "Details", regular, color=MUTED)
+    ry = y0 - 16
+    for k, v in details:
+        key_value(ry, k, v)
+        ry -= 14
 
     # Line items
-    y = y - lowest - 14 - 9 * mm * gap
-    label(c, margin, y, "Description", medium, color=MUTED)
-    label(c, right, y, "Amount", medium, "right", color=MUTED)
-    y -= 8
+    y = band_bottom - 10 * mm * gap
+    label(c, margin, y, "Description", regular, color=MUTED)
+    label(c, right, y, "Amount", regular, "right", color=MUTED)
+    y -= 7
     c.setStrokeColor(INK)
-    c.setLineWidth(0.8)
+    c.setLineWidth(0.5)
     c.line(margin, y, right, y)
-    y -= 18
+    row_pad = (11 if not compact else 7)
 
-    desc_style = ParagraphStyle("d", fontName=medium, fontSize=10.5, leading=14, textColor=INK)
-    detail_style = ParagraphStyle("dd", fontName=light, fontSize=8.8, leading=10.5 if compact else 11.5, textColor=MUTED)
-    desc_w = width - 40 * mm
+    name_style = ParagraphStyle("n", fontName=regular, fontSize=10, leading=13, textColor=INK)
+    incl_style = ParagraphStyle("i", fontName=light, fontSize=8.5, leading=12, textColor=MUTED)
+    desc_w = width - 32 * mm
 
     package_row, extras, discounts = build_lines(data)
 
-    def row(item, amount_color=INK):
+    def row(item):
         nonlocal y
-        p = Paragraph(item["description"], desc_style)
+        y -= row_pad + 10
+        p = Paragraph(item["description"], name_style)
         _, ph = p.wrap(desc_w, 100)
-        p.drawOn(c, margin, y - ph + 11)
-        spaced(c, right, y, money(item["amount"]), regular, 10.5, amount_color, 0.2, "right")
-        y -= ph + 3
-        for d in item["detail"]:
-            dp = Paragraph(d, detail_style)
-            _, dh = dp.wrap(desc_w - 10, 100)
-            c.setFillColor(ACCENT)
-            c.circle(margin + 2.2, y + 3.4, 1.1, stroke=0, fill=1)
-            dp.drawOn(c, margin + 9, y - dh + 10)
-            y -= dh
-        y -= 7 * gap
+        p.drawOn(c, margin, y - ph + 10)
+        spaced(c, right, y, money(item["amount"]), regular, 10, INK, 0, "right")
+        y -= ph - 10
+        if item["detail"]:
+            ip = Paragraph("  ·  ".join(item["detail"]), incl_style)
+            _, ih = ip.wrap(desc_w, 200)
+            y -= 4
+            ip.drawOn(c, margin, y - ih)
+            y -= ih
+        y -= row_pad
         c.setStrokeColor(LINE)
         c.setLineWidth(0.6)
-        c.line(margin, y + 2, right, y + 2)
-        y -= 15 * gap
+        c.line(margin, y, right, y)
 
     row(package_row)
-    for item in extras:
+    for item in extras + discounts:
         row(item)
-    for item in discounts:
-        row(item, ACCENT)
 
     # Totals
     subtotal = package_row["amount"] + sum(i["amount"] for i in extras)
@@ -324,117 +312,110 @@ def draw_invoice(data, out_path, qr_path=None, compact=False):
     total = subtotal + discount_total
     deposit = float(data.get("deposit", DEFAULT_DEPOSIT))
 
-    totals = []
+    rows = []
     if discounts or extras:
-        totals.append(("Subtotal", money(subtotal)))
+        rows.append(("Subtotal", money(subtotal)))
     if discounts:
-        totals.append(("Discount", money(discount_total)))
+        rows.append(("Discount", money(discount_total)))
+    after = []
     if inv_type == "deposit":
         due_label, due = "Deposit due now", deposit
-        after = [("Balance before procedure", money(total - deposit))]
+        after.append(("Balance before procedure", money(total - deposit)))
     elif inv_type == "receipt":
-        paid = []
         if deposit:
-            label_text = "Deposit paid"
-            if data.get("deposit_invoice_no"):
-                label_text += f" (Inv. {data['deposit_invoice_no']})"
-            paid.append((label_text, money(-deposit)))
-            paid.append(("Balance paid", money(-(total - deposit))))
+            dl = "Deposit paid" + (f" (Inv. {data['deposit_invoice_no']})" if data.get("deposit_invoice_no") else "")
+            after += [(dl, money(-deposit)), ("Balance paid", money(-(total - deposit)))]
         else:
-            paid.append((f"Paid {fmt_date(inv_date)}", money(-total)))
+            after.append(("Paid " + fmt_date(inv_date), money(-total)))
         due_label, due = "Balance remaining", 0.0
-        after = paid
     else:
-        after = []
         if deposit:
-            label_text = "Less deposit paid"
-            if data.get("deposit_invoice_no"):
-                label_text += f" (Inv. {data['deposit_invoice_no']})"
-            after.append((label_text, money(-deposit)))
+            dl = "Less deposit" + (f" (Inv. {data['deposit_invoice_no']})" if data.get("deposit_invoice_no") else "")
+            after.append((dl, money(-deposit)))
         due_label, due = "Balance due", total - deposit
 
-    tx = right - 74 * mm
-    rx = right - 14
-    y -= 14 * gap
-    block_top = y
-    rows_h = 17 * (len(totals) + 1 + len(after)) + 40
+    step = 15
+    panel_top = y - 10 * mm * gap
+    n = len(rows) + 1 + len(after)
+    panel_h = pad + 9 + step * (n - 1) + (3 if rows else 0) + 14 + 26 + pad
+    panel_bottom = panel_top - panel_h
     c.setFillColor(MIST)
-    c.roundRect(tx - 14, y - rows_h + 4, right - tx + 14, rows_h + 14, 5, stroke=0, fill=1)
+    c.roundRect(col_r - pad, panel_bottom, right - col_r + 2 * pad, panel_h, 4, stroke=0, fill=1)
 
-    def total_row(text, value, font=light, colour=MUTED, size=9.5):
-        nonlocal y
-        spaced(c, tx, y, text, font, size, colour)
-        spaced(c, rx, y, value, regular if font == light else medium, size, INK, 0.2, "right")
-        y -= 17
-
-    for t, v in totals:
-        total_row(t, v)
-    y -= 2
-    c.setStrokeColor(LINE)
-    c.setStrokeColor(HexColor("#d4e4ec"))
-    c.line(tx, y + 11, rx, y + 11)
-    total_row("Total", money(total), medium, INK, 10.5)
-    for t, v in after:
-        total_row(t, v)
-    y -= 4
+    ty = panel_top - pad - 9
+    for k, v in rows:
+        key_value(ty, k, v)
+        ty -= step
+    if rows:
+        c.setStrokeColor(HexColor("#d4e4ec"))
+        c.setLineWidth(0.6)
+        c.line(col_r, ty + 10, right, ty + 10)
+        ty -= 3
+    key_value(ty, "Total", money(total), key_font=regular, value_font=regular, colour=INK)
+    ty -= step
+    for k, v in after:
+        key_value(ty, k, v)
+        ty -= step
+    ty += step - 9
     c.setStrokeColor(INK)
-    c.setLineWidth(0.8)
-    c.line(tx, y + 12, rx, y + 12)
-    y -= 10
-    label(c, tx, y + 3, due_label, medium, color=ACCENT)
-    spaced(c, rx, y - 2, money(due), medium, 17, INK, 0.3, "right")
-    y -= 32
+    c.setLineWidth(0.5)
+    c.line(col_r, ty, right, ty)
+    due_y = ty - 24
+    label(c, col_r, due_y + 2, due_label, regular, color=ACCENT)
+    spaced(c, right, due_y, money(due), regular, 17, INK, 0.2, "right")
 
+    # Left of the totals: how to pay
+    left_bottom = panel_bottom
+    ly = panel_top - pad - 7
     if qr_path and inv_type != "receipt":
-        qr_size = 30 * mm
-        qx, qy = margin, block_top + 4
-        label(c, qx, qy, "Pay via PayNow", medium)
-        c.drawImage(ImageReader(qr_path), qx, qy - 8 - qr_size, qr_size, qr_size)
-        tx2 = qx + qr_size + 5 * mm
-        ly = qy - 22
-        lines = []
-        if data.get("paynow_name"):
-            lines.append(data["paynow_name"])
-        lines += [f"Amount  {money(due)}", f"Reference  {inv_no}"]
-        for line in lines:
-            spaced(c, tx2, ly, line, light, 8.8, MUTED)
-            ly -= 13
-        y = min(y, qy - 8 - qr_size - 10)
+        label(c, margin, ly, "Pay via PayNow", regular, color=MUTED)
+        qr_size = 27 * mm
+        c.drawImage(ImageReader(qr_path), margin - 2, ly - 8 - qr_size, qr_size, qr_size)
+        info_x = margin + qr_size + 5 * mm
+        iy = ly - 22
+        for k, v in (("Amount", money(due)), ("Reference", inv_no)):
+            spaced(c, info_x, iy, k, light, 8.5, MUTED)
+            spaced(c, info_x, iy - 12, v, regular, 9.5, INK)
+            iy -= 30
+        left_bottom = min(left_bottom, ly - 8 - qr_size)
+    elif inv_type == "receipt":
+        label(c, margin, ly, "Payment", regular, color=MUTED)
+        p = Paragraph(f"Received in full on {fmt_date(inv_date)} by {data.get('payment_method', 'PayNow')}. "
+                      "Thank you.", incl_style)
+        _, ph = p.wrap(col_r - margin - 10 * mm, 100)
+        p.drawOn(c, margin, ly - 10 - ph)
 
     # Remarks
+    y = left_bottom - 9 * mm * gap
     notes = list(data.get("notes", []))
     if inv_type == "deposit" and not data.get("hide_deposit_note"):
         notes.append("The deposit secures your procedure date. The balance is invoiced the day before your procedure.")
     if notes:
-        y -= 8
-        label(c, margin, y, "Remarks", medium)
-        y -= 14
-        for n in notes:
-            p = Paragraph(n, detail_style)
+        label(c, margin, y, "Remarks", regular, color=MUTED)
+        y -= 6
+        for note in notes:
+            p = Paragraph(note, incl_style)
             _, ph = p.wrap(width, 200)
-            p.drawOn(c, margin, y - ph + 10)
-            y -= ph + 3
+            p.drawOn(c, margin, y - ph)
+            y -= ph + 2
 
-    # Terms, pinned above the footer
-    term_style = ParagraphStyle("t", fontName=light, fontSize=7.6, leading=10.5, textColor=MUTED)
-    paras = [Paragraph(t, term_style) for t in TERMS]
-    heights = [p.wrap(width - 8, 200)[1] for p in paras]
-    ty = 21 * mm + sum(heights) + 3 * len(paras) + 14
-    if ty > y + 4:
+    # Terms, above the footer
+    term_style = ParagraphStyle("t", fontName=light, fontSize=7.3, leading=10, textColor=MUTED)
+    paras = [Paragraph(f"{i}.&nbsp;&nbsp;{t}", term_style) for i, t in enumerate(TERMS, 1)]
+    heights = [p.wrap(width, 200)[1] for p in paras]
+    terms_top = 22 * mm + sum(heights) + 2 * len(paras) + 12
+    if terms_top > y - 6:
         raise OverflowError("Invoice content is too long for one page; shorten the notes or line items.")
-    label(c, margin, ty, "Terms and conditions", medium, color=MUTED)
-    ty -= 14
+    label(c, margin, terms_top, "Terms and conditions", regular, color=MUTED)
+    ty = terms_top - 6
     for p, h in zip(paras, heights):
-        c.setFillColor(LINE)
-        c.circle(margin + 1.5, ty + 3, 1, stroke=0, fill=1)
-        p.drawOn(c, margin + 8, ty - h + 9)
-        ty -= h + 3
+        p.drawOn(c, margin, ty - h)
+        ty -= h + 2
 
     c.setStrokeColor(LINE)
     c.setLineWidth(0.6)
-    c.line(margin, 17 * mm, right, 17 * mm)
-    spaced(c, W / 2, 11 * mm, f"THANK YOU FOR CHOOSING {BUSINESS['name'].upper()}",
-           regular, 7, ACCENT, 1.4, "centre")
+    c.line(margin, 15 * mm, right, 15 * mm)
+    spaced(c, W / 2, 10 * mm, f"THANK YOU FOR CHOOSING {BUSINESS['name'].upper()}", regular, 6.5, MUTED, 1.6, "centre")
 
     c.showPage()
     c.save()
