@@ -54,7 +54,7 @@ BUSINESS = {
 }
 
 TERMS = [
-    "All medical procedures are performed by licensed physicians.",
+    "All medical procedures are performed by licensed physicians at our partner hospital.",
     "Results are dependent on individual circumstances and adherence to post-operative care instructions.",
     "All services, coordination, marketing, and administrative support provided by the concierge are non-medical in nature.",
     "By paying for and continuing to receive services, the client acknowledges that they have read, understood, "
@@ -133,6 +133,8 @@ def build_lines(data):
         desc = f"Additional Hotel Night{'s' if extra_nights != 1 else ''} ({extra_nights} \u00d7 {money(night_price)})"
         extras.append({"description": desc, "detail": [], "amount": extra_nights * night_price})
     for item in data.get("line_items", []):
+        if "graft" in item["description"].lower():
+            sys.exit("Grafts are only sold in blocks of 1,000. Use extra_graft_blocks, not line_items.")
         qty = item.get("qty", 1)
         if "amount" in item:
             amount = float(item["amount"])

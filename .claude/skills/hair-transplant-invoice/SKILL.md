@@ -27,7 +27,7 @@ Standard prices (use unless the user says otherwise):
 |---|---|
 | Shaved FUE package (4,000 grafts, 2 hotel nights) | $4,888 |
 | Non-shaved FUE package (4,000 grafts, 2 hotel nights) | $6,688 |
-| Graft top-up | $1,000 per 1,000-graft block (`extra_graft_blocks`) |
+| Graft top-up | $1,000 per 1,000-graft block (`extra_graft_blocks`). Grafts are only sold in whole blocks of 1,000: never 500 or other part blocks |
 | Additional hotel night | $64 per night for now (`extra_hotel_nights`); still ask each time |
 
 Each package lists: Airport Pick Up, 2 Nights Hotel Stay, Body Check & Consultation,
@@ -43,7 +43,8 @@ Ask the user to confirm or fill in all of these in one message. Don't generate u
 2. Package: shaved or non-shaved, and whether the standard price applies.
 3. Invoice type: deposit, balance, or receipt. Deposit paid (default $1,000).
 4. Procedure date.
-5. **Additional grafts?** How many 1,000-graft blocks ($1,000 each unless told otherwise).
+5. **Additional grafts?** How many 1,000-graft blocks ($1,000 each unless told otherwise). Only whole
+   blocks of 1,000; if the user gives a number that isn't a multiple of 1,000, ask them to confirm.
 6. **Additional hotel nights?** How many, and confirm the price ($64 per night unless told otherwise).
 7. **Any discount?** Amount and label (e.g. "Referral Discount", "Hotel Offset").
 8. Payment method (default PayNow), invoice date (default today), and any remarks.
@@ -58,6 +59,10 @@ Invoice number: day + month + 2-digit year with no padding (14 Sep 2026 -> `1492
 Invoice Log for a clash; if one exists add `-2`, `-3`. The balance invoice always gets its own number.
 
 ## Generate the PDF
+
+The PDF design is final and approved by the user: Jost typeface, a two-column grid, a full-width
+tinted client band, one totals panel aligned with the item amounts, the PayNow QR beside it, and
+numbered terms. Don't change the layout, fonts, colours or wording unless the user asks.
 
 Write the spec to the scratchpad and run the script from the repo root:
 
