@@ -122,7 +122,8 @@ Notes | Old Invoice Tab
 - Deposit invoice: add the client's row with M, N, O filled and Status "Deposit invoiced".
 - Balance invoice: update the same row (P, Q, any changed add-ons or discount) and set Status
   "Balance invoiced". Never add a second row for the same client.
-- Status dropdown: Deposit invoiced, Deposit paid, Balance invoiced, Paid in full, Surgery done, Cancelled.
+- Status dropdown: Deposit invoiced, Deposit paid, Balance invoiced, Paid in full, Surgery done,
+  Unresponsive (client stopped replying with money owed), Cancelled.
 
 Read both rows back and check the totals match the PDF.
 
@@ -132,7 +133,7 @@ Columns T (Fully Paid) and U (Surgery Done) are only ever set from what the user
 assume a client paid or had surgery.
 
 - At the start of any invoice or tracking request, read the Client Tracker and list clients with a
-  balance invoice where T or U is not "Yes" (skip Cancelled). Ask in one short question, e.g.
+  balance invoice where T or U is not "Yes" (skip Cancelled; for Unresponsive, only remind about the amount owed). Ask in one short question, e.g.
   "Before we start: has Tng Jian Kai paid the $4,088 balance, and has his surgery been done?"
   Prioritise clients whose surgery date has passed. Don't ask again about a client the user said is
   still pending in this conversation.
