@@ -2,7 +2,7 @@
 """Generate a Vday hair transplant invoice as an A4 portrait PDF.
 
 Usage:
-    python3 generate_invoice.py invoice.json -o "Invoice 191026 - Client Name.pdf"
+    python3 generate_invoice.py invoice.json -o "Invoice 191026 - Client Name.pdf" --qr paynow_qr.png
 
 See SKILL.md in this folder for the JSON fields.
 """
@@ -152,7 +152,7 @@ def build_lines(data):
     return package_row, extras, discounts
 
 
-def draw_invoice(data, out_path):
+def draw_invoice(data, out_path, qr_path=None):
     body, bold = "Helvetica", "Helvetica-Bold"
     W, H = A4
     margin = 18 * mm
@@ -302,6 +302,23 @@ def draw_invoice(data, out_path):
 
     tx = right - 85 * mm
     y -= 2
+    if qr_path and inv_type != "receipt":
+        qr_size = 34 * mm
+        qr_top = y + 10
+        c.drawImage(ImageReader(qr_path), margin, qr_top - qr_size, qr_size, qr_size)
+        c.setFont(bold, 9)
+        c.setFillColor(INK)
+        c.drawString(margin + qr_size + 4 * mm, qr_top - 12, "Scan to pay with PayNow")
+        c.setFont(body, 8.5)
+        c.setFillColor(MUTED)
+        lines = [f"Amount: {money(deposit if inv_type == 'deposit' else total - deposit)}",
+                 f"Reference: Invoice {inv_no}"]
+        if data.get("paynow_name"):
+            lines.insert(0, data["paynow_name"])
+        ly = qr_top - 26
+        for line in lines:
+            c.drawString(margin + qr_size + 4 * mm, ly, line)
+            ly -= 11
     for label, value in totals:
         is_total = label == "Total"
         c.setFont(bold if is_total else body, 10 if is_total else 9.5)
@@ -379,6 +396,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("spec", help="JSON file with the invoice details")
     ap.add_argument("-o", "--output", help="PDF path (default: 'Invoice <no> - <name>.pdf' next to the JSON)")
+    ap.add_argument("--qr", help="PayNow QR image, pulled from the sheet with extract_qr.py")
     args = ap.parse_args()
 
     with open(args.spec) as f:
@@ -387,7 +405,7 @@ def main():
     inv_no = str(data.get("invoice_no") or default_invoice_no(inv_date))
     out = args.output or os.path.join(os.path.dirname(os.path.abspath(args.spec)),
                                       f"Invoice {inv_no} - {data['client']['name']}.pdf")
-    summary = draw_invoice(data, out)
+    summary = draw_invoice(data, out, args.qr)
     summary["pdf"] = out
     print(json.dumps(summary, indent=2))
 

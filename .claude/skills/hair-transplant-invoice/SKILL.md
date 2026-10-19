@@ -89,9 +89,19 @@ standard price, standard inclusions, $1,000 deposit, PayNow, $1,000 per graft bl
 night. `line_items` takes any other charge (`amount`, or `qty` + `unit_price`). `inclusions` (a list)
 replaces the default inclusion bullets, and `package_name` replaces the package title.
 
+First get the PayNow QR. It is the only QR to use on invoices (VDAY PTE. LTD.), and it lives only on
+the `Invoice Template` tab of the private sheet, never in this repo. Export the sheet with Drive
+`download_file_content` (`exportMimeType: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`);
+the result is too large to show and is saved to a file. Then:
+
 ```
-python3 .claude/skills/hair-transplant-invoice/generate_invoice.py <scratchpad>/<spec>.json -o "<scratchpad>/Invoice <no> - <Name>.pdf"
+python3 .claude/skills/hair-transplant-invoice/extract_qr.py <saved result file> <scratchpad>/paynow_qr.png
+python3 .claude/skills/hair-transplant-invoice/generate_invoice.py <scratchpad>/<spec>.json -o "<scratchpad>/Invoice <no> - <Name>.pdf" --qr <scratchpad>/paynow_qr.png
 ```
+
+Do the export once per conversation and reuse the PNG. If the QR can't be extracted, stop and tell
+the user rather than sending an invoice without it. Deposit and balance invoices show the QR with
+the amount to pay and the invoice number as reference; receipts don't.
 
 The script prints the totals as JSON. Check them against the breakdown the user approved, render
 page 1 to PNG (pypdfium2) and look at it, then **send the PDF to the user with SendUserFile**
@@ -103,6 +113,18 @@ The sheet is the Google Sheet titled `Invoice ` (with a trailing space). Find it
 search (`title contains 'Invoice' and mimeType = 'application/vnd.google-apps.spreadsheet'`) or
 use the link the user gives. Read the google-workspace skill first. Prefix invoice numbers and
 mobile numbers with `'` so they stay text. Discounts are positive numbers.
+
+**Invoice tab**: for every invoice, duplicate the `Invoice Template` tab (`duplicateSheet`, insert
+after the last client tab) and name it `YYYY-MM-DD First name Deposit` or `... Balance`. It keeps the
+logo and QR. Fill only these cells:
+- B7 name, B8 nationality, B9 mobile, B10 email; G7 invoice no. (with `'`), G8 date, G9 payment method.
+- A13 package name, G13 package price. A14:A18 inclusions (edit the hotel nights line if changed).
+- Add-ons in rows 19 to 21: description in A, amount in G (e.g. "Top Up 1000 Grafts", 1000).
+- G22 discount as a negative number (clear E22 if there's no discount).
+- G24 total and G27 balance are formulas; don't overwrite them. G26 deposit.
+- Deposit invoice: F26 "Deposit Due", F27 "Balance Due". Balance invoice: F26
+  "Deposit Paid (Inv. <no>)", F27 "Balance Due".
+Read the tab back and check G24 and G27 match the PDF. Never edit the template tab itself.
 
 **Invoice Log** tab: one row per invoice document, added under the last row. Columns A to Q:
 Invoice No | Invoice Type (Deposit/Balance/Receipt) | Invoice Date | Client Name | Package |
@@ -117,11 +139,12 @@ Client Name | Nationality | Mobile | Email | Passport No | Package | Surgery Dat
 Package Price (SGD) | Add-ons (SGD) | Add-on Details | Discount (SGD) | Total (SGD) |
 Deposit Invoice No | Deposit Invoice Date | Deposit Paid (SGD) | Balance Invoice No |
 Balance Invoice Date | Balance Due (SGD) | Status | Fully Paid (Yes/No) | Surgery Done (Yes/No) |
-Notes | Old Invoice Tab
+Notes | Invoice Tab
 - L: `=IF(Hn="","",Hn+In-Kn)`. R: `=IF(Ln="","",Ln-On)`.
 - Deposit invoice: add the client's row with M, N, O filled and Status "Deposit invoiced".
 - Balance invoice: update the same row (P, Q, any changed add-ons or discount) and set Status
   "Balance invoiced". Never add a second row for the same client.
+- W: `=HYPERLINK("#gid=<sheetId of the client's latest invoice tab>","Open")`.
 - Status dropdown: Deposit invoiced, Deposit paid, Balance invoiced, Paid in full, Surgery done,
   Unresponsive (client stopped replying with money owed), Cancelled.
 
@@ -134,7 +157,7 @@ assume a client paid or had surgery.
 
 - At the start of any invoice or tracking request, read the Client Tracker and list clients with a
   balance invoice where T or U is not "Yes" (skip Cancelled; for Unresponsive, only remind about the amount owed). Ask in one short question, e.g.
-  "Before we start: has Tng Jian Kai paid the $4,088 balance, and has his surgery been done?"
+  "Before we start: has <client> paid the $<balance> balance, and has their surgery been done?"
   Prioritise clients whose surgery date has passed. Don't ask again about a client the user said is
   still pending in this conversation.
 - When the user answers (or says on their own that a client paid or finished surgery), set T and U,
