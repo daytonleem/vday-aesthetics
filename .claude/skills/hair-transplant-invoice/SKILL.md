@@ -26,7 +26,7 @@ Standard prices (use unless the user says otherwise):
 | Item | Price (SGD) |
 |---|---|
 | Shaved FUE package (4,000 grafts, 2 hotel nights) | $4,888 |
-| Non-shaved FUE package (2 hotel nights) | $6,688 |
+| Non-shaved FUE package (4,000 grafts, 2 hotel nights) | $6,688 |
 | Graft top-up | $1,000 per 1,000-graft block (`extra_graft_blocks`) |
 | Additional hotel night | $64 per night for now (`extra_hotel_nights`); still ask each time |
 

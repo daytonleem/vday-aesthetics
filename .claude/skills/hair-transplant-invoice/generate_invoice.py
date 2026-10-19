@@ -37,7 +37,7 @@ PACKAGE_NAMES = {
     "shaved": "Shaved FUE Hair Transplant Package",
     "non-shaved": "Non-Shaved FUE Hair Transplant Package",
 }
-DEFAULT_GRAFTS = {"shaved": 4000, "non-shaved": None}
+DEFAULT_GRAFTS = {"shaved": 4000, "non-shaved": 4000}
 DEFAULT_HOTEL_NIGHTS = 2
 DEFAULT_DEPOSIT = 1000.0
 GRAFT_BLOCK = 1000  # grafts per top-up block
