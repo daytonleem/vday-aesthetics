@@ -19,6 +19,8 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.units import mm
 from reportlab.lib.utils import ImageReader
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import Paragraph
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -74,7 +76,7 @@ def dark_logo():
 
 
 def money(value):
-    sign = "-" if value < 0 else ""
+    sign = "\u2212" if value < 0 else ""
     return f"{sign}${abs(value):,.2f}"
 
 
@@ -116,8 +118,6 @@ def build_lines(data):
         ]
 
     title = data.get("package_name", PACKAGE_NAMES[package])
-    if data.get("surgery_date"):
-        title += f" – {fmt_date(parse_date(data['surgery_date']))}"
 
     package_row = {"description": title, "detail": inclusions, "amount": price}
 
@@ -152,11 +152,47 @@ def build_lines(data):
     return package_row, extras, discounts
 
 
+FONT_DIR = os.path.join(HERE, "fonts")
+
+
+def register_fonts():
+    """Jost is the website's typeface; fall back to Helvetica if the font files are missing."""
+    files = {"Light": "Jost-300.ttf", "Regular": "Jost-400.ttf", "Medium": "Jost-500.ttf"}
+    paths = {k: os.path.join(FONT_DIR, v) for k, v in files.items()}
+    if all(os.path.exists(p) for p in paths.values()):
+        for k, p in paths.items():
+            pdfmetrics.registerFont(TTFont(f"Jost-{k}", p))
+        return "Jost-Light", "Jost-Regular", "Jost-Medium"
+    return "Helvetica", "Helvetica", "Helvetica-Bold"
+
+
+def spaced(c, x, y, text, font, size, color, space=0.0, align="left"):
+    """Draw text with letter spacing; align is left, right or centre."""
+    width = pdfmetrics.stringWidth(text, font, size) + space * max(len(text) - 1, 0)
+    if align == "right":
+        x -= width
+    elif align == "centre":
+        x -= width / 2
+    t = c.beginText(x, y)
+    t.setFont(font, size)
+    t.setCharSpace(space)
+    t.setFillColor(color)
+    t.textOut(text)
+    t.setCharSpace(0)  # char spacing is page state; reset it so Paragraphs aren't affected
+    c.drawText(t)
+    return width
+
+
+def label(c, x, y, text, font, align="left", color=None):
+    spaced(c, x, y, text.upper(), font, 7, color or ACCENT, 1.4, align)
+
+
 def draw_invoice(data, out_path, qr_path=None):
-    body, bold = "Helvetica", "Helvetica-Bold"
+    light, regular, medium = register_fonts()
     W, H = A4
-    margin = 18 * mm
+    margin = 22 * mm
     right = W - margin
+    width = right - margin
 
     from reportlab.pdfgen import canvas
 
@@ -168,80 +204,86 @@ def draw_invoice(data, out_path, qr_path=None):
     c.setTitle(f"Invoice {inv_no} - {client['name']}")
     c.setAuthor(BUSINESS["name"])
 
-    # Header band
-    c.setFillColor(MIST)
-    c.rect(0, H - 52 * mm, W, 52 * mm, stroke=0, fill=1)
+    # Thin accent line across the very top
     c.setFillColor(ACCENT)
-    c.rect(0, H - 52 * mm, W, 1.2 * mm, stroke=0, fill=1)
+    c.rect(0, H - 2.2 * mm, W, 2.2 * mm, stroke=0, fill=1)
 
+    # Header: logo left, document title right
+    top = H - 20 * mm
     logo = dark_logo()
-    top = H - 14 * mm
     if logo:
         reader, (lw, lh) = logo
-        logo_w = 42 * mm
+        logo_w = 38 * mm
         logo_h = logo_w * lh / lw
-        c.drawImage(reader, margin - 2 * mm, top - logo_h + 2 * mm, logo_w, logo_h, mask="auto")
-        y = top - logo_h - 2 * mm
+        c.drawImage(reader, margin - 2.5 * mm, top - logo_h + 6 * mm, logo_w, logo_h, mask="auto")
     else:
-        c.setFont(bold, 28)
-        c.setFillColor(INK)
-        c.drawString(margin, top - 20, BUSINESS["name"])
-        y = top - 30
-    c.setFillColor(MUTED)
-    c.setFont(body, 9)
-    for line in (BUSINESS["tagline"], f"{BUSINESS['website']}  ·  WhatsApp {BUSINESS['whatsapp']}"):
-        c.drawString(margin, y, line)
-        y -= 12
+        spaced(c, margin, top - 14, BUSINESS["name"], medium, 26, INK)
+    sub_y = top - 16 * mm
+    spaced(c, margin, sub_y, BUSINESS["tagline"].upper(), regular, 7, MUTED, 1.4)
+    spaced(c, margin, sub_y - 11, f"{BUSINESS['website']}   ·   WhatsApp {BUSINESS['whatsapp']}", light, 8.5, MUTED)
 
-    c.setFillColor(INK)
-    c.setFont(bold, 26)
-    heading = {"deposit": "DEPOSIT INVOICE", "receipt": "RECEIPT"}.get(inv_type, "INVOICE")
-    c.drawRightString(right, top - 18, heading)
-    meta = [("Invoice No.", inv_no), ("Date", fmt_date(inv_date)),
-            ("Payment Method", data.get("payment_method", "PayNow"))]
-    if data.get("surgery_date"):
-        meta.append(("Procedure Date", fmt_date(parse_date(data["surgery_date"]))))
-    my = top - 38
-    for label, value in meta:
-        c.setFont(body, 9)
-        c.setFillColor(MUTED)
-        c.drawRightString(right - 34 * mm, my, label)
-        c.setFont(bold, 9.5)
-        c.setFillColor(INK)
-        c.drawRightString(right, my, value)
-        my -= 13
+    title = {"deposit": "Deposit Invoice", "receipt": "Receipt"}.get(inv_type, "Invoice")
+    spaced(c, right, top - 4, title.upper(), light, 22, INK, 4.5, "right")
+    spaced(c, right, top - 20, f"No. {inv_no}", regular, 9.5, MUTED, 0.6, "right")
+    if inv_type == "receipt":
+        pill = "PAID IN FULL"
+        pw = pdfmetrics.stringWidth(pill, medium, 7) + 1.6 * (len(pill) - 1) + 16
+        c.setStrokeColor(ACCENT)
+        c.setLineWidth(0.8)
+        c.roundRect(right - pw, top - 42, pw, 15, 7.5, stroke=1, fill=0)
+        spaced(c, right - pw / 2, top - 37, pill, medium, 7, ACCENT, 1.6, "centre")
 
-    # Bill to
-    y = H - 64 * mm
-    c.setFont(bold, 8)
-    c.setFillColor(ACCENT)
-    c.drawString(margin, y, "BILLED TO")
-    y -= 15
-    c.setFont(bold, 12)
-    c.setFillColor(INK)
-    c.drawString(margin, y, client["name"])
-    y -= 14
-    c.setFont(body, 9.5)
-    c.setFillColor(MUTED)
-    for label, key in (("Passport No.", "passport"), ("Nationality", "nationality"),
-                       ("Mobile", "mobile"), ("Email", "email")):
+    # Rule, then three columns of details
+    y = top - 27 * mm
+    c.setStrokeColor(LINE)
+    c.setLineWidth(0.7)
+    c.line(margin, y, right, y)
+    y -= 8 * mm
+    col_w = width / 3
+    cols = [margin, margin + col_w, margin + 2 * col_w]
+
+    label(c, cols[0], y, "Billed to", medium)
+    yy = y - 15
+    spaced(c, cols[0], yy, client["name"], medium, 11, INK)
+    yy -= 14
+    for key in ("nationality", "passport", "mobile", "email"):
         if client.get(key):
-            c.drawString(margin, y, f"{label}:  {client[key]}")
-            y -= 12.5
+            value = client[key] if key != "passport" else f"Passport {client[key]}"
+            spaced(c, cols[0], yy, value, light, 9, MUTED)
+            yy -= 12.5
+    bottom = yy
+
+    def detail_column(x, heading, rows):
+        label(c, x, y, heading, medium)
+        ry = y - 15
+        for k, v in rows:
+            spaced(c, x, ry, k, light, 8.5, MUTED)
+            spaced(c, x + 26 * mm, ry, v, regular, 9, INK)
+            ry -= 14
+        return ry
+
+    details = [("Date", fmt_date(inv_date))]
+    if data.get("surgery_date"):
+        details.append(("Procedure", fmt_date(parse_date(data["surgery_date"]))))
+    if data.get("deposit_invoice_no"):
+        details.append(("Deposit inv.", str(data["deposit_invoice_no"])))
+    bottom = min(bottom, detail_column(cols[1], "Details", details))
+    pay_rows = [("Method", data.get("payment_method", "PayNow")), ("Currency", "SGD")]
+    bottom = min(bottom, detail_column(cols[2], "Payment", pay_rows))
 
     # Line items
-    y -= 10
-    c.setFillColor(INK)
-    c.rect(margin, y - 7, right - margin, 20, stroke=0, fill=1)
-    c.setFillColor(HexColor("#ffffff"))
-    c.setFont(bold, 9)
-    c.drawString(margin + 8, y, "DESCRIPTION")
-    c.drawRightString(right - 8, y, "AMOUNT (SGD)")
-    y -= 26
+    y = bottom - 6 * mm
+    label(c, margin, y, "Description", medium, color=MUTED)
+    label(c, right, y, "Amount", medium, "right", color=MUTED)
+    y -= 8
+    c.setStrokeColor(INK)
+    c.setLineWidth(0.8)
+    c.line(margin, y, right, y)
+    y -= 18
 
-    desc_style = ParagraphStyle("d", fontName=bold, fontSize=10.5, leading=13, textColor=INK)
-    detail_style = ParagraphStyle("dd", fontName=body, fontSize=9, leading=12, textColor=MUTED)
-    desc_w = right - margin - 45 * mm
+    desc_style = ParagraphStyle("d", fontName=medium, fontSize=10.5, leading=14, textColor=INK)
+    detail_style = ParagraphStyle("dd", fontName=light, fontSize=8.8, leading=11.5, textColor=MUTED)
+    desc_w = width - 40 * mm
 
     package_row, extras, discounts = build_lines(data)
 
@@ -249,21 +291,21 @@ def draw_invoice(data, out_path, qr_path=None):
         nonlocal y
         p = Paragraph(item["description"], desc_style)
         _, ph = p.wrap(desc_w, 100)
-        p.drawOn(c, margin + 8, y - ph + 10)
-        c.setFont(bold, 10.5)
-        c.setFillColor(amount_color)
-        c.drawRightString(right - 8, y, money(item["amount"]))
-        y -= ph + 2
+        p.drawOn(c, margin, y - ph + 11)
+        spaced(c, right, y, money(item["amount"]), regular, 10.5, amount_color, 0.2, "right")
+        y -= ph + 3
         for d in item["detail"]:
-            dp = Paragraph(f"–&nbsp;&nbsp;{d}", detail_style)
+            dp = Paragraph(d, detail_style)
             _, dh = dp.wrap(desc_w - 10, 100)
-            dp.drawOn(c, margin + 16, y - dh + 10)
+            c.setFillColor(ACCENT)
+            c.circle(margin + 2.2, y + 3.4, 1.1, stroke=0, fill=1)
+            dp.drawOn(c, margin + 9, y - dh + 10)
             y -= dh
-        y -= 8
+        y -= 7
         c.setStrokeColor(LINE)
         c.setLineWidth(0.6)
-        c.line(margin, y + 4, right, y + 4)
-        y -= 12
+        c.line(margin, y + 2, right, y + 2)
+        y -= 15
 
     row(package_row)
     for item in extras:
@@ -277,114 +319,112 @@ def draw_invoice(data, out_path, qr_path=None):
     total = subtotal + discount_total
     deposit = float(data.get("deposit", DEFAULT_DEPOSIT))
 
-    totals = [("Subtotal", money(subtotal))]
+    totals = []
+    if discounts or extras:
+        totals.append(("Subtotal", money(subtotal)))
     if discounts:
-        totals.append(("Total Discount", money(discount_total)))
-    totals.append(("Total", money(total)))
+        totals.append(("Discount", money(discount_total)))
     if inv_type == "deposit":
-        totals.append(("Balance payable before procedure", money(total - deposit)))
-        due_label, due = "Deposit Due Now", deposit
+        due_label, due = "Deposit due now", deposit
+        after = [("Balance before procedure", money(total - deposit))]
     elif inv_type == "receipt":
+        paid = []
         if deposit:
-            label = "Deposit Paid"
+            label_text = "Deposit paid"
             if data.get("deposit_invoice_no"):
-                label += f" (Inv. {data['deposit_invoice_no']})"
-            totals.append((label, money(-deposit)))
-        totals.append(("Balance Paid" if deposit else "Amount Paid", money(-(total - deposit))))
-        due_label, due = "Remaining", 0.0
+                label_text += f" (Inv. {data['deposit_invoice_no']})"
+            paid.append((label_text, money(-deposit)))
+            paid.append(("Balance paid", money(-(total - deposit))))
+        else:
+            paid.append((f"Paid {fmt_date(inv_date)}", money(-total)))
+        due_label, due = "Balance remaining", 0.0
+        after = paid
     else:
+        after = []
         if deposit:
-            label = "Less Deposit Paid"
+            label_text = "Less deposit paid"
             if data.get("deposit_invoice_no"):
-                label += f" (Inv. {data['deposit_invoice_no']})"
-            totals.append((label, money(-deposit)))
-        due_label, due = "Balance Due", total - deposit
+                label_text += f" (Inv. {data['deposit_invoice_no']})"
+            after.append((label_text, money(-deposit)))
+        due_label, due = "Balance due", total - deposit
 
-    tx = right - 85 * mm
+    tx = right - 78 * mm
     y -= 2
-    if qr_path and inv_type != "receipt":
-        qr_size = 34 * mm
-        qr_top = y + 10
-        c.drawImage(ImageReader(qr_path), margin, qr_top - qr_size, qr_size, qr_size)
-        c.setFont(bold, 9)
-        c.setFillColor(INK)
-        c.drawString(margin + qr_size + 4 * mm, qr_top - 12, "Scan to pay with PayNow")
-        c.setFont(body, 8.5)
-        c.setFillColor(MUTED)
-        lines = [f"Amount: {money(deposit if inv_type == 'deposit' else total - deposit)}",
-                 f"Reference: Invoice {inv_no}"]
-        if data.get("paynow_name"):
-            lines.insert(0, data["paynow_name"])
-        ly = qr_top - 26
-        for line in lines:
-            c.drawString(margin + qr_size + 4 * mm, ly, line)
-            ly -= 11
-    for label, value in totals:
-        is_total = label == "Total"
-        c.setFont(bold if is_total else body, 10 if is_total else 9.5)
-        c.setFillColor(INK if is_total else MUTED)
-        c.drawString(tx, y, label)
-        c.setFillColor(INK)
-        c.drawRightString(right - 8, y, value)
-        y -= 16
-    y -= 4
-    c.setFillColor(ACCENT)
-    c.roundRect(tx - 8, y - 9, right - tx + 8, 26, 3, stroke=0, fill=1)
-    c.setFillColor(HexColor("#ffffff"))
-    c.setFont(bold, 11.5)
-    c.drawString(tx, y, due_label.upper())
-    c.drawRightString(right - 8, y, money(due))
-    bar_y = y
-    y -= 30
+    block_top = y
 
-    if inv_type == "receipt":
-        c.saveState()
-        c.setStrokeColor(ACCENT)
-        c.setFillColor(ACCENT)
-        c.setLineWidth(2)
-        c.translate(margin + 35 * mm, bar_y + 45)
-        c.rotate(10)
-        c.roundRect(-25 * mm, -8 * mm, 50 * mm, 16 * mm, 4, stroke=1, fill=0)
-        c.setFont(bold, 22)
-        c.drawCentredString(0, -2.8 * mm, "PAID")
-        c.restoreState()
+    def total_row(text, value, font=light, colour=MUTED, size=9.5):
+        nonlocal y
+        spaced(c, tx, y, text, font, size, colour)
+        spaced(c, right, y, value, regular if font == light else medium, size, INK, 0.2, "right")
+        y -= 17
+
+    for t, v in totals:
+        total_row(t, v)
+    y -= 2
+    c.setStrokeColor(LINE)
+    c.line(tx, y + 11, right, y + 11)
+    total_row("Total", money(total), medium, INK, 10.5)
+    for t, v in after:
+        total_row(t, v)
+    y -= 4
+    c.setStrokeColor(INK)
+    c.setLineWidth(0.8)
+    c.line(tx, y + 12, right, y + 12)
+    y -= 10
+    label(c, tx, y + 3, due_label, medium, color=ACCENT)
+    spaced(c, right, y - 2, money(due), medium, 17, INK, 0.3, "right")
+    y -= 24
+
+    if qr_path and inv_type != "receipt":
+        qr_size = 30 * mm
+        qx, qy = margin, block_top + 4
+        label(c, qx, qy, "Pay via PayNow", medium)
+        c.drawImage(ImageReader(qr_path), qx, qy - 8 - qr_size, qr_size, qr_size)
+        tx2 = qx + qr_size + 5 * mm
+        ly = qy - 22
+        lines = []
+        if data.get("paynow_name"):
+            lines.append(data["paynow_name"])
+        lines += [f"Amount  {money(due)}", f"Reference  {inv_no}"]
+        for line in lines:
+            spaced(c, tx2, ly, line, light, 8.8, MUTED)
+            ly -= 13
+        y = min(y, qy - 8 - qr_size - 10)
 
     # Remarks
     notes = list(data.get("notes", []))
     if inv_type == "deposit" and not data.get("hide_deposit_note"):
         notes.append("The deposit secures your procedure date. The balance is invoiced the day before your procedure.")
     if notes:
-        y -= 6
-        c.setFont(bold, 8)
-        c.setFillColor(ACCENT)
-        c.drawString(margin, y, "REMARKS")
-        y -= 13
+        y -= 8
+        label(c, margin, y, "Remarks", medium)
+        y -= 14
         for n in notes:
-            p = Paragraph(f"–&nbsp;&nbsp;{n}", detail_style)
-            _, ph = p.wrap(right - margin, 200)
+            p = Paragraph(n, detail_style)
+            _, ph = p.wrap(width, 200)
             p.drawOn(c, margin, y - ph + 10)
-            y -= ph + 2
+            y -= ph + 3
 
-    # Terms, pinned to the bottom of the page
-    term_style = ParagraphStyle("t", fontName=body, fontSize=7.8, leading=10.2, textColor=MUTED)
-    paras = [Paragraph(f"–&nbsp;&nbsp;{t}", term_style) for t in TERMS]
-    heights = [p.wrap(right - margin, 200)[1] for p in paras]
-    ty = 20 * mm + sum(heights) + 14
-    if ty > y - 10:
+    # Terms, pinned above the footer
+    term_style = ParagraphStyle("t", fontName=light, fontSize=7.6, leading=10.5, textColor=MUTED)
+    paras = [Paragraph(t, term_style) for t in TERMS]
+    heights = [p.wrap(width - 8, 200)[1] for p in paras]
+    ty = 21 * mm + sum(heights) + 3 * len(paras) + 14
+    if ty > y + 4:
         sys.exit("Invoice content is too long for one page; shorten the notes or line items.")
-    c.setStrokeColor(LINE)
-    c.line(margin, ty + 10, right, ty + 10)
-    c.setFont(bold, 8)
-    c.setFillColor(INK)
-    c.drawString(margin, ty - 2, "TERMS AND CONDITIONS")
+    label(c, margin, ty, "Terms and conditions", medium, color=MUTED)
     ty -= 14
     for p, h in zip(paras, heights):
-        p.drawOn(c, margin, ty - h + 8)
-        ty -= h + 1
+        c.setFillColor(LINE)
+        c.circle(margin + 1.5, ty + 3, 1, stroke=0, fill=1)
+        p.drawOn(c, margin + 8, ty - h + 9)
+        ty -= h + 3
 
-    c.setFont(body, 8)
-    c.setFillColor(ACCENT)
-    c.drawCentredString(W / 2, 11 * mm, f"Thank you for choosing {BUSINESS['name']}  ·  {BUSINESS['website']}")
+    c.setStrokeColor(LINE)
+    c.setLineWidth(0.6)
+    c.line(margin, 17 * mm, right, 17 * mm)
+    spaced(c, W / 2, 11 * mm, f"THANK YOU FOR CHOOSING {BUSINESS['name'].upper()}   ·   {BUSINESS['website'].upper()}",
+           regular, 7, ACCENT, 1.4, "centre")
 
     c.showPage()
     c.save()
