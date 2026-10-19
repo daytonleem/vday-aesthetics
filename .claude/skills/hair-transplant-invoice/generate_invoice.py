@@ -290,7 +290,7 @@ def draw_invoice(data, out_path, qr_path=None):
             if data.get("deposit_invoice_no"):
                 label += f" (Inv. {data['deposit_invoice_no']})"
             totals.append((label, money(-deposit)))
-        totals.append(("Balance Paid", money(-(total - deposit))))
+        totals.append(("Balance Paid" if deposit else "Amount Paid", money(-(total - deposit))))
         due_label, due = "Remaining", 0.0
     else:
         if deposit:
