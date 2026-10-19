@@ -54,11 +54,15 @@ BUSINESS = {
 }
 
 TERMS = [
-    "All medical procedures are performed by licensed physicians at our partner hospital.",
-    "Results are dependent on individual circumstances and adherence to post-operative care instructions.",
-    "All services, coordination, marketing, and administrative support provided by the concierge are non-medical in nature.",
-    "By paying for and continuing to receive services, the client acknowledges that they have read, understood, "
-    "and accepted the risks and non-refundable terms of the procedure.",
+    "All procedures are performed by licensed physicians at our partner hospital, who may modify or decline "
+    "treatment on medical grounds after consultation.",
+    "Results vary with individual circumstances and aftercare. Graft counts are estimates confirmed by the surgeon.",
+    "The deposit secures your procedure date and is non-refundable. The balance must be paid in full before the "
+    "procedure; additional grafts or services agreed on the day are payable before discharge.",
+    "Vday provides non-medical coordination only. Hospital, hotel and transport services are provided by "
+    "independent partners. Flights, visas and travel insurance are the client's responsibility.",
+    "By paying, the client confirms they have read and accepted these terms and the risks of the procedure. "
+    "These terms are governed by the laws of Singapore.",
 ]
 
 
@@ -391,7 +395,7 @@ def draw_invoice(data, out_path, qr_path=None, compact=False):
     y = left_bottom - 9 * mm * gap
     notes = list(data.get("notes", []))
     if inv_type == "deposit" and not data.get("hide_deposit_note"):
-        notes.append("The deposit secures your procedure date. The balance is invoiced the day before your procedure.")
+        notes.append("The balance is invoiced the day before your procedure.")
     if notes:
         label(c, margin, y, "Remarks", regular, color=MUTED)
         y -= 6
