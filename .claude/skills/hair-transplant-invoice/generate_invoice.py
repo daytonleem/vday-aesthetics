@@ -19,8 +19,6 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.units import mm
 from reportlab.lib.utils import ImageReader
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import Paragraph
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -42,6 +40,9 @@ PACKAGE_NAMES = {
 DEFAULT_GRAFTS = {"shaved": 4000, "non-shaved": None}
 DEFAULT_HOTEL_NIGHTS = 2
 DEFAULT_DEPOSIT = 1000.0
+GRAFT_BLOCK = 1000  # grafts per top-up block
+GRAFT_BLOCK_PRICE = 1000.0
+HOTEL_NIGHT_PRICE = 64.0
 
 BUSINESS = {
     "name": "Vday",
@@ -57,17 +58,6 @@ TERMS = [
     "By paying for and continuing to receive services, the client acknowledges that they have read, understood, "
     "and accepted the risks and non-refundable terms of the procedure.",
 ]
-
-
-def register_fonts():
-    """Use Carlito when installed; fall back to the built-in Helvetica."""
-    base = "/usr/share/fonts/truetype/crosextra"
-    regular, bold = os.path.join(base, "Carlito-Regular.ttf"), os.path.join(base, "Carlito-Bold.ttf")
-    if os.path.exists(regular) and os.path.exists(bold):
-        pdfmetrics.registerFont(TTFont("Body", regular))
-        pdfmetrics.registerFont(TTFont("Body-Bold", bold))
-        return "Body", "Body-Bold"
-    return "Helvetica", "Helvetica-Bold"
 
 
 def dark_logo():
@@ -132,6 +122,18 @@ def build_lines(data):
     package_row = {"description": title, "detail": inclusions, "amount": price}
 
     extras = []
+    blocks = int(data.get("extra_graft_blocks", 0))
+    if blocks:
+        price_per_block = float(data.get("graft_block_price", GRAFT_BLOCK_PRICE))
+        desc = f"Top Up {blocks * GRAFT_BLOCK:,} Grafts"
+        if blocks > 1:
+            desc += f" ({blocks} \u00d7 {money(price_per_block)} per {GRAFT_BLOCK:,})"
+        extras.append({"description": desc, "detail": [], "amount": blocks * price_per_block})
+    extra_nights = int(data.get("extra_hotel_nights", 0))
+    if extra_nights:
+        night_price = float(data.get("hotel_night_price", HOTEL_NIGHT_PRICE))
+        desc = f"Additional Hotel Night{'s' if extra_nights != 1 else ''} ({extra_nights} \u00d7 {money(night_price)})"
+        extras.append({"description": desc, "detail": [], "amount": extra_nights * night_price})
     for item in data.get("line_items", []):
         qty = item.get("qty", 1)
         if "amount" in item:
@@ -151,7 +153,7 @@ def build_lines(data):
 
 
 def draw_invoice(data, out_path):
-    body, bold = register_fonts()
+    body, bold = "Helvetica", "Helvetica-Bold"
     W, H = A4
     margin = 18 * mm
     right = W - margin
@@ -284,12 +286,18 @@ def draw_invoice(data, out_path):
         due_label, due = "Deposit Due Now", deposit
     elif inv_type == "receipt":
         if deposit:
-            totals.append(("Deposit Paid", money(-deposit)))
+            label = "Deposit Paid"
+            if data.get("deposit_invoice_no"):
+                label += f" (Inv. {data['deposit_invoice_no']})"
+            totals.append((label, money(-deposit)))
         totals.append(("Balance Paid", money(-(total - deposit))))
         due_label, due = "Remaining", 0.0
     else:
         if deposit:
-            totals.append(("Less Deposit Paid", money(-deposit)))
+            label = "Less Deposit Paid"
+            if data.get("deposit_invoice_no"):
+                label += f" (Inv. {data['deposit_invoice_no']})"
+            totals.append((label, money(-deposit)))
         due_label, due = "Balance Due", total - deposit
 
     tx = right - 85 * mm
