@@ -30,7 +30,7 @@ Standard prices (use unless the user says otherwise):
 | Graft top-up | $1,000 per 1,000-graft block (`extra_graft_blocks`). Grafts are only sold in whole blocks of 1,000: never 500 or other part blocks |
 | Additional hotel night | $64 per night for now (`extra_hotel_nights`); still ask each time |
 
-Each package lists: Airport Pick Up, 2 Nights Hotel Stay, Body Check & Consultation,
+Each package lists: Pick-up & Drop-off Transfers (airport or hotel), 2 Nights Hotel Stay, Body Check & Consultation,
 Hair Transplant, Post Procedure Medication, Remote Follow Up.
 
 ## Every time, before generating
