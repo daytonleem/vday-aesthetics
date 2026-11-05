@@ -84,6 +84,11 @@ def money(value):
     return f"{sign}S${abs(value):,.2f}"
 
 
+def whole(value):
+    """Money without cents, for estimated price ranges."""
+    return money(value)[:-3]
+
+
 def parse_date(value):
     if not value:
         return dt.date.today()
@@ -102,8 +107,21 @@ def default_invoice_no(d):
 def build_lines(data):
     """Return (package_row, extra_rows, discount_rows) as dicts with description, detail and amount."""
     package = data.get("package", "shaved").lower().replace("_", "-").replace(" ", "-")
+    if package == "custom":
+        # Any other procedure: package_name, inclusions, and package_price or price_range [low, high]
+        if not data.get("package_name"):
+            sys.exit("A custom package needs package_name.")
+        price_range = data.get("price_range")
+        if price_range:
+            low, high = (float(v) for v in price_range)
+            row = {"description": data["package_name"], "detail": data.get("inclusions", []), "amount": low,
+                   "range": (low, high), "amount_text": f"{whole(low)} \u2013 {whole(high)}"}
+        else:
+            row = {"description": data["package_name"], "detail": data.get("inclusions", []),
+                   "amount": float(data["package_price"])}
+        return (row,) + build_extras(data)
     if package not in PRICES:
-        sys.exit(f"Unknown package '{package}'. Use 'shaved' or 'non-shaved'.")
+        sys.exit(f"Unknown package '{package}'. Use 'shaved', 'non-shaved' or 'custom'.")
 
     price = float(data.get("package_price", PRICES[package]))
     grafts = data.get("grafts_included", DEFAULT_GRAFTS[package])
@@ -124,7 +142,11 @@ def build_lines(data):
     title = data.get("package_name", PACKAGE_NAMES[package])
 
     package_row = {"description": title, "detail": inclusions, "amount": price}
+    return (package_row,) + build_extras(data)
 
+
+def build_extras(data):
+    """Return (extra_rows, discount_rows) for graft blocks, hotel nights, other charges and discounts."""
     extras = []
     blocks = int(data.get("extra_graft_blocks", 0))
     if blocks:
@@ -153,7 +175,7 @@ def build_lines(data):
         {"description": d.get("description", "Discount"), "detail": [], "amount": -abs(float(d["amount"]))}
         for d in data.get("discounts", [])
     ]
-    return package_row, extras, discounts
+    return extras, discounts
 
 
 FONT_DIR = os.path.join(HERE, "fonts")
@@ -295,7 +317,7 @@ def draw_invoice(data, out_path, qr_path=None, compact=False):
         p = Paragraph(item["description"], name_style)
         _, ph = p.wrap(desc_w, 100)
         p.drawOn(c, margin, y - ph + 10)
-        spaced(c, right, y, money(item["amount"]), regular, 10, INK, 0, "right")
+        spaced(c, right, y, item.get("amount_text") or money(item["amount"]), regular, 10, INK, 0, "right")
         y -= ph - 10
         if item["detail"]:
             ip = Paragraph("  ·  ".join(item["detail"]), incl_style)
@@ -318,15 +340,26 @@ def draw_invoice(data, out_path, qr_path=None, compact=False):
     total = subtotal + discount_total
     deposit = float(data.get("deposit", DEFAULT_DEPOSIT))
 
+    price_range = package_row.get("range")
+    if price_range:
+        if inv_type != "deposit":
+            sys.exit("A price range only works on a deposit invoice; balance invoices need the final price.")
+        spread = price_range[1] - price_range[0]
+
+        def money_range(low):
+            return f"{whole(low)} \u2013 {whole(low + spread)}"
     rows = []
     if discounts or extras:
-        rows.append(("Subtotal", money(subtotal)))
+        rows.append(("Subtotal", money_range(subtotal) if price_range else money(subtotal)))
     if discounts:
         rows.append(("Discount", money(discount_total)))
     after = []
     if inv_type == "deposit":
         due_label, due = "Deposit due now", deposit
-        after.append(("Balance before procedure", money(total - deposit)))
+        if price_range:
+            after.append(("Estimated balance", money_range(total - deposit)))
+        else:
+            after.append(("Balance before procedure", money(total - deposit)))
     elif inv_type == "receipt":
         if deposit:
             dl = "Deposit paid" + (f" (Inv. {data['deposit_invoice_no']})" if data.get("deposit_invoice_no") else "")
@@ -357,7 +390,10 @@ def draw_invoice(data, out_path, qr_path=None, compact=False):
         c.setLineWidth(0.6)
         c.line(col_r, ty + 10, right, ty + 10)
         ty -= 3
-    key_value(ty, "Total", money(total), key_font=regular, value_font=regular, colour=INK)
+    if price_range:
+        key_value(ty, "Estimated total", money_range(total), key_font=regular, value_font=regular, colour=INK)
+    else:
+        key_value(ty, "Total", money(total), key_font=regular, value_font=regular, colour=INK)
     ty -= step
     for k, v in after:
         key_value(ty, k, v)
@@ -384,6 +420,11 @@ def draw_invoice(data, out_path, qr_path=None, compact=False):
             spaced(c, info_x, iy - 12, v, regular, 9.5, INK)
             iy -= 30
         left_bottom = min(left_bottom, ly - 8 - qr_size)
+    elif inv_type != "receipt" and data.get("payment_note"):
+        label(c, margin, ly, "How to pay", regular, color=MUTED)
+        p = Paragraph(f"{data['payment_note']}<br/>Amount {money(due)}  \u00b7  Reference {inv_no}", incl_style)
+        _, ph = p.wrap(col_r - margin - 12 * mm, 100)
+        p.drawOn(c, margin, ly - 10 - ph)
     elif inv_type == "receipt":
         label(c, margin, ly, "Payment", regular, color=MUTED)
         p = Paragraph(f"Received in full on {fmt_date(inv_date)} by {data.get('payment_method', 'PayNow')}. "
@@ -407,7 +448,7 @@ def draw_invoice(data, out_path, qr_path=None, compact=False):
 
     # Terms, above the footer
     term_style = ParagraphStyle("t", fontName=light, fontSize=7.3, leading=10, textColor=MUTED)
-    paras = [Paragraph(f"{i}.&nbsp;&nbsp;{t}", term_style) for i, t in enumerate(TERMS, 1)]
+    paras = [Paragraph(f"{i}.&nbsp;&nbsp;{t}", term_style) for i, t in enumerate(data.get("terms") or TERMS, 1)]
     heights = [p.wrap(width, 200)[1] for p in paras]
     terms_top = 22 * mm + sum(heights) + 2 * len(paras) + 12
     if terms_top > y - 6:

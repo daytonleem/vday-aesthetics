@@ -33,6 +33,33 @@ Standard prices (use unless the user says otherwise):
 Each package lists: Pick-up & Drop-off Transfers (airport or hotel), 2 Nights Hotel Stay, Body Check & Consultation,
 Hair Transplant, Post Procedure Medication, Remote Follow Up.
 
+## Other procedures (not hair transplants)
+
+Use `"package": "custom"` with `package_name`, `inclusions` and either `package_price` or
+`price_range: [low, high]`. A price range only works on deposit invoices: the PDF shows the range
+(whole dollars), "Estimated total" and "Estimated balance", and the fixed deposit due. Balance
+invoices need the final price. Pass `terms` to replace term 2 where it talks about grafts, e.g.
+"Results vary with individual circumstances and aftercare. Final implant size and price are
+confirmed by the surgeon." Add a remark that the final price depends on what the surgeon confirms.
+
+Known prices (SGD, range depends on final implant size):
+
+| Procedure | Price |
+|---|---|
+| PEEK chin implant | S$14,088 – S$16,288 |
+| PEEK midface implant | S$12,388 – S$14,688 |
+| PEEK chin + midface together (combined rate) | S$24,588 – S$29,088 |
+
+In the sheet, put the lower estimate in the package price and the full range in the add-on details
+and notes, since the sheet formulas need a single number.
+
+## Payment methods
+
+PayNow invoices show the PayNow QR. For anything else (e.g. a Wise bank transfer link for overseas
+clients), leave out `--qr`, set `payment_method` (e.g. "Bank Transfer (Wise)") and `payment_note`
+(e.g. "Bank transfer via the Wise payment link we send you."), which prints a "How to pay" block with
+the amount and reference beside the totals.
+
 ## Every time, before generating
 
 Ask the user to confirm or fill in all of these in one message. Don't generate until they answer:
