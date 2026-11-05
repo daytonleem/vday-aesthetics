@@ -62,8 +62,10 @@ the amount and reference beside the totals.
 
 If the user sends a payment QR for a specific invoice (e.g. a Wise payment link QR), decode it first
 (`pip install zxing-cpp`; OpenCV can't read QRs with a large centre logo) and tell the user where it
-pays and for how much. Recolour it black if asked, keeping the centre logo, and confirm it still
-scans. Pass it with `--qr` and set `qr_label` (e.g. "Pay via Wise"). Keep the image in the scratchpad
+pays and for how much. If the user wants it black on white, rebuild it from the decoded link
+(`pip install segno`; `segno.make(link, error="h")`, black on white) and paste the centre logo from
+the original back in the middle on a white disc; editing the original's pixels breaks codes whose
+frame touches the modules. Confirm the new QR scans to the same link, also on the rendered PDF. Pass it with `--qr` and set `qr_label` (e.g. "Pay via Wise"). Keep the image in the scratchpad
 only, never in the repo.
 
 ## Every time, before generating
