@@ -410,7 +410,7 @@ def draw_invoice(data, out_path, qr_path=None, compact=False):
     left_bottom = panel_bottom
     ly = panel_top - pad - 7
     if qr_path and inv_type != "receipt":
-        label(c, margin, ly, "Pay via PayNow", regular, color=MUTED)
+        label(c, margin, ly, data.get("qr_label", "Pay via PayNow"), regular, color=MUTED)
         qr_size = 27 * mm
         c.drawImage(ImageReader(qr_path), margin - 2, ly - 8 - qr_size, qr_size, qr_size)
         info_x = margin + qr_size + 5 * mm

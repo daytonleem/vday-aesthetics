@@ -60,6 +60,12 @@ clients), leave out `--qr`, set `payment_method` (e.g. "Bank Transfer (Wise)") a
 (e.g. "Bank transfer via the Wise payment link we send you."), which prints a "How to pay" block with
 the amount and reference beside the totals.
 
+If the user sends a payment QR for a specific invoice (e.g. a Wise payment link QR), decode it first
+(`pip install zxing-cpp`; OpenCV can't read QRs with a large centre logo) and tell the user where it
+pays and for how much. Recolour it black if asked, keeping the centre logo, and confirm it still
+scans. Pass it with `--qr` and set `qr_label` (e.g. "Pay via Wise"). Keep the image in the scratchpad
+only, never in the repo.
+
 ## Every time, before generating
 
 Ask the user to confirm or fill in all of these in one message. Don't generate until they answer:
