@@ -126,7 +126,9 @@ Write the spec to the scratchpad and run the script from the repo root:
 
 Only `client.name` is required. Defaults: today's date, auto invoice number, shaved package at the
 standard price, standard inclusions, $1,000 deposit, PayNow, $1,000 per graft block, $64 per hotel
-night. `line_items` takes any other charge (`amount`, or `qty` + `unit_price`). `inclusions` (a list)
+night. `line_items` takes any other charge (`amount`, or `qty` + `unit_price`); add
+`"complimentary": true` for a free extra (e.g. hotel nights you cover), shown as "Complimentary"
+and not added to the total. `qr_size_mm` sets the QR width (default 27). `inclusions` (a list)
 replaces the default inclusion bullets, and `package_name` replaces the package title.
 
 First get the PayNow QR. It is the only QR to use on invoices (VDAY PTE. LTD.), and it lives only on

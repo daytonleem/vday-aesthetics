@@ -161,6 +161,10 @@ def build_extras(data):
     for item in data.get("line_items", []):
         if "graft" in item["description"].lower():
             sys.exit("Grafts are only sold in blocks of 1,000. Use extra_graft_blocks, not line_items.")
+        if item.get("complimentary"):
+            extras.append({"description": item["description"], "detail": item.get("detail", []),
+                           "amount": 0.0, "amount_text": "Complimentary"})
+            continue
         qty = item.get("qty", 1)
         if "amount" in item:
             amount = float(item["amount"])
@@ -411,7 +415,7 @@ def draw_invoice(data, out_path, qr_path=None, compact=False):
     ly = panel_top - pad - 7
     if qr_path and inv_type != "receipt":
         label(c, margin, ly, data.get("qr_label", "Pay via PayNow"), regular, color=MUTED)
-        qr_size = 27 * mm
+        qr_size = float(data.get("qr_size_mm", 27)) * mm
         c.drawImage(ImageReader(qr_path), margin - 2, ly - 8 - qr_size, qr_size, qr_size)
         info_x = margin + qr_size + 5 * mm
         iy = ly - 22
